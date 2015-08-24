@@ -31,8 +31,8 @@ namespace Synchronica.Simulation.Modifiers
         public short GetValue(KeyFrame<short> startFrame, KeyFrame<short> endFrame, int milliseconds)
         {
             var slope = (float)(endFrame.Value - startFrame.Value) / (float)(endFrame.Milliseconds - startFrame.Milliseconds);
-            var intercept = (startFrame.Value);
-            var value = slope * milliseconds + intercept;
+            var intercept = startFrame.Value;
+            var value = slope * (milliseconds - startFrame.Milliseconds) + intercept;
 
             return (short)Math.Round(value);
         }
@@ -43,8 +43,8 @@ namespace Synchronica.Simulation.Modifiers
         public int GetValue(KeyFrame<int> startFrame, KeyFrame<int> endFrame, int milliseconds)
         {
             var slope = (float)(endFrame.Value - startFrame.Value) / (float)(endFrame.Milliseconds - startFrame.Milliseconds);
-            var intercept = (startFrame.Value);
-            var value = slope * milliseconds + intercept;
+            var intercept = startFrame.Value;
+            var value = slope * (milliseconds - startFrame.Milliseconds) + intercept;
 
             return (int)Math.Round(value);
         }
@@ -55,8 +55,8 @@ namespace Synchronica.Simulation.Modifiers
         public long GetValue(KeyFrame<long> startFrame, KeyFrame<long> endFrame, int milliseconds)
         {
             var slope = (float)(endFrame.Value - startFrame.Value) / (float)(endFrame.Milliseconds - startFrame.Milliseconds);
-            var intercept = (startFrame.Value);
-            var value = slope * milliseconds + intercept;
+            var intercept = startFrame.Value;
+            var value = slope * (milliseconds - startFrame.Milliseconds) + intercept;
 
             return (long)Math.Round(value);
         }

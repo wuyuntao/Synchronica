@@ -35,18 +35,17 @@ namespace Synchronica.Simulation
         private int milliseconds;
         private TValue value;
 
-        internal KeyFrame(KeyFrame<TValue> previous, int milliseconds, TValue value, IModifier<TValue> modifier)
+        internal KeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value, IModifier<TValue> modifier)
         {
             if (previous != null && previous.milliseconds >= milliseconds)
                 throw new ArgumentException("time must be greater than time of previous frame");
 
-            this.previous = previous;
+            Previous = previous;
+            Next = next;
+
             this.milliseconds = milliseconds;
             this.value = value;
             this.modifier = modifier;
-
-            if (previous != null)
-                this.previous.next = this;
         }
 
         internal TValue GetValue(int milliseconds)
@@ -57,16 +56,37 @@ namespace Synchronica.Simulation
             return this.modifier.GetValue(this.previous, this, milliseconds);
         }
 
+        internal KeyFrame<TValue> Interpolate(int milliseconds)
+        {
+            if (this.previous == null)
+                throw new InvalidOperationException("Previous frame is null");
+
+            return new KeyFrame<TValue>(this.previous, this, milliseconds, GetValue(milliseconds), this.modifier);
+        }
+
         public KeyFrame<TValue> Previous
         {
             get { return this.previous; }
-            internal set { this.previous = value; }
+            internal set
+            {
+                this.previous = value;
+
+                if (value != null)
+                    value.next = this;
+            }
         }
 
         public KeyFrame<TValue> Next
         {
             get { return this.next; }
-            internal set { this.next = value; }
+            internal set
+            {
+                this.next = value;
+
+                if (value != null)
+                    value.previous = this;
+            }
+
         }
 
         public int Milliseconds

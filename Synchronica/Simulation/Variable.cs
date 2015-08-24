@@ -37,7 +37,7 @@ namespace Synchronica.Simulation
 
         protected Variable(TValue initialValue)
         {
-            var initialFrame = new KeyFrame<TValue>(null, 0, initialValue, new StepModifier<TValue>());
+            var initialFrame = new KeyFrame<TValue>(null, null, 0, initialValue, new StepModifier<TValue>());
 
             this.head = initialFrame;
             this.tail = initialFrame;
@@ -46,6 +46,12 @@ namespace Synchronica.Simulation
 
         public TValue GetValue(int milliseconds)
         {
+            if (milliseconds <= this.head.Milliseconds)
+                return this.head.Value;
+
+            if (milliseconds >= this.tail.Milliseconds)
+                return this.tail.Value;
+
             this.current = FindFrame(milliseconds);
 
             return this.current.GetValue(milliseconds);
@@ -56,7 +62,7 @@ namespace Synchronica.Simulation
             if (this.tail.Milliseconds >= milliseconds)
                 throw new ArgumentException("milliseconds must be greater than last frame");
 
-            var frame = new KeyFrame<TValue>(this.tail, milliseconds, value, modifier);
+            var frame = new KeyFrame<TValue>(this.tail, null, milliseconds, value, modifier);
 
             this.tail = frame;
             this.current = frame;
@@ -67,17 +73,14 @@ namespace Synchronica.Simulation
             if (milliseconds <= this.head.Milliseconds)
                 return;
 
-            if (milliseconds >= this.tail.Milliseconds)
-                throw new ArgumentNullException("Cannot remove last frame");
+            if (milliseconds > this.tail.Milliseconds)
+                throw new ArgumentException("Cannot remove last frame");
 
-            var frame = FindFrame(milliseconds);
-            if (frame == this.tail )
-                throw new ArgumentNullException("Cannot remove last frame");
+            var newHead = FindFrame(milliseconds).Interpolate(milliseconds);
+            newHead.Previous = null;
 
-            this.head = frame;
-            this.head.Previous = null;
-
-            this.current = this.head;
+            this.head = newHead;
+            this.current = newHead;
         }
 
         public void RemoveFramesAfter(int milliseconds)
@@ -85,45 +88,50 @@ namespace Synchronica.Simulation
             if (milliseconds >= this.tail.Milliseconds)
                 return;
 
-            if (milliseconds <= this.head.Milliseconds)
-                throw new ArgumentNullException("Cannot remove first frame");
+            if (milliseconds < this.head.Milliseconds)
+                throw new ArgumentException("Cannot remove first frame");
 
-            var frame = FindFrame(milliseconds);
-            if (frame == this.head )
-                throw new ArgumentNullException("Cannot remove first frame");
+            var newTail = FindFrame(milliseconds).Interpolate(milliseconds);
+            newTail.Next = null;
 
-            this.tail = frame.Previous;
-            this.tail.Next = null;
-
-            this.current = this.tail;
+            this.tail = newTail;
+            this.current = newTail;
         }
 
         private KeyFrame<TValue> FindFrame(int milliseconds)
         {
             if (milliseconds <= this.head.Milliseconds)
-            {
                 return this.head;
-            }
-            else if (milliseconds >= this.tail.Milliseconds)
-            {
+
+            if (milliseconds >= this.tail.Milliseconds)
                 return this.tail;
-            }
-            else if (milliseconds > this.current.Milliseconds)
-            {
-                var frame = this.current.Next;
-                while (frame.Next != null && frame.Milliseconds < milliseconds)
-                    frame = frame.Next;
 
-                return frame;
-            }
-            else
-            {
-                var frame = this.current;
-                while (frame.Previous != null && frame.Previous.Milliseconds >= milliseconds)
-                    frame = frame.Previous;
+            if (milliseconds > this.current.Milliseconds)
+                return FindNextFrame(this.current.Next, f => f.Milliseconds >= milliseconds);
 
-                return frame;
+            return FindPreviousFrame(this.current, f => f.Previous.Milliseconds < milliseconds);
+        }
+
+        private static KeyFrame<TValue> FindNextFrame(KeyFrame<TValue> frame, Func<KeyFrame<TValue>, bool> predicate)
+        {
+            for (; frame != null; frame = frame.Next)
+            {
+                if (predicate(frame))
+                    break;
             }
+
+            return frame;
+        }
+
+        private static KeyFrame<TValue> FindPreviousFrame(KeyFrame<TValue> frame, Func<KeyFrame<TValue>, bool> predicate)
+        {
+            for (; frame != null; frame = frame.Previous)
+            {
+                if (predicate(frame))
+                    break;
+            }
+
+            return frame;
         }
     }
 }

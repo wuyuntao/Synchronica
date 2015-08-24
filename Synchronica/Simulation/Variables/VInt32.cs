@@ -32,6 +32,10 @@ namespace Synchronica.Simulation.Variables
             : base(initialValue)
         { }
 
+        public VInt32()
+            : base(0)
+        { }
+
         public void AppendStepFrame(int milliseconds, int value)
         {
             AppendFrame(milliseconds, value, new StepModifier<int>());
