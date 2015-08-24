@@ -22,14 +22,24 @@
  * SOFTWARE.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Synchronica.Simulation.Modifiers;
 
 namespace Synchronica.Simulation.Variables
 {
-    public abstract class Variable
+    public sealed class VInt16 : Variable<short>
     {
+        public VInt16(short initialValue)
+            : base(initialValue)
+        { }
+
+        public void AppendStepFrame(int milliseconds, short value)
+        {
+            AppendFrame(milliseconds, value, new StepModifier<short>());
+        }
+
+        public void AppendLinearFrame(int milliseconds, short value)
+        {
+            AppendFrame(milliseconds, value, new LinearModifier_Int16());
+        }
     }
 }

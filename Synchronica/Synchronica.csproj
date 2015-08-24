@@ -35,10 +35,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Simulation\Curves\Curve.cs" />
-    <Compile Include="Simulation\Curves\Line.cs" />
-    <Compile Include="Simulation\Curves\Step.cs" />
-    <Compile Include="Simulation\Variables\Variable.cs" />
+    <Compile Include="Simulation\KeyFrame.cs" />
+    <Compile Include="Simulation\IModifier.cs" />
+    <Compile Include="Simulation\Modifiers\LinearModifier.cs" />
+    <Compile Include="Simulation\Modifiers\StepModifier.cs" />
+    <Compile Include="Simulation\Variable.cs" />
+    <Compile Include="Simulation\Variables\VInt64.cs" />
+    <Compile Include="Simulation\Variables\VInt16.cs" />
     <Compile Include="Simulation\Variables\VInt32.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -23,13 +23,11 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Synchronica.Simulation.Curves
+namespace Synchronica.Simulation
 {
-    public abstract class Curve
+    public interface IModifier<TValue>
     {
+        TValue GetValue(KeyFrame<TValue> startFrame, KeyFrame<TValue> endFrame, int milliseconds);
     }
 }

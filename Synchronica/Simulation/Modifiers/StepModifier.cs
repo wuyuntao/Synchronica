@@ -22,24 +22,18 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Modifiers;
+using System;
 
-namespace Synchronica.Simulation.Variables
+namespace Synchronica.Simulation.Modifiers
 {
-    public sealed class VInt32 : Variable<int>
+    sealed class StepModifier<TValue> : IModifier<TValue>
     {
-        public VInt32(int initialValue)
-            : base(initialValue)
-        { }
-
-        public void AppendStepFrame(int milliseconds, int value)
+        public TValue GetValue(KeyFrame<TValue> startFrame, KeyFrame<TValue> endFrame, int milliseconds)
         {
-            AppendFrame(milliseconds, value, new StepModifier<int>());
-        }
-
-        public void AppendLinearFrame(int milliseconds, int value)
-        {
-            AppendFrame(milliseconds, value, new LinearModifier_Int32());
+            if (milliseconds < endFrame.Milliseconds)
+                return startFrame.Value;
+            else
+                return endFrame.Value;
         }
     }
 }

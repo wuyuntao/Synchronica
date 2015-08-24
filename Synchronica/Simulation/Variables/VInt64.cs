@@ -26,20 +26,20 @@ using Synchronica.Simulation.Modifiers;
 
 namespace Synchronica.Simulation.Variables
 {
-    public sealed class VInt32 : Variable<int>
+    public sealed class VInt64 : Variable<long>
     {
-        public VInt32(int initialValue)
+        public VInt64(long initialValue)
             : base(initialValue)
         { }
 
-        public void AppendStepFrame(int milliseconds, int value)
+        public void AppendStepFrame(int milliseconds, long value)
         {
-            AppendFrame(milliseconds, value, new StepModifier<int>());
+            AppendFrame(milliseconds, value, new StepModifier<long>());
         }
 
-        public void AppendLinearFrame(int milliseconds, int value)
+        public void AppendLinearFrame(int milliseconds, long value)
         {
-            AppendFrame(milliseconds, value, new LinearModifier_Int32());
+            AppendFrame(milliseconds, value, new LinearModifier_Int64());
         }
     }
 }
