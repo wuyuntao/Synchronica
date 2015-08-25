@@ -61,4 +61,15 @@ namespace Synchronica.Simulation.Modifiers
             return (long)Math.Round(value);
         }
     }
+
+    sealed class LinearModifier_Single : IModifier<float>
+    {
+        public float GetValue(KeyFrame<float> startFrame, KeyFrame<float> endFrame, int milliseconds)
+        {
+            var slope = (endFrame.Value - startFrame.Value) / (endFrame.Milliseconds - startFrame.Milliseconds);
+            var intercept = startFrame.Value;
+
+            return slope * (milliseconds - startFrame.Milliseconds) + intercept;
+        }
+    }
 }

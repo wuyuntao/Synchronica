@@ -40,6 +40,7 @@
     <Compile Include="Simulation\Modifiers\LinearModifier.cs" />
     <Compile Include="Simulation\Modifiers\StepModifier.cs" />
     <Compile Include="Simulation\Variable.cs" />
+    <Compile Include="Simulation\Variables\VSingle.cs" />
     <Compile Include="Simulation\Variables\VInt64.cs" />
     <Compile Include="Simulation\Variables\VInt16.cs" />
     <Compile Include="Simulation\Variables\VInt32.cs" />
