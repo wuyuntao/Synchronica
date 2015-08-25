@@ -55,7 +55,9 @@
     <Compile Include="Simulation\Variables\VInt32.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GeneratedCode\" />
     <Folder Include="Networking\" />
+    <Folder Include="Schema\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
