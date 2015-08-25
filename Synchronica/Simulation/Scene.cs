@@ -23,14 +23,42 @@
 */
 
 using Synchronica.Simulation.Data;
-using System;
+using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
-    public interface IModifier<TValue>
+    public sealed class Scene
     {
-        TValue GetValue(KeyFrame<TValue> startFrame, KeyFrame<TValue> endFrame, int milliseconds);
+        private int nextObjectId = 1;
+        private List<GameObject> objects = new List<GameObject>();
 
-        KeyFrameData GetKeyFrameData(int milliseconds, TValue value);
+        public SceneData GetData(int startMilliseconds, int endMilliseconds)
+        {
+            SceneData sceneData = null;
+
+            foreach (var obj in this.objects)
+            {
+                var objectData = obj.GetData(startMilliseconds, endMilliseconds);
+                if (objectData != null)
+                {
+                    if (sceneData == null)
+                        sceneData = new SceneData(startMilliseconds, endMilliseconds);
+
+                    sceneData.AddObject(objectData);
+                }
+            }
+
+            return sceneData;
+        }
+
+        internal void AddObject(GameObject obj)
+        {
+            this.objects.Add(obj);
+        }
+
+        internal int NextObjectId
+        {
+            get { return this.nextObjectId++; }
+        }
     }
 }

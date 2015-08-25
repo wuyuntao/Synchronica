@@ -22,6 +22,7 @@
  * SOFTWARE.
 */
 
+using Synchronica.Simulation.Data;
 using System;
 
 namespace Synchronica.Simulation.Modifiers
@@ -36,6 +37,11 @@ namespace Synchronica.Simulation.Modifiers
 
             return (short)Math.Round(value);
         }
+
+        public KeyFrameData GetKeyFrameData(int milliseconds, short value)
+        {
+            return new LinearKeyFrameData(milliseconds, value);
+        }
     }
 
     sealed class LinearModifier_Int32 : IModifier<int>
@@ -47,6 +53,11 @@ namespace Synchronica.Simulation.Modifiers
             var value = slope * (milliseconds - startFrame.Milliseconds) + intercept;
 
             return (int)Math.Round(value);
+        }
+
+        public KeyFrameData GetKeyFrameData(int milliseconds, int value)
+        {
+            return new LinearKeyFrameData(milliseconds, value);
         }
     }
 
@@ -60,6 +71,11 @@ namespace Synchronica.Simulation.Modifiers
 
             return (long)Math.Round(value);
         }
+
+        public KeyFrameData GetKeyFrameData(int milliseconds, long value)
+        {
+            return new LinearKeyFrameData(milliseconds, value);
+        }
     }
 
     sealed class LinearModifier_Single : IModifier<float>
@@ -70,6 +86,11 @@ namespace Synchronica.Simulation.Modifiers
             var intercept = startFrame.Value;
 
             return slope * (milliseconds - startFrame.Milliseconds) + intercept;
+        }
+
+        public KeyFrameData GetKeyFrameData(int milliseconds, float value)
+        {
+            return new LinearKeyFrameData(milliseconds, value);
         }
     }
 }

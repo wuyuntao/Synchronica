@@ -22,6 +22,7 @@
  * SOFTWARE.
 */
 
+using Synchronica.Simulation.Data;
 using Synchronica.Simulation.Modifiers;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,12 @@ using System.Linq;
 
 namespace Synchronica.Simulation
 {
-    public abstract class Variable<TValue>
+    interface IVariable
+    {
+        KeyFrameData[] GetKeyFrameData(int startMilliseconds, int endMilliseconds);
+    }
+
+    public abstract class Variable<TValue> : IVariable
     {
         private KeyFrame<TValue> head;
         private KeyFrame<TValue> tail;
@@ -98,6 +104,12 @@ namespace Synchronica.Simulation
             this.current = newTail;
         }
 
+        public KeyFrameData[] GetKeyFrameData(int startMilliseconds, int endMilliseconds)
+        {
+            return (from f in FindFrames(startMilliseconds, endMilliseconds)
+                    select f.GetData()).ToArray();
+        }
+
         private KeyFrame<TValue> FindFrame(int milliseconds)
         {
             if (milliseconds <= this.head.Milliseconds)
@@ -110,6 +122,22 @@ namespace Synchronica.Simulation
                 return FindNextFrame(this.current.Next, f => f.Milliseconds >= milliseconds);
 
             return FindPreviousFrame(this.current, f => f.Previous.Milliseconds < milliseconds);
+        }
+
+        private IEnumerable<KeyFrame<TValue>> FindFrames(int startMilliseconds, int endMilliseconds)
+        {
+            for (var frame = this.head; frame.Next != null; frame = frame.Next)
+            {
+                if (frame.Milliseconds > endMilliseconds)
+                {
+                    yield return frame;
+                    yield break;
+                }
+                else if (frame.Milliseconds > startMilliseconds)
+                {
+                    yield return frame;
+                }
+            }
         }
 
         private static KeyFrame<TValue> FindNextFrame(KeyFrame<TValue> frame, Func<KeyFrame<TValue>, bool> predicate)

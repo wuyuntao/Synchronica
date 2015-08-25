@@ -22,6 +22,7 @@
  * SOFTWARE.
 */
 
+using Synchronica.Simulation.Data;
 using System;
 
 namespace Synchronica.Simulation.Modifiers
@@ -34,6 +35,11 @@ namespace Synchronica.Simulation.Modifiers
                 return startFrame.Value;
             else
                 return endFrame.Value;
+        }
+
+        public KeyFrameData GetKeyFrameData(int milliseconds, TValue value)
+        {
+            return new StepKeyFrameData(milliseconds, value);
         }
     }
 }

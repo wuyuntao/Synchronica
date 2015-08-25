@@ -22,15 +22,41 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Data;
-using System;
-
-namespace Synchronica.Simulation
+namespace Synchronica.Simulation.Data
 {
-    public interface IModifier<TValue>
+    public abstract class KeyFrameData
     {
-        TValue GetValue(KeyFrame<TValue> startFrame, KeyFrame<TValue> endFrame, int milliseconds);
+        private int milliseconds;
+        private object value;
 
-        KeyFrameData GetKeyFrameData(int milliseconds, TValue value);
+        protected KeyFrameData(int milliseconds, object value)
+        {
+            this.milliseconds = milliseconds;
+            this.value = value;
+        }
+
+        public int Milliseconds
+        {
+            get { return this.milliseconds; }
+        }
+
+        public object Value
+        {
+            get { return this.value; }
+        }
+    }
+
+    public sealed class LinearKeyFrameData : KeyFrameData
+    {
+        public LinearKeyFrameData(int milliseconds, object value)
+            : base(milliseconds, value)
+        { }
+    }
+
+    public sealed class StepKeyFrameData : KeyFrameData
+    {
+        public StepKeyFrameData(int milliseconds, object value)
+            : base(milliseconds, value)
+        { }
     }
 }

@@ -22,6 +22,7 @@
  * SOFTWARE.
 */
 
+using Synchronica.Simulation.Data;
 using System;
 
 namespace Synchronica.Simulation
@@ -62,6 +63,11 @@ namespace Synchronica.Simulation
                 throw new InvalidOperationException("Previous frame is null");
 
             return new KeyFrame<TValue>(this.previous, this, milliseconds, GetValue(milliseconds), this.modifier);
+        }
+
+        internal KeyFrameData GetData()
+        {
+            return this.modifier.GetKeyFrameData(this.milliseconds, this.value);
         }
 
         public KeyFrame<TValue> Previous

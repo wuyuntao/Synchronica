@@ -22,15 +22,23 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Data;
-using System;
+using System.Collections.Generic;
 
-namespace Synchronica.Simulation
+namespace Synchronica.Simulation.Data
 {
-    public interface IModifier<TValue>
+    public sealed class GameObjectData
     {
-        TValue GetValue(KeyFrame<TValue> startFrame, KeyFrame<TValue> endFrame, int milliseconds);
+        private int objectId;
+        private List<PropertyData> properties = new List<PropertyData>();
 
-        KeyFrameData GetKeyFrameData(int milliseconds, TValue value);
+        public GameObjectData(int objectId)
+        {
+            this.objectId = objectId;
+        }
+
+        public void AddProperty(PropertyData variable)
+        {
+            this.properties.Add(variable);
+        }
     }
 }

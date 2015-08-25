@@ -35,10 +35,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simulation\Data\KeyFrameData.cs" />
+    <Compile Include="Simulation\Data\PropertyData.cs" />
+    <Compile Include="Simulation\Data\GameObjectData.cs" />
+    <Compile Include="Simulation\Data\SceneData.cs" />
+    <Compile Include="Simulation\GameObject.cs" />
     <Compile Include="Simulation\KeyFrame.cs" />
     <Compile Include="Simulation\IModifier.cs" />
     <Compile Include="Simulation\Modifiers\LinearModifier.cs" />
     <Compile Include="Simulation\Modifiers\StepModifier.cs" />
+    <Compile Include="Simulation\Scene.cs" />
     <Compile Include="Simulation\Variable.cs" />
     <Compile Include="Simulation\Variables\VSingle.cs" />
     <Compile Include="Simulation\Variables\VInt64.cs" />
