@@ -1,13 +1,14 @@
-include "SynchronicaData.fbs";
-
-namespace Synchronica.Schema;
+namespace Synchronica.Examples.Schema;
 
 enum ClientMessageIds : int {
 	LoginRequest = 1,
-	LoginResponse = 2,
-	Synchronization = 3,
-	InputRequest = 4,
-	InputResponse = 5,
+	InputRequest = 2,
+}
+
+enum ServerMessageIds : int {
+	LoginResponse = 1,
+	InputResponse = 2,
+	SynchronicaData = 3,
 }
 
 enum Command : int {
@@ -23,10 +24,6 @@ table LoginRequest {
 
 table LoginResponse {
 	objectId: int;
-}
-
-table Synchronization {
-	data: Synchronica.Schema.SynchronicaData;
 }
 
 table InputRequest {

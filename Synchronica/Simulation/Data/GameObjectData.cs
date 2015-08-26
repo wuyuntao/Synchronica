@@ -40,5 +40,15 @@ namespace Synchronica.Simulation.Data
         {
             this.properties.Add(variable);
         }
+
+        public int Id
+        {
+            get { return this.id; }
+        }
+
+        public IEnumerable<PropertyData> Properties
+        {
+            get { return this.properties; }
+        }
     }
 }

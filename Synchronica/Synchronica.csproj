@@ -59,6 +59,8 @@
     <Compile Include="Simulation\Data\PropertyData.cs" />
     <Compile Include="Simulation\Data\GameObjectData.cs" />
     <Compile Include="Simulation\Data\SceneData.cs" />
+    <Compile Include="Simulation\Data\SynchronicaData.cs" />
+    <Compile Include="Simulation\Data\SynchronicaDataSerializer.cs" />
     <Compile Include="Simulation\GameObject.cs" />
     <Compile Include="Simulation\Command\ICommand.cs" />
     <Compile Include="Simulation\Command\CommandController.cs" />

@@ -43,5 +43,20 @@ namespace Synchronica.Simulation.Data
         {
             this.objects.Add(obj);
         }
+
+        public int StartMilliseconds
+        {
+            get { return this.startMilliseconds; }
+        }
+
+        public int EndMilliseconds
+        {
+            get { return this.endMilliseconds; }
+        }
+
+        public IEnumerable<GameObjectData> Objects
+        {
+            get { return this.objects; }
+        }
     }
 }

@@ -40,5 +40,15 @@ namespace Synchronica.Simulation.Data
         {
             this.frames.Add(frame);
         }
+
+        public int Id
+        {
+            get { return this.id; }
+        }
+
+        public IEnumerable<KeyFrameData> Frames
+        {
+            get { return this.frames; }
+        }
     }
 }

@@ -1,6 +1,6 @@
 // automatically generated, do not modify
 
-namespace Synchronica.Schema
+namespace Synchronica.Examples.Schema
 {
 
 public enum Command : int

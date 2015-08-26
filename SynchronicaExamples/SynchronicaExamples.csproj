@@ -43,12 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\DemoClient.cs" />
-    <Compile Include="GeneratedCode\Synchronica\Schema\ClientMessageIds.cs" />
-    <Compile Include="GeneratedCode\Synchronica\Schema\Command.cs" />
-    <Compile Include="GeneratedCode\Synchronica\Schema\InputRequest.cs" />
-    <Compile Include="GeneratedCode\Synchronica\Schema\LoginRequest.cs" />
-    <Compile Include="GeneratedCode\Synchronica\Schema\LoginResponse.cs" />
-    <Compile Include="GeneratedCode\Synchronica\Schema\Synchronization.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Examples\Schema\ClientMessageIds.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Examples\Schema\Command.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Examples\Schema\InputRequest.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Examples\Schema\LoginRequest.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Examples\Schema\LoginResponse.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Examples\Schema\ServerMessageIds.cs" />
     <Compile Include="LogObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,13 +67,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="Schema\SynchronicaData.fbs" />
     <None Include="Schema\DemoSchema.fbs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd $(ProjectDir)
-copy $(SolutionDir)Synchronica\Schema\SynchronicaData.fbs Schema\SynchronicaData.fbs
 $(SolutionDir)Lib\FlatBuffers\flatc.exe -n -o GeneratedCode Schema\DemoSchema.fbs</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
