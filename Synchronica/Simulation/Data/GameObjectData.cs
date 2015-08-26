@@ -28,12 +28,12 @@ namespace Synchronica.Simulation.Data
 {
     public sealed class GameObjectData
     {
-        private int objectId;
+        private int id;
         private List<PropertyData> properties = new List<PropertyData>();
 
-        public GameObjectData(int objectId)
+        public GameObjectData(int id)
         {
-            this.objectId = objectId;
+            this.id = id;
         }
 
         public void AddProperty(PropertyData variable)

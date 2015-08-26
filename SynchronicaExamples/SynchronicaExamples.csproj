@@ -32,11 +32,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FlatBuffers">
+      <HintPath>..\Lib\FlatBuffers\FlatBuffers.dll</HintPath>
+    </Reference>
+    <Reference Include="FlatBuffersSchema">
+      <HintPath>..\Lib\FlatBuffersSchema\FlatBuffersSchema.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\DemoClient.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\ClientMessageIds.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\Command.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\InputRequest.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\LoginRequest.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\LoginResponse.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\Synchronization.cs" />
     <Compile Include="LogObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,7 +66,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="Schema\SynchronicaData.fbs" />
+    <None Include="Schema\DemoSchema.fbs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>cd $(ProjectDir)
+copy $(SolutionDir)Synchronica\Schema\SynchronicaData.fbs Schema\SynchronicaData.fbs
+$(SolutionDir)Lib\FlatBuffers\flatc.exe -n -o GeneratedCode Schema\DemoSchema.fbs</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

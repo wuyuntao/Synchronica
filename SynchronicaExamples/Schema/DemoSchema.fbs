@@ -1,0 +1,35 @@
+include "SynchronicaData.fbs";
+
+namespace Synchronica.Schema;
+
+enum ClientMessageIds : int {
+	LoginRequest = 1,
+	LoginResponse = 2,
+	Synchronization = 3,
+	InputRequest = 4,
+	InputResponse = 5,
+}
+
+enum Command : int {
+	Up = 0,
+	Down = 1,
+	Left = 2,
+	Right = 3,
+}
+
+table LoginRequest {
+	name: string;
+}
+
+table LoginResponse {
+	objectId: int;
+}
+
+table Synchronization {
+	data: Synchronica.Schema.SynchronicaData;
+}
+
+table InputRequest {
+	milliseconds: int;
+	command: Command;
+}

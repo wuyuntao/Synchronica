@@ -11,7 +11,7 @@ namespace Synchronica.Examples
 
             Thread.Sleep(1000);
 
-            var client = new Client.DemoClient("192.168.0.103", 4000);
+            var client = new Client.DemoClient("127.0.0.1", 4000);
 
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
