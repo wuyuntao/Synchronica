@@ -51,7 +51,7 @@ namespace Synchronica.Simulation
             return data;
         }
 
-        internal GameObject CreateObject()
+        public GameObject CreateObject()
         {
             var gameObject = new GameObject(this, this.nextObjectId++);
 

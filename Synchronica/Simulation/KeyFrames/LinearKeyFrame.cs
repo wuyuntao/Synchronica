@@ -115,9 +115,7 @@ namespace Synchronica.Simulation.KeyFrames
         {
             var slope = (float)(Value - Previous.Value) / (float)(Milliseconds - Previous.Milliseconds);
             var intercept = Previous.Value;
-            var value = slope * (milliseconds - Previous.Milliseconds) + intercept;
-
-            return (float)Math.Round(value);
+            return slope * (milliseconds - Previous.Milliseconds) + intercept;
         }
 
         internal override KeyFrame Interpolate(int milliseconds)

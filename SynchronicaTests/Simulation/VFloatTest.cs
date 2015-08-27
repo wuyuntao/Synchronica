@@ -28,7 +28,7 @@ using System;
 
 namespace Synchronica.Tests.Simulation
 {
-    public class VInt16Test
+    public class VFloatTest
     {
         [Test]
         public void TestAppendFrames()
@@ -36,24 +36,24 @@ namespace Synchronica.Tests.Simulation
             var scene = new Scene();
             var go = scene.CreateObject();
 
-            var value = go.CreateInt16(-10);
-            Assert.AreEqual(-10, value.GetValue(-1));
-            Assert.AreEqual(-10, value.GetValue(0));
-            Assert.AreEqual(-10, value.GetValue(1));
+            var value = go.CreateFloat(-10.5f);
+            Assert.AreEqual(-10.5f, value.GetValue(-1));
+            Assert.AreEqual(-10.5f, value.GetValue(0));
+            Assert.AreEqual(-10.5f, value.GetValue(1));
 
-            value.AppendStepFrame(10, 5);
-            Assert.AreEqual(-10, value.GetValue(-1));
-            Assert.AreEqual(-10, value.GetValue(0));
-            Assert.AreEqual(-10, value.GetValue(9));
-            Assert.AreEqual(5, value.GetValue(10));
-            Assert.AreEqual(5, value.GetValue(11));
+            value.AppendStepFrame(10, 5.6f);
+            Assert.AreEqual(-10.5f, value.GetValue(-1));
+            Assert.AreEqual(-10.5f, value.GetValue(0));
+            Assert.AreEqual(-10.5f, value.GetValue(9));
+            Assert.AreEqual(5.6f, value.GetValue(10));
+            Assert.AreEqual(5.6f, value.GetValue(11));
 
-            value.AppendLinearFrame(20, 15);
-            Assert.AreEqual(5, value.GetValue(10));
-            Assert.AreEqual(6, value.GetValue(11));
-            Assert.AreEqual(14, value.GetValue(19));
-            Assert.AreEqual(15, value.GetValue(20));
-            Assert.AreEqual(15, value.GetValue(21));
+            value.AppendLinearFrame(20, 15.6f);
+            Assert.AreEqual(5.6f, value.GetValue(10));
+            Assert.AreEqual(6.6f, value.GetValue(11));
+            Assert.AreEqual(14.6f, value.GetValue(19));
+            Assert.AreEqual(15.6f, value.GetValue(20));
+            Assert.AreEqual(15.6f, value.GetValue(21));
         }
 
         [Test]
@@ -62,24 +62,24 @@ namespace Synchronica.Tests.Simulation
             var scene = new Scene();
             var go = scene.CreateObject();
 
-            var value = go.CreateInt16(0);
+            var value = go.CreateFloat(0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesBefore(1));
 
-            value.AppendStepFrame(10, 5);
+            value.AppendStepFrame(10, 5.1f);
             value.RemoveFramesBefore(5);
             Assert.AreEqual(0, value.GetValue(4));
             Assert.AreEqual(0, value.GetValue(5));
             Assert.AreEqual(0, value.GetValue(9));
-            Assert.AreEqual(5, value.GetValue(10));
-            Assert.AreEqual(5, value.GetValue(11));
+            Assert.AreEqual(5.1f, value.GetValue(10));
+            Assert.AreEqual(5.1f, value.GetValue(11));
 
-            value.AppendLinearFrame(20, 15);
+            value.AppendLinearFrame(20, 15.1f);
             value.RemoveFramesBefore(12);
-            Assert.AreEqual(7, value.GetValue(11));
-            Assert.AreEqual(7, value.GetValue(12));
-            Assert.AreEqual(8, value.GetValue(13));
-            Assert.AreEqual(14, value.GetValue(19));
-            Assert.AreEqual(15, value.GetValue(20));
+            Assert.AreEqual(7.1f, value.GetValue(11));
+            Assert.AreEqual(7.1f, value.GetValue(12));
+            Assert.AreEqual(8.1f, value.GetValue(13));
+            Assert.AreEqual(14.1f, value.GetValue(19));
+            Assert.AreEqual(15.1f, value.GetValue(20));
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace Synchronica.Tests.Simulation
             var scene = new Scene();
             var go = scene.CreateObject();
 
-            var value = go.CreateInt16(0);
+            var value = go.CreateFloat(0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesAfter(-1));
 
             value.AppendStepFrame(10, 5);

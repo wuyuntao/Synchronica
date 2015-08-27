@@ -90,7 +90,7 @@ namespace Synchronica.Simulation
             return variable;
         }
 
-        public VFloat CreateFloat(short value)
+        public VFloat CreateFloat(float value)
         {
             var variable = new VFloat(GetNextVariableId(), value);
             this.variables.Add(variable);

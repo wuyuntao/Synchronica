@@ -7,6 +7,10 @@ namespace Synchronica.Examples
     {
         static void Main(string[] args)
         {
+            var t = new Synchronica.Tests.Simulation.VFloatTest();
+            t.TestAppendFrames();
+
+            /*
             var server = new Server.DemoServer(4000);
 
             Thread.Sleep(1000);
@@ -32,6 +36,7 @@ namespace Synchronica.Examples
             }
 
             server.Close();
+            */
         }
     }
 }
