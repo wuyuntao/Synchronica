@@ -46,6 +46,12 @@ namespace Synchronica.Simulation
 
         public TValue GetValue<TValue>(int milliseconds)
         {
+            if (milliseconds <= this.head.Milliseconds)
+                return ((KeyFrame<TValue>)this.head).Value;
+
+            if (milliseconds >= this.tail.Milliseconds)
+                return ((KeyFrame<TValue>)this.tail).Value;
+
             var frame = (KeyFrame<TValue>)FindFrame(milliseconds);
             this.current = frame;
             return frame.GetValue(milliseconds);

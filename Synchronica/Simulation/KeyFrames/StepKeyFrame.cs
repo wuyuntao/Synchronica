@@ -34,15 +34,15 @@ namespace Synchronica.Simulation.KeyFrames
 
         internal override TValue GetValue(int milliseconds)
         {
-            if (Previous.Milliseconds < Milliseconds)
-                return Value;
-            else
+            if (Previous != null && milliseconds < Milliseconds)
                 return Previous.Value;
+            else
+                return Value;
         }
 
         internal override KeyFrame Interpolate(int milliseconds)
         {
-            return new StepKeyFrame<TValue>(Previous, null, milliseconds, GetValue(milliseconds));
+            return new StepKeyFrame<TValue>(Previous, this, milliseconds, GetValue(milliseconds));
         }
 
         internal override KeyFrameData GetData()

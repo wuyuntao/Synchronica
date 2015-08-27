@@ -44,7 +44,7 @@ namespace Synchronica.Simulation.KeyFrames
 
         internal override KeyFrame Interpolate(int milliseconds)
         {
-            return new LinearKeyFrame_Int16(Previous, null, milliseconds, GetValue(milliseconds));
+            return new LinearKeyFrame_Int16(Previous, this, milliseconds, GetValue(milliseconds));
         }
 
         internal override KeyFrameData GetData()
@@ -70,7 +70,7 @@ namespace Synchronica.Simulation.KeyFrames
 
         internal override KeyFrame Interpolate(int milliseconds)
         {
-            return new LinearKeyFrame_Int32(Previous, null, milliseconds, GetValue(milliseconds));
+            return new LinearKeyFrame_Int32(Previous, this, milliseconds, GetValue(milliseconds));
         }
 
         internal override KeyFrameData GetData()
@@ -96,7 +96,7 @@ namespace Synchronica.Simulation.KeyFrames
 
         internal override KeyFrame Interpolate(int milliseconds)
         {
-            return new LinearKeyFrame_Int64(Previous, null, milliseconds, GetValue(milliseconds));
+            return new LinearKeyFrame_Int64(Previous, this, milliseconds, GetValue(milliseconds));
         }
 
         internal override KeyFrameData GetData()
@@ -122,7 +122,7 @@ namespace Synchronica.Simulation.KeyFrames
 
         internal override KeyFrame Interpolate(int milliseconds)
         {
-            return new LinearKeyFrame_Float(Previous, null, milliseconds, GetValue(milliseconds));
+            return new LinearKeyFrame_Float(Previous, this, milliseconds, GetValue(milliseconds));
         }
 
         internal override KeyFrameData GetData()
