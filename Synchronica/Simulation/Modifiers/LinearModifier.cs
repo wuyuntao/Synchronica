@@ -78,7 +78,7 @@ namespace Synchronica.Simulation.Modifiers
         }
     }
 
-    sealed class LinearModifier_Single : IModifier<float>
+    sealed class LinearModifier_Float : IModifier<float>
     {
         public float GetValue(KeyFrame<float> startFrame, KeyFrame<float> endFrame, int milliseconds)
         {

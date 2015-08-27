@@ -26,13 +26,13 @@ using Synchronica.Simulation.Modifiers;
 
 namespace Synchronica.Simulation.Variables
 {
-    public sealed class VSingle : Variable<float>
+    public sealed class VFloat : Variable<float>
     {
-        public VSingle(float initialValue)
+        public VFloat(float initialValue)
             : base(initialValue)
         { }
 
-        public VSingle()
+        public VFloat()
             : base(0)
         { }
 
@@ -43,7 +43,7 @@ namespace Synchronica.Simulation.Variables
 
         public void AppendLinearFrame(int milliseconds, float value)
         {
-            AppendFrame(milliseconds, value, new LinearModifier_Single());
+            AppendFrame(milliseconds, value, new LinearModifier_Float());
         }
     }
 }
