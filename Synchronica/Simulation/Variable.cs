@@ -36,7 +36,7 @@ namespace Synchronica.Simulation
         private KeyFrame tail;
         private KeyFrame current;
 
-        protected Variable(int id, KeyFrame initialFrame)
+        internal Variable(int id, KeyFrame initialFrame)
         {
             this.id = id;
             this.head = initialFrame;
@@ -51,7 +51,7 @@ namespace Synchronica.Simulation
             return frame.GetValue(milliseconds);
         }
 
-        protected void AppendFrame(KeyFrame frame)
+        internal void AppendFrame(KeyFrame frame)
         {
             if (this.tail.Milliseconds >= frame.Milliseconds)
                 throw new ArgumentException("milliseconds must be greater than last frame");
@@ -163,12 +163,12 @@ namespace Synchronica.Simulation
             get { return this.id; }
         }
 
-        protected KeyFrame Head
+        internal KeyFrame Head
         {
             get { return this.head; }
         }
 
-        protected KeyFrame Tail
+        internal KeyFrame Tail
         {
             get { return this.tail; }
         }
@@ -185,12 +185,12 @@ namespace Synchronica.Simulation
             return base.GetValue<TValue>(milliseconds);
         }
 
-        protected new KeyFrame<TValue> Head
+        internal new KeyFrame<TValue> Head
         {
             get { return (KeyFrame<TValue>)base.Head; }
         }
 
-        protected new KeyFrame<TValue> Tail
+        internal new KeyFrame<TValue> Tail
         {
             get { return (KeyFrame<TValue>)base.Tail; }
         }

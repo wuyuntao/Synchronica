@@ -27,7 +27,7 @@ using System;
 
 namespace Synchronica.Simulation
 {
-    public abstract class KeyFrame
+    abstract class KeyFrame
     {
         private KeyFrame previous;
         private KeyFrame next;
@@ -78,7 +78,7 @@ namespace Synchronica.Simulation
         }
     }
 
-    public abstract class KeyFrame<TValue> : KeyFrame
+    abstract class KeyFrame<TValue> : KeyFrame
     {
         private TValue value;
 
