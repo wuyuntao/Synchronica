@@ -32,7 +32,9 @@ namespace Synchronica.Simulation
 {
     interface IVariable
     {
-        KeyFrameData[] GetKeyFrameData(int startMilliseconds, int endMilliseconds);
+        int Id { get; }
+
+        PropertyData GetData(int startMilliseconds, int endMilliseconds);
     }
 
     public abstract class Variable<TValue> : IVariable
@@ -106,10 +108,20 @@ namespace Synchronica.Simulation
             this.current = newTail;
         }
 
-        public KeyFrameData[] GetKeyFrameData(int startMilliseconds, int endMilliseconds)
+        public PropertyData GetData(int startMilliseconds, int endMilliseconds)
         {
-            return (from f in FindFrames(startMilliseconds, endMilliseconds)
-                    select f.GetData()).ToArray();
+            PropertyData propertyData = null;
+
+            var keyFrames = FindFrames(startMilliseconds, endMilliseconds);
+            foreach (var frame in keyFrames)
+            {
+                if (propertyData == null)
+                    propertyData = new PropertyData(this.id);
+
+                propertyData.AddFrame(frame.GetData());
+            }
+
+            return propertyData;
         }
 
         private KeyFrame<TValue> FindFrame(int milliseconds)

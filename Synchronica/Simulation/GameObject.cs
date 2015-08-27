@@ -33,7 +33,7 @@ namespace Synchronica.Simulation
         private Scene scene;
         private int id;
         private int nextVariableId;
-        private List<Property> properties = new List<Property>();
+        private List<IVariable> variables = new List<IVariable>();
 
         internal GameObject(Scene scene, int id)
         {
@@ -45,9 +45,9 @@ namespace Synchronica.Simulation
         {
             GameObjectData od = null;
 
-            foreach (var property in this.properties)
+            foreach (var variable in this.variables)
             {
-                var propertyData = property.GetData(startMilliseconds, endMilliseconds);
+                var propertyData = variable.GetData(startMilliseconds, endMilliseconds);
                 if (propertyData != null)
                 {
                     if (od == null)
@@ -65,74 +65,31 @@ namespace Synchronica.Simulation
         public VInt16 AddInt16(short value)
         {
             var variable = new VInt16(NextVariableId, value);
-            this.properties.Add(new Property(variable.Id, variable));
+            this.variables.Add(variable);
             return variable;
         }
 
         public VInt32 AddInt32(short value)
         {
             var variable = new VInt32(NextVariableId, value);
-            this.properties.Add(new Property(variable.Id, variable));
+            this.variables.Add(variable);
             return variable;
         }
 
         public VInt64 AddInt64(short value)
         {
             var variable = new VInt64(NextVariableId, value);
-            this.properties.Add(new Property(variable.Id, variable));
+            this.variables.Add(variable);
             return variable;
         }
 
         public VFloat AddFloat(short value)
         {
             var variable = new VFloat(NextVariableId, value);
-            this.properties.Add(new Property(variable.Id, variable));
+            this.variables.Add(variable);
             return variable;
         }
         
-        #endregion
-
-        #region Property
-
-        class Property
-        {
-            private int id;
-            private IVariable variable;
-
-            public Property(int id, IVariable variable)
-            {
-                this.id = id;
-                this.variable = variable;
-            }
-
-            public PropertyData GetData(int startMilliseconds, int endMilliseconds)
-            {
-                PropertyData propertyData = null;
-
-                var keyFrames = variable.GetKeyFrameData(startMilliseconds, endMilliseconds);
-                if (keyFrames != null && keyFrames.Length > 0)
-                {
-                    propertyData = new PropertyData(this.id);
-
-                    foreach (var keyFrame in keyFrames)
-                        propertyData.AddFrame(keyFrame);
-                }
-
-                return propertyData;
-            }
-
-            public int Id
-            {
-                get { return this.id; }
-            }
-
-            public TVariable GetVariable<TVariable>()
-                where TVariable : IVariable
-            {
-                return (TVariable)this.variable;
-            }
-        }
-
         #endregion
 
         public int Id
