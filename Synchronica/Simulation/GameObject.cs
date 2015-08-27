@@ -33,7 +33,7 @@ namespace Synchronica.Simulation
         private Scene scene;
         private int id;
         private int nextVariableId;
-        private List<IVariable> variables = new List<IVariable>();
+        private List<Variable> variables = new List<Variable>();
 
         internal GameObject(Scene scene, int id)
         {
@@ -62,44 +62,51 @@ namespace Synchronica.Simulation
 
         #region Variable definitions
 
-        public VInt16 AddInt16(short value)
+        public VBoolean CreateBoolean(bool value)
         {
-            var variable = new VInt16(NextVariableId, value);
+            var variable = new VBoolean(GetNextVariableId(), value);
             this.variables.Add(variable);
             return variable;
         }
 
-        public VInt32 AddInt32(short value)
+        public VInt16 CreateInt16(short value)
         {
-            var variable = new VInt32(NextVariableId, value);
+            var variable = new VInt16(GetNextVariableId(), value);
             this.variables.Add(variable);
             return variable;
         }
 
-        public VInt64 AddInt64(short value)
+        public VInt32 CreateInt32(short value)
         {
-            var variable = new VInt64(NextVariableId, value);
+            var variable = new VInt32(GetNextVariableId(), value);
             this.variables.Add(variable);
             return variable;
         }
 
-        public VFloat AddFloat(short value)
+        public VInt64 CreateInt64(short value)
         {
-            var variable = new VFloat(NextVariableId, value);
+            var variable = new VInt64(GetNextVariableId(), value);
             this.variables.Add(variable);
             return variable;
         }
-        
+
+        public VFloat CreateFloat(short value)
+        {
+            var variable = new VFloat(GetNextVariableId(), value);
+            this.variables.Add(variable);
+            return variable;
+        }
+
+        private int GetNextVariableId()
+        {
+            return this.nextVariableId++; 
+        }
+
         #endregion
 
         public int Id
         {
             get { return this.id; }
-        }
-
-        private int NextVariableId
-        {
-            get { return this.nextVariableId++; }
         }
     }
 }

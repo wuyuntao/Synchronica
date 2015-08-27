@@ -27,50 +27,27 @@ using System;
 
 namespace Synchronica.Simulation
 {
-    public sealed class KeyFrame<TValue>
+    public abstract class KeyFrame
     {
-        private KeyFrame<TValue> previous;
-        private KeyFrame<TValue> next;
-        private IModifier<TValue> modifier;
-
+        private KeyFrame previous;
+        private KeyFrame next;
         private int milliseconds;
-        private TValue value;
 
-        internal KeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value, IModifier<TValue> modifier)
+        protected KeyFrame(KeyFrame previous, KeyFrame next, int milliseconds)
         {
             if (previous != null && previous.milliseconds >= milliseconds)
                 throw new ArgumentException("time must be greater than time of previous frame");
 
             Previous = previous;
             Next = next;
-
             this.milliseconds = milliseconds;
-            this.value = value;
-            this.modifier = modifier;
         }
 
-        internal TValue GetValue(int milliseconds)
-        {
-            if (this.previous == null)
-                throw new InvalidOperationException("Previous frame is null");
+        internal abstract KeyFrame Interpolate(int milliseconds);
 
-            return this.modifier.GetValue(this.previous, this, milliseconds);
-        }
+        internal abstract KeyFrameData GetData();
 
-        internal KeyFrame<TValue> Interpolate(int milliseconds)
-        {
-            if (this.previous == null)
-                throw new InvalidOperationException("Previous frame is null");
-
-            return new KeyFrame<TValue>(this.previous, this, milliseconds, GetValue(milliseconds), this.modifier);
-        }
-
-        internal KeyFrameData GetData()
-        {
-            return this.modifier.GetKeyFrameData(this.milliseconds, this.value);
-        }
-
-        public KeyFrame<TValue> Previous
+        public KeyFrame Previous
         {
             get { return this.previous; }
             internal set
@@ -82,7 +59,7 @@ namespace Synchronica.Simulation
             }
         }
 
-        public KeyFrame<TValue> Next
+        public KeyFrame Next
         {
             get { return this.next; }
             internal set
@@ -98,6 +75,52 @@ namespace Synchronica.Simulation
         public int Milliseconds
         {
             get { return this.milliseconds; }
+        }
+    }
+
+    public sealed class KeyFrame<TValue> : KeyFrame
+    {
+        private IModifier<TValue> modifier;
+        private TValue value;
+
+        internal KeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value, IModifier<TValue> modifier)
+            : base(previous, next, milliseconds)
+        {
+            this.value = value;
+            this.modifier = modifier;
+        }
+
+        internal TValue GetValue(int milliseconds)
+        {
+            if (Previous == null)
+                throw new InvalidOperationException("Previous frame is null");
+
+            return this.modifier.GetValue(Previous, this, milliseconds);
+        }
+
+        internal override KeyFrame Interpolate(int milliseconds)
+        {
+            if (Previous == null)
+                throw new InvalidOperationException("Previous frame is null");
+
+            return new KeyFrame<TValue>(Previous, this, milliseconds, GetValue(milliseconds), this.modifier);
+        }
+
+        internal override KeyFrameData GetData()
+        {
+            return this.modifier.GetKeyFrameData(Milliseconds, this.value);
+        }
+
+        public new KeyFrame<TValue> Previous
+        {
+            get { return (KeyFrame<TValue>)base.Previous; }
+            internal set { base.Previous = value; }
+        }
+
+        public new KeyFrame<TValue> Next
+        {
+            get { return (KeyFrame<TValue>)base.Next; }
+            internal set { base.Next = value; }
         }
 
         public TValue Value

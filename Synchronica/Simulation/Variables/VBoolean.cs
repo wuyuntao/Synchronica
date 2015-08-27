@@ -38,7 +38,7 @@ namespace Synchronica.Simulation.Variables
 
         public void AppendStepFrame(int milliseconds, bool value)
         {
-            AppendFrame(milliseconds, value, new StepModifier<bool>());
+            AppendFrame(new KeyFrame<bool>(Tail, null, milliseconds, value, new StepModifier<bool>()));
         }
     }
 }

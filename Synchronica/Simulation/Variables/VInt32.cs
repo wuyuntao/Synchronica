@@ -38,12 +38,12 @@ namespace Synchronica.Simulation.Variables
 
         public void AppendStepFrame(int milliseconds, int value)
         {
-            AppendFrame(milliseconds, value, new StepModifier<int>());
+            AppendFrame(new KeyFrame<int>(Tail, null, milliseconds, value, new StepModifier<int>()));
         }
 
         public void AppendLinearFrame(int milliseconds, int value)
         {
-            AppendFrame(milliseconds, value, new LinearModifier_Int32());
+            AppendFrame(new KeyFrame<int>(Tail, null, milliseconds, value, new LinearModifier_Int32()));
         }
     }
 }

@@ -30,49 +30,32 @@ using System.Linq;
 
 namespace Synchronica.Simulation
 {
-    interface IVariable
+    public abstract class Variable
     {
-        int Id { get; }
+        private int id;
+        private KeyFrame head;
+        private KeyFrame tail;
+        private KeyFrame current;
 
-        PropertyData GetData(int startMilliseconds, int endMilliseconds);
-    }
-
-    public abstract class Variable<TValue> : IVariable
-    {
-        int id;
-        private KeyFrame<TValue> head;
-        private KeyFrame<TValue> tail;
-        private KeyFrame<TValue> current;
-
-        protected Variable(int id, TValue initialValue)
+        protected Variable(int id, KeyFrame initialFrame)
         {
-            var initialFrame = new KeyFrame<TValue>(null, null, 0, initialValue, new StepModifier<TValue>());
-
             this.id = id;
             this.head = initialFrame;
             this.tail = initialFrame;
             this.current = initialFrame;
         }
 
-        public TValue GetValue(int milliseconds)
+        public TValue GetValue<TValue>(int milliseconds)
         {
-            if (milliseconds <= this.head.Milliseconds)
-                return this.head.Value;
-
-            if (milliseconds >= this.tail.Milliseconds)
-                return this.tail.Value;
-
-            this.current = FindFrame(milliseconds);
-
-            return this.current.GetValue(milliseconds);
+            var frame = (KeyFrame<TValue>)FindFrame(milliseconds);
+            this.current = frame;
+            return frame.GetValue(milliseconds);
         }
 
-        public void AppendFrame(int milliseconds, TValue value, IModifier<TValue> modifier)
+        protected void AppendFrame(KeyFrame frame)
         {
-            if (this.tail.Milliseconds >= milliseconds)
+            if (this.tail.Milliseconds >= frame.Milliseconds)
                 throw new ArgumentException("milliseconds must be greater than last frame");
-
-            var frame = new KeyFrame<TValue>(this.tail, null, milliseconds, value, modifier);
 
             this.tail = frame;
             this.current = frame;
@@ -124,7 +107,7 @@ namespace Synchronica.Simulation
             return propertyData;
         }
 
-        private KeyFrame<TValue> FindFrame(int milliseconds)
+        private KeyFrame FindFrame(int milliseconds)
         {
             if (milliseconds <= this.head.Milliseconds)
                 return this.head;
@@ -138,7 +121,7 @@ namespace Synchronica.Simulation
             return FindPreviousFrame(this.current, f => f.Previous.Milliseconds < milliseconds);
         }
 
-        private IEnumerable<KeyFrame<TValue>> FindFrames(int startMilliseconds, int endMilliseconds)
+        private IEnumerable<KeyFrame> FindFrames(int startMilliseconds, int endMilliseconds)
         {
             for (var frame = this.head; frame.Next != null; frame = frame.Next)
             {
@@ -154,7 +137,7 @@ namespace Synchronica.Simulation
             }
         }
 
-        private static KeyFrame<TValue> FindNextFrame(KeyFrame<TValue> frame, Func<KeyFrame<TValue>, bool> predicate)
+        private static KeyFrame FindNextFrame(KeyFrame frame, Func<KeyFrame, bool> predicate)
         {
             for (; frame != null; frame = frame.Next)
             {
@@ -165,7 +148,7 @@ namespace Synchronica.Simulation
             return frame;
         }
 
-        private static KeyFrame<TValue> FindPreviousFrame(KeyFrame<TValue> frame, Func<KeyFrame<TValue>, bool> predicate)
+        private static KeyFrame FindPreviousFrame(KeyFrame frame, Func<KeyFrame, bool> predicate)
         {
             for (; frame != null; frame = frame.Previous)
             {
@@ -179,6 +162,43 @@ namespace Synchronica.Simulation
         public int Id
         {
             get { return this.id; }
+        }
+
+        protected KeyFrame Head
+        {
+            get { return this.head; }
+        }
+
+        protected KeyFrame Tail
+        {
+            get { return this.tail; }
+        }
+    }
+
+    public abstract class Variable<TValue> : Variable
+    {
+        protected Variable(int id, TValue initialValue)
+            : base(id, CreateInitialFrame(initialValue))
+        { }
+
+        private static KeyFrame CreateInitialFrame(TValue initialValue)
+        {
+            return new KeyFrame<TValue>(null, null, 0, initialValue, new StepModifier<TValue>());
+        }
+
+        public TValue GetValue(int milliseconds)
+        {
+            return base.GetValue<TValue>(milliseconds);
+        }
+
+        protected new KeyFrame<TValue> Head
+        {
+            get { return (KeyFrame<TValue>)base.Head; }
+        }
+
+        protected new KeyFrame<TValue> Tail
+        {
+            get { return (KeyFrame<TValue>)base.Tail; }
         }
     }
 }
