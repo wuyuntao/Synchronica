@@ -62,14 +62,14 @@ table KeyFrameData {
 	data: KeyFrameUnion;
 }
 
-table PropertyData {
+table VariableData {
 	id: int;
 	keyFrames: [KeyFrameData];
 }
 
 table GameObjectData {
 	id: int;
-	properties: [PropertyData];
+	properties: [VariableData];
 }
 
 table SceneData {

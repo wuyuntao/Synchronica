@@ -43,21 +43,21 @@ namespace Synchronica.Simulation
 
         internal GameObjectData GetData(int startMilliseconds, int endMilliseconds)
         {
-            GameObjectData od = null;
+            GameObjectData data = null;
 
             foreach (var variable in this.variables)
             {
-                var propertyData = variable.GetData(startMilliseconds, endMilliseconds);
-                if (propertyData != null)
+                var variableData = variable.GetData(startMilliseconds, endMilliseconds);
+                if (variableData != null)
                 {
-                    if (od == null)
-                        od = new GameObjectData(this.id);
+                    if (data == null)
+                        data = new GameObjectData(this.id);
 
-                    od.AddProperty(propertyData);
+                    data.AddVariable(variableData);
                 }
             }
 
-            return od;
+            return data;
         }
 
         #region Variable definitions

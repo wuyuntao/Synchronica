@@ -47,30 +47,30 @@ namespace Synchronica.Simulation.Data
 
         private Offset<Schema.GameObjectData> SerializeGameObject(FlatBufferBuilder fbb, GameObjectData gameObject)
         {
-            var vProperties = SerializeProperties(fbb, gameObject.Properties.ToArray());
+            var vProperties = SerializeProperties(fbb, gameObject.Variables.ToArray());
 
             return Schema.GameObjectData.CreateGameObjectData(fbb, gameObject.Id, vProperties);
         }
 
-        private VectorOffset SerializeProperties(FlatBufferBuilder fbb, PropertyData[] properties)
+        private VectorOffset SerializeProperties(FlatBufferBuilder fbb, VariableData[] properties)
         {
-            var oProperties = Array.ConvertAll(properties, property => SerializeProperty(fbb, property));
+            var oProperties = Array.ConvertAll(properties, variable => SerializeVariable(fbb, variable));
 
             return Schema.GameObjectData.CreatePropertiesVector(fbb, oProperties);
         }
 
-        private Offset<Schema.PropertyData> SerializeProperty(FlatBufferBuilder fbb, PropertyData property)
+        private Offset<Schema.VariableData> SerializeVariable(FlatBufferBuilder fbb, VariableData variable)
         {
-            var vFrames = SerializeFrames(fbb, property.Frames.ToArray());
+            var vFrames = SerializeFrames(fbb, variable.Frames.ToArray());
 
-            return Schema.PropertyData.CreatePropertyData(fbb, property.Id, vFrames);
+            return Schema.VariableData.CreateVariableData(fbb, variable.Id, vFrames);
         }
 
         private VectorOffset SerializeFrames(FlatBufferBuilder fbb, KeyFrameData[] keyFrames)
         {
             var oFrames = Array.ConvertAll(keyFrames, frame => SerializeFrame(fbb, frame));
 
-            return Schema.PropertyData.CreateKeyFramesVector(fbb, oFrames);
+            return Schema.VariableData.CreateKeyFramesVector(fbb, oFrames);
         }
 
         private Offset<Schema.KeyFrameData> SerializeFrame(FlatBufferBuilder fbb, KeyFrameData frame)
@@ -197,31 +197,31 @@ namespace Synchronica.Simulation.Data
 
                 var gameObject = new GameObjectData(fObject.Id);
                 foreach (var prop in DeserializeProperties(fObject))
-                    gameObject.AddProperty(prop);
+                    gameObject.AddVariable(prop);
 
                 yield return gameObject;
             }
         }
 
-        private IEnumerable<PropertyData> DeserializeProperties(Schema.GameObjectData gameObject)
+        private IEnumerable<VariableData> DeserializeProperties(Schema.GameObjectData gameObject)
         {
             for (int i = 0; i < gameObject.PropertiesLength; i++)
             {
-                var fProperty = gameObject.GetProperties(i);
+                var fVariable = gameObject.GetProperties(i);
 
-                var property = new PropertyData(fProperty.Id);
-                foreach (var frame in DeserializeFrames(fProperty))
-                    property.AddFrame(frame);
+                var variable = new VariableData(fVariable.Id);
+                foreach (var frame in DeserializeFrames(fVariable))
+                    variable.AddFrame(frame);
 
-                yield return property;
+                yield return variable;
             }
         }
 
-        private IEnumerable<KeyFrameData> DeserializeFrames(Schema.PropertyData property)
+        private IEnumerable<KeyFrameData> DeserializeFrames(Schema.VariableData variable)
         {
-            for (int i = 0; i < property.KeyFramesLength; i++)
+            for (int i = 0; i < variable.KeyFramesLength; i++)
             {
-                var fFrame = property.GetKeyFrames(i);
+                var fFrame = variable.GetKeyFrames(i);
 
                 switch (fFrame.DataType)
                 {

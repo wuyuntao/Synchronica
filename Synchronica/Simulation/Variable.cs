@@ -90,20 +90,20 @@ namespace Synchronica.Simulation
             this.current = newTail;
         }
 
-        public PropertyData GetData(int startMilliseconds, int endMilliseconds)
+        public VariableData GetData(int startMilliseconds, int endMilliseconds)
         {
-            PropertyData propertyData = null;
+            VariableData data = null;
 
             var keyFrames = FindFrames(startMilliseconds, endMilliseconds);
             foreach (var frame in keyFrames)
             {
-                if (propertyData == null)
-                    propertyData = new PropertyData(this.id);
+                if (data == null)
+                    data = new VariableData(this.id);
 
-                propertyData.AddFrame(frame.GetData());
+                data.AddFrame(frame.GetData());
             }
 
-            return propertyData;
+            return data;
         }
 
         private KeyFrame FindFrame(int milliseconds)

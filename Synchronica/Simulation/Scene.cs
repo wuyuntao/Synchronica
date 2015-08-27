@@ -34,21 +34,21 @@ namespace Synchronica.Simulation
 
         public SceneData GetData(int startMilliseconds, int endMilliseconds)
         {
-            SceneData sceneData = null;
+            SceneData data = null;
 
             foreach (var obj in this.objects)
             {
                 var objectData = obj.GetData(startMilliseconds, endMilliseconds);
                 if (objectData != null)
                 {
-                    if (sceneData == null)
-                        sceneData = new SceneData(startMilliseconds, endMilliseconds);
+                    if (data == null)
+                        data = new SceneData(startMilliseconds, endMilliseconds);
 
-                    sceneData.AddObject(objectData);
+                    data.AddObject(objectData);
                 }
             }
 
-            return sceneData;
+            return data;
         }
 
         internal GameObject CreateObject()

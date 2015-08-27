@@ -29,16 +29,16 @@ namespace Synchronica.Simulation.Data
     public sealed class GameObjectData
     {
         private int id;
-        private List<PropertyData> properties = new List<PropertyData>();
+        private List<VariableData> variables = new List<VariableData>();
 
         public GameObjectData(int id)
         {
             this.id = id;
         }
 
-        public void AddProperty(PropertyData variable)
+        public void AddVariable(VariableData variable)
         {
-            this.properties.Add(variable);
+            this.variables.Add(variable);
         }
 
         public int Id
@@ -46,9 +46,9 @@ namespace Synchronica.Simulation.Data
             get { return this.id; }
         }
 
-        public IEnumerable<PropertyData> Properties
+        public IEnumerable<VariableData> Variables
         {
-            get { return this.properties; }
+            get { return this.variables; }
         }
     }
 }

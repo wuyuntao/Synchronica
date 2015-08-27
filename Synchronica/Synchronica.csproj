@@ -47,7 +47,7 @@
     <Compile Include="GeneratedCode\Synchronica\Schema\LinearKeyFrameData_Int16.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\LinearKeyFrameData_Int32.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\LinearKeyFrameData_Int64.cs" />
-    <Compile Include="GeneratedCode\Synchronica\Schema\PropertyData.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\VariableData.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\SceneData.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\StepKeyFrameData_Boolean.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\StepKeyFrameData_Float.cs" />

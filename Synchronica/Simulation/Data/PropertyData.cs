@@ -26,12 +26,12 @@ using System.Collections.Generic;
 
 namespace Synchronica.Simulation.Data
 {
-    public sealed class PropertyData
+    public sealed class VariableData
     {
         private int id;
         private List<KeyFrameData> frames = new List<KeyFrameData>();
 
-        public PropertyData(int id)
+        public VariableData(int id)
         {
             this.id = id;
         }
