@@ -23,10 +23,9 @@
 */
 
 using Synchronica.Simulation.Data;
-using Synchronica.Simulation.Modifiers;
+using Synchronica.Simulation.KeyFrames;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Synchronica.Simulation
 {
@@ -178,13 +177,8 @@ namespace Synchronica.Simulation
     public abstract class Variable<TValue> : Variable
     {
         protected Variable(int id, TValue initialValue)
-            : base(id, CreateInitialFrame(initialValue))
+            : base(id, new StepKeyFrame<TValue>(null, null, 0, initialValue))
         { }
-
-        private static KeyFrame CreateInitialFrame(TValue initialValue)
-        {
-            return new KeyFrame<TValue>(null, null, 0, initialValue, new StepModifier<TValue>());
-        }
 
         public TValue GetValue(int milliseconds)
         {

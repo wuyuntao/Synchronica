@@ -78,38 +78,17 @@ namespace Synchronica.Simulation
         }
     }
 
-    public sealed class KeyFrame<TValue> : KeyFrame
+    public abstract class KeyFrame<TValue> : KeyFrame
     {
-        private IModifier<TValue> modifier;
         private TValue value;
 
-        internal KeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value, IModifier<TValue> modifier)
+        protected KeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value)
             : base(previous, next, milliseconds)
         {
             this.value = value;
-            this.modifier = modifier;
         }
 
-        internal TValue GetValue(int milliseconds)
-        {
-            if (Previous == null)
-                throw new InvalidOperationException("Previous frame is null");
-
-            return this.modifier.GetValue(Previous, this, milliseconds);
-        }
-
-        internal override KeyFrame Interpolate(int milliseconds)
-        {
-            if (Previous == null)
-                throw new InvalidOperationException("Previous frame is null");
-
-            return new KeyFrame<TValue>(Previous, this, milliseconds, GetValue(milliseconds), this.modifier);
-        }
-
-        internal override KeyFrameData GetData()
-        {
-            return this.modifier.GetKeyFrameData(Milliseconds, this.value);
-        }
+        internal abstract TValue GetValue(int milliseconds);
 
         public new KeyFrame<TValue> Previous
         {

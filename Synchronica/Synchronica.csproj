@@ -67,9 +67,8 @@
     <Compile Include="Simulation\Command\CommandProcessor.cs" />
     <Compile Include="Simulation\Command\CommandFrame.cs" />
     <Compile Include="Simulation\KeyFrame.cs" />
-    <Compile Include="Simulation\IModifier.cs" />
-    <Compile Include="Simulation\Modifiers\LinearModifier.cs" />
-    <Compile Include="Simulation\Modifiers\StepModifier.cs" />
+    <Compile Include="Simulation\KeyFrames\LinearKeyFrame.cs" />
+    <Compile Include="Simulation\KeyFrames\StepKeyFrame.cs" />
     <Compile Include="Simulation\Scene.cs" />
     <Compile Include="Simulation\Variable.cs" />
     <Compile Include="Simulation\Variables\VBoolean.cs" />

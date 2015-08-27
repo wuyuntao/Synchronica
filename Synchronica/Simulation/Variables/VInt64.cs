@@ -22,7 +22,7 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Modifiers;
+using Synchronica.Simulation.KeyFrames;
 
 namespace Synchronica.Simulation.Variables
 {
@@ -37,12 +37,12 @@ namespace Synchronica.Simulation.Variables
 
         public void AppendStepFrame(int milliseconds, long value)
         {
-            AppendFrame(new KeyFrame<long>(Tail, null, milliseconds, value, new StepModifier<long>()));
+            AppendFrame(new StepKeyFrame<long>(Tail, null, milliseconds, value));
         }
 
         public void AppendLinearFrame(int milliseconds, long value)
         {
-            AppendFrame(new KeyFrame<long>(Tail, null, milliseconds, value, new LinearModifier_Int64()));
+            AppendFrame(new LinearKeyFrame_Int64(Tail, null, milliseconds, value));
         }
     }
 }

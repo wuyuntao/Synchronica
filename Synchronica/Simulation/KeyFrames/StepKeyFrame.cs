@@ -23,14 +23,31 @@
 */
 
 using Synchronica.Simulation.Data;
-using System;
 
-namespace Synchronica.Simulation
+namespace Synchronica.Simulation.KeyFrames
 {
-    public interface IModifier<TValue>
+    sealed class StepKeyFrame<TValue> : KeyFrame<TValue>
     {
-        TValue GetValue(KeyFrame<TValue> startFrame, KeyFrame<TValue> endFrame, int milliseconds);
+        public StepKeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value)
+            : base(previous, next, milliseconds, value)
+        { }
 
-        KeyFrameData GetKeyFrameData(int milliseconds, TValue value);
+        internal override TValue GetValue(int milliseconds)
+        {
+            if (Previous.Milliseconds < Milliseconds)
+                return Value;
+            else
+                return Previous.Value;
+        }
+
+        internal override KeyFrame Interpolate(int milliseconds)
+        {
+            return new StepKeyFrame<TValue>(Previous, null, milliseconds, GetValue(milliseconds));
+        }
+
+        internal override KeyFrameData GetData()
+        {
+            return new StepKeyFrameData(Milliseconds, Value);
+        }
     }
 }
