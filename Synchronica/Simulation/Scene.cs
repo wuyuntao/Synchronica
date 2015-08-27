@@ -23,6 +23,7 @@
 */
 
 using Synchronica.Simulation.Data;
+using System;
 using System.Collections.Generic;
 
 namespace Synchronica.Simulation
@@ -31,6 +32,7 @@ namespace Synchronica.Simulation
     {
         private int nextObjectId = 1;
         private List<GameObject> objects = new List<GameObject>();
+        private int milliseconds;
 
         public SceneData GetData(int startMilliseconds, int endMilliseconds)
         {
@@ -58,6 +60,19 @@ namespace Synchronica.Simulation
             this.objects.Add(gameObject);
 
             return gameObject;
+        }
+
+        public void IncreaseMilliseconds(int milliseconds)
+        {
+            if (milliseconds <= 0)
+                throw new ArgumentException("milliseconds must > 0");
+
+            this.milliseconds += milliseconds;
+        }
+
+        public int Milliseconds
+        {
+            get { return this.milliseconds; }
         }
     }
 }

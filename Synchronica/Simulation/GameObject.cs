@@ -24,21 +24,30 @@
 
 using Synchronica.Simulation.Data;
 using Synchronica.Simulation.Variables;
+using System;
 using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
     public sealed class GameObject
     {
+        public const int MaxInternalEventId = 10;
+        private const int CreateEventId = 1;
+        private const int DestroyEventId = 2;
+
         private Scene scene;
         private int id;
         private int nextVariableId;
         private List<Variable> variables = new List<Variable>();
+        private VInt32 events;
 
         internal GameObject(Scene scene, int id)
         {
             this.scene = scene;
             this.id = id;
+
+            this.events = CreateInt32(0);
+            CreateEventTrigger(scene.Milliseconds, CreateEventId, true);
         }
 
         internal GameObjectData GetData(int startMilliseconds, int endMilliseconds)
@@ -60,6 +69,11 @@ namespace Synchronica.Simulation
             return data;
         }
 
+        public void Destroy(int milliseconds)
+        {
+            CreateEventTrigger(milliseconds, DestroyEventId, true);
+        }
+
         #region Variable definitions
 
         public VBoolean CreateBoolean(bool value)
@@ -76,14 +90,14 @@ namespace Synchronica.Simulation
             return variable;
         }
 
-        public VInt32 CreateInt32(short value)
+        public VInt32 CreateInt32(int value)
         {
             var variable = new VInt32(GetNextVariableId(), value);
             this.variables.Add(variable);
             return variable;
         }
 
-        public VInt64 CreateInt64(short value)
+        public VInt64 CreateInt64(long value)
         {
             var variable = new VInt64(GetNextVariableId(), value);
             this.variables.Add(variable);
@@ -99,14 +113,36 @@ namespace Synchronica.Simulation
 
         private int GetNextVariableId()
         {
-            return this.nextVariableId++; 
+            return this.nextVariableId++;
         }
 
         #endregion
+        
+        public void CreateEventTrigger(int milliseconds, int eventId)
+        {
+            CreateEventTrigger(milliseconds, eventId, false);
+        }
+
+        private void CreateEventTrigger(int milliseconds, int eventId, bool isInternalEvent)
+        {
+            if (!isInternalEvent && eventId <= MaxInternalEventId)
+                throw new ArgumentException("Event id is reserved for internal usage");
+
+            this.events.AppendPulseFrame(milliseconds, eventId);
+        }
 
         public int Id
         {
             get { return this.id; }
+        }
+
+        public bool IsDestroyed
+        {
+            get
+            {
+                var lastEvent = this.events.Tail;
+                return lastEvent.Value == DestroyEventId && lastEvent.Milliseconds <= scene.Milliseconds;
+            }
         }
     }
 }
