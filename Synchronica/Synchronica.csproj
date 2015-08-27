@@ -49,6 +49,7 @@
     <Compile Include="GeneratedCode\Synchronica\Schema\LinearKeyFrameData_Int64.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\PropertyData.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\SceneData.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\StepKeyFrameData_Boolean.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\StepKeyFrameData_Float.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\StepKeyFrameData_Int16.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\StepKeyFrameData_Int32.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Simulation\Modifiers\StepModifier.cs" />
     <Compile Include="Simulation\Scene.cs" />
     <Compile Include="Simulation\Variable.cs" />
+    <Compile Include="Simulation\Variables\VBoolean.cs" />
     <Compile Include="Simulation\Variables\VFloat.cs" />
     <Compile Include="Simulation\Variables\VInt64.cs" />
     <Compile Include="Simulation\Variables\VInt16.cs" />

@@ -20,6 +20,11 @@ table LinearKeyFrameData_Float {
 	value: float;
 }
 
+table StepKeyFrameData_Boolean {
+	milliseconds: int;
+	value: bool;
+}
+
 table StepKeyFrameData_Int16 {
 	milliseconds: int;
 	value: short;
@@ -45,6 +50,8 @@ union KeyFrameUnion {
 	LinearKeyFrameData_Int32,
 	LinearKeyFrameData_Int64,
 	LinearKeyFrameData_Float,
+
+	StepKeyFrameData_Boolean,
 	StepKeyFrameData_Int16,
 	StepKeyFrameData_Int32,
 	StepKeyFrameData_Int64,
