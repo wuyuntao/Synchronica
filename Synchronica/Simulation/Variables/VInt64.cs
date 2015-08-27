@@ -35,14 +35,19 @@ namespace Synchronica.Simulation.Variables
             : this(id, 0)
         { }
 
-        public void AppendStepFrame(int milliseconds, long value)
-        {
-            AppendFrame(new StepKeyFrame<long>(Tail, null, milliseconds, value));
-        }
-
         public void AppendLinearFrame(int milliseconds, long value)
         {
             AppendFrame(new LinearKeyFrame_Int64(Tail, null, milliseconds, value));
+        }
+
+        public void AppendPulseFrame(int milliseconds, long value)
+        {
+            AppendFrame(new PulseKeyFrame_Int64(Tail, null, milliseconds, value));
+        }
+
+        public void AppendStepFrame(int milliseconds, long value)
+        {
+            AppendFrame(new StepKeyFrame<long>(Tail, null, milliseconds, value));
         }
     }
 }

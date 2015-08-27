@@ -10,11 +10,15 @@ public enum KeyFrameUnion : byte
  LinearKeyFrameData_Int32 = 2,
  LinearKeyFrameData_Int64 = 3,
  LinearKeyFrameData_Float = 4,
- StepKeyFrameData_Boolean = 5,
- StepKeyFrameData_Int16 = 6,
- StepKeyFrameData_Int32 = 7,
- StepKeyFrameData_Int64 = 8,
- StepKeyFrameData_Float = 9,
+ PulseKeyFrameData_Int16 = 5,
+ PulseKeyFrameData_Int32 = 6,
+ PulseKeyFrameData_Int64 = 7,
+ PulseKeyFrameData_Float = 8,
+ StepKeyFrameData_Boolean = 9,
+ StepKeyFrameData_Int16 = 10,
+ StepKeyFrameData_Int32 = 11,
+ StepKeyFrameData_Int64 = 12,
+ StepKeyFrameData_Float = 13,
 };
 
 

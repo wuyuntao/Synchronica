@@ -47,6 +47,10 @@
     <Compile Include="GeneratedCode\Synchronica\Schema\LinearKeyFrameData_Int16.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\LinearKeyFrameData_Int32.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\LinearKeyFrameData_Int64.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\PulseKeyFrameData_Float.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\PulseKeyFrameData_Int16.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\PulseKeyFrameData_Int32.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\PulseKeyFrameData_Int64.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\VariableData.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\SceneData.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\StepKeyFrameData_Boolean.cs" />
@@ -57,7 +61,7 @@
     <Compile Include="GeneratedCode\Synchronica\Schema\SynchronicaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation\Data\KeyFrameData.cs" />
-    <Compile Include="Simulation\Data\PropertyData.cs" />
+    <Compile Include="Simulation\Data\VariableData.cs" />
     <Compile Include="Simulation\Data\GameObjectData.cs" />
     <Compile Include="Simulation\Data\SceneData.cs" />
     <Compile Include="Simulation\Data\SynchronicaData.cs" />
@@ -67,6 +71,7 @@
     <Compile Include="Simulation\Command\CommandProcessor.cs" />
     <Compile Include="Simulation\Command\CommandFrame.cs" />
     <Compile Include="Simulation\KeyFrame.cs" />
+    <Compile Include="Simulation\KeyFrames\PulseKeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\LinearKeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\StepKeyFrame.cs" />
     <Compile Include="Simulation\Scene.cs" />

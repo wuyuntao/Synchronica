@@ -78,6 +78,9 @@ namespace Synchronica.Simulation.Data
             if (frame is LinearKeyFrameData)
                 return SerializeLinearFrame(fbb, (LinearKeyFrameData)frame);
 
+            if (frame is PulseKeyFrameData)
+                return SerializePulseFrame(fbb, (PulseKeyFrameData)frame);
+
             if (frame is StepKeyFrameData)
                 return SerializeStepFrame(fbb, (StepKeyFrameData)frame);
 
@@ -112,6 +115,39 @@ namespace Synchronica.Simulation.Data
                 var oFrame = Schema.LinearKeyFrameData_Float.CreateLinearKeyFrameData_Float(fbb, frame.Milliseconds, (short)frame.Value);
 
                 return Schema.KeyFrameData.CreateKeyFrameData(fbb, Schema.KeyFrameUnion.LinearKeyFrameData_Float, oFrame.Value);
+            }
+
+            throw new NotSupportedException("Unsupported type of Value");
+        }
+
+        private Offset<Schema.KeyFrameData> SerializePulseFrame(FlatBufferBuilder fbb, PulseKeyFrameData frame)
+        {
+            if (frame.Value is short)
+            {
+                var oFrame = Schema.PulseKeyFrameData_Int16.CreatePulseKeyFrameData_Int16(fbb, frame.Milliseconds, (short)frame.Value);
+
+                return Schema.KeyFrameData.CreateKeyFrameData(fbb, Schema.KeyFrameUnion.PulseKeyFrameData_Int16, oFrame.Value);
+            }
+
+            if (frame.Value is int)
+            {
+                var oFrame = Schema.PulseKeyFrameData_Int32.CreatePulseKeyFrameData_Int32(fbb, frame.Milliseconds, (int)frame.Value);
+
+                return Schema.KeyFrameData.CreateKeyFrameData(fbb, Schema.KeyFrameUnion.PulseKeyFrameData_Int32, oFrame.Value);
+            }
+
+            if (frame.Value is long)
+            {
+                var oFrame = Schema.PulseKeyFrameData_Int64.CreatePulseKeyFrameData_Int64(fbb, frame.Milliseconds, (long)frame.Value);
+
+                return Schema.KeyFrameData.CreateKeyFrameData(fbb, Schema.KeyFrameUnion.PulseKeyFrameData_Int64, oFrame.Value);
+            }
+
+            if (frame.Value is float)
+            {
+                var oFrame = Schema.PulseKeyFrameData_Float.CreatePulseKeyFrameData_Float(fbb, frame.Milliseconds, (short)frame.Value);
+
+                return Schema.KeyFrameData.CreateKeyFrameData(fbb, Schema.KeyFrameUnion.PulseKeyFrameData_Float, oFrame.Value);
             }
 
             throw new NotSupportedException("Unsupported type of Value");
@@ -254,6 +290,46 @@ namespace Synchronica.Simulation.Data
                             var frame = fFrame.GetData<Schema.LinearKeyFrameData_Float>(new Schema.LinearKeyFrameData_Float());
 
                             yield return new LinearKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.PulseKeyFrameData_Int16:
+                        {
+                            var frame = fFrame.GetData<Schema.PulseKeyFrameData_Int16>(new Schema.PulseKeyFrameData_Int16());
+
+                            yield return new PulseKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.PulseKeyFrameData_Int32:
+                        {
+                            var frame = fFrame.GetData<Schema.PulseKeyFrameData_Int32>(new Schema.PulseKeyFrameData_Int32());
+
+                            yield return new PulseKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.PulseKeyFrameData_Int64:
+                        {
+                            var frame = fFrame.GetData<Schema.PulseKeyFrameData_Int64>(new Schema.PulseKeyFrameData_Int64());
+
+                            yield return new PulseKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.PulseKeyFrameData_Float:
+                        {
+                            var frame = fFrame.GetData<Schema.PulseKeyFrameData_Float>(new Schema.PulseKeyFrameData_Float());
+
+                            yield return new PulseKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.StepKeyFrameData_Boolean:
+                        {
+                            var frame = fFrame.GetData<Schema.StepKeyFrameData_Boolean>(new Schema.StepKeyFrameData_Boolean());
+
+                            yield return new StepKeyFrameData(frame.Milliseconds, frame.Value);
                         }
                         break;
 

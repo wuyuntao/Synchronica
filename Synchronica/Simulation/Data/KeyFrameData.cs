@@ -53,6 +53,13 @@ namespace Synchronica.Simulation.Data
         { }
     }
 
+    public sealed class PulseKeyFrameData : KeyFrameData
+    {
+        public PulseKeyFrameData(int milliseconds, object value)
+            : base(milliseconds, value)
+        { }
+    }
+
     public sealed class StepKeyFrameData : KeyFrameData
     {
         public StepKeyFrameData(int milliseconds, object value)
