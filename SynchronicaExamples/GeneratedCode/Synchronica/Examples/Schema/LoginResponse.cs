@@ -25,6 +25,7 @@ public sealed class LoginResponse : Table {
     int o = builder.EndObject();
     return new Offset<LoginResponse>(o);
   }
+  public static void FinishLoginResponseBuffer(FlatBufferBuilder builder, Offset<LoginResponse> offset) { builder.Finish(offset.Value); }
 };
 
 

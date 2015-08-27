@@ -1,0 +1,7 @@
+namespace Synchronica.Examples.Schema;
+
+table LoginResponse {
+	objectId: int;
+}
+
+root_type LoginResponse;

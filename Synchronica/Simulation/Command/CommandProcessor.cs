@@ -26,13 +26,13 @@ using System.Collections.Generic;
 
 namespace Synchronica.Simulation.Command
 {
-    public abstract class CommandController
+    public abstract class CommandProcessor
     {
         private Scene scene;
         private List<ICommand> commands = new List<ICommand>();
         private List<CommandFrame> commandFrames = new List<CommandFrame>();
 
-        protected CommandController(Scene scene)
+        protected CommandProcessor(Scene scene)
         {
             this.scene = scene;
         }

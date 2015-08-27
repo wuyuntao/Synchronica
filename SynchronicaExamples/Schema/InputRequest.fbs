@@ -1,0 +1,15 @@
+namespace Synchronica.Examples.Schema;
+
+enum Command : int {
+	Up = 0,
+	Down = 1,
+	Left = 2,
+	Right = 3,
+}
+
+table InputRequest {
+	milliseconds: int;
+	command: Command;
+}
+
+root_type InputRequest;

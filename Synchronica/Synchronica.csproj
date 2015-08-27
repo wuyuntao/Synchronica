@@ -63,7 +63,7 @@
     <Compile Include="Simulation\Data\SynchronicaDataSerializer.cs" />
     <Compile Include="Simulation\GameObject.cs" />
     <Compile Include="Simulation\Command\ICommand.cs" />
-    <Compile Include="Simulation\Command\CommandController.cs" />
+    <Compile Include="Simulation\Command\CommandProcessor.cs" />
     <Compile Include="Simulation\Command\CommandFrame.cs" />
     <Compile Include="Simulation\KeyFrame.cs" />
     <Compile Include="Simulation\IModifier.cs" />

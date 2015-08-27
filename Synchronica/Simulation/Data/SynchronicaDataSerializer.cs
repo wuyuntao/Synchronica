@@ -35,7 +35,7 @@ namespace Synchronica.Simulation.Data
         {
             var vObjects = SerializeGameObjects(fbb, scene.Objects.ToArray());
 
-            return Schema.SceneData.CreateSceneData(fbb, scene.StartMilliseconds, vObjects);
+            return Schema.SceneData.CreateSceneData(fbb, scene.StartMilliseconds, scene.EndMilliseconds, vObjects);
         }
 
         private VectorOffset SerializeGameObjects(FlatBufferBuilder fbb, GameObjectData[] gameObjects)
@@ -159,20 +159,140 @@ namespace Synchronica.Simulation.Data
             if (data == null || data.Length == 0)
                 return null;
 
-            var synchronicaData = new SynchronicaData();
-
             var buffer = new ByteBuffer(data);
             var fSynchronicaData = Schema.SynchronicaData.GetRootAsSynchronicaData(buffer);
-            
-            foreach (var scene in DeserializeScenes(fSynchronicaData))
+
+            return Deserialize(fSynchronicaData);
+        }
+
+        public SynchronicaData Deserialize(Schema.SynchronicaData data)
+        {
+            var synchronicaData = new SynchronicaData();
+
+            foreach (var scene in DeserializeScenes(data))
                 synchronicaData.AddScene(scene);
 
             return synchronicaData;
         }
 
-        private IEnumerable<SceneData> DeserializeScenes(Schema.SynchronicaData fSynchronicaData)
+        private IEnumerable<SceneData> DeserializeScenes(Schema.SynchronicaData data)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < data.ScenesLength; i++)
+            {
+                var fScene = data.GetScenes(i);
+
+                var scene = new SceneData(fScene.StartMilliseconds, fScene.EndMilliseconds);
+                foreach (var obj in DeserializeObjects(fScene))
+                    scene.AddObject(obj);
+
+                yield return scene;
+            }
+        }
+
+        private IEnumerable<GameObjectData> DeserializeObjects(Schema.SceneData scene)
+        {
+            for (int i = 0; i < scene.ObjectsLength; i++)
+            {
+                var fObject = scene.GetObjects(i);
+
+                var gameObject = new GameObjectData(fObject.Id);
+                foreach (var prop in DeserializeProperties(fObject))
+                    gameObject.AddProperty(prop);
+
+                yield return gameObject;
+            }
+        }
+
+        private IEnumerable<PropertyData> DeserializeProperties(Schema.GameObjectData gameObject)
+        {
+            for (int i = 0; i < gameObject.PropertiesLength; i++)
+            {
+                var fProperty = gameObject.GetProperties(i);
+
+                var property = new PropertyData(fProperty.Id);
+                foreach (var frame in DeserializeFrames(fProperty))
+                    property.AddFrame(frame);
+
+                yield return property;
+            }
+        }
+
+        private IEnumerable<KeyFrameData> DeserializeFrames(Schema.PropertyData property)
+        {
+            for (int i = 0; i < property.KeyFramesLength; i++)
+            {
+                var fFrame = property.GetKeyFrames(i);
+
+                switch (fFrame.DataType)
+                {
+                    case Schema.KeyFrameUnion.LinearKeyFrameData_Int16:
+                        {
+                            var frame = fFrame.GetData<Schema.LinearKeyFrameData_Int16>(new Schema.LinearKeyFrameData_Int16());
+
+                            yield return new LinearKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.LinearKeyFrameData_Int32:
+                        {
+                            var frame = fFrame.GetData<Schema.LinearKeyFrameData_Int32>(new Schema.LinearKeyFrameData_Int32());
+
+                            yield return new LinearKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.LinearKeyFrameData_Int64:
+                        {
+                            var frame = fFrame.GetData<Schema.LinearKeyFrameData_Int64>(new Schema.LinearKeyFrameData_Int64());
+
+                            yield return new LinearKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.LinearKeyFrameData_Float:
+                        {
+                            var frame = fFrame.GetData<Schema.LinearKeyFrameData_Float>(new Schema.LinearKeyFrameData_Float());
+
+                            yield return new LinearKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.StepKeyFrameData_Int16:
+                        {
+                            var frame = fFrame.GetData<Schema.StepKeyFrameData_Int16>(new Schema.StepKeyFrameData_Int16());
+
+                            yield return new StepKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.StepKeyFrameData_Int32:
+                        {
+                            var frame = fFrame.GetData<Schema.StepKeyFrameData_Int32>(new Schema.StepKeyFrameData_Int32());
+
+                            yield return new StepKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.StepKeyFrameData_Int64:
+                        {
+                            var frame = fFrame.GetData<Schema.StepKeyFrameData_Int64>(new Schema.StepKeyFrameData_Int64());
+
+                            yield return new StepKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    case Schema.KeyFrameUnion.StepKeyFrameData_Float:
+                        {
+                            var frame = fFrame.GetData<Schema.StepKeyFrameData_Float>(new Schema.StepKeyFrameData_Float());
+
+                            yield return new StepKeyFrameData(frame.Milliseconds, frame.Value);
+                        }
+                        break;
+
+                    default:
+                        throw new NotSupportedException("Unknown type of keyFrame");
+                }
+            }
         }
 
         #endregion

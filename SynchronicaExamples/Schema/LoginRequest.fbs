@@ -1,0 +1,7 @@
+namespace Synchronica.Examples.Schema;
+
+table LoginRequest {
+	name: string;
+}
+
+root_type LoginRequest;

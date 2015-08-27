@@ -65,14 +65,19 @@
       <Name>Synchronica</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="Schema\DemoSchema.fbs" />
+    <Folder Include="Common\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Schema\MessageIds.fbs" />
+    <None Include="Schema\InputRequest.fbs" />
+    <None Include="Schema\LoginResponse.fbs" />
+    <None Include="Schema\LoginRequest.fbs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd $(ProjectDir)
-$(SolutionDir)Lib\FlatBuffers\flatc.exe -n -o GeneratedCode Schema\DemoSchema.fbs</PreBuildEvent>
+$(SolutionDir)Lib\FlatBuffers\flatc.exe -n -o GeneratedCode Schema\MessageIds.fbs Schema\LoginRequest.fbs Schema\LoginResponse.fbs Schema\InputRequest.fbs</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

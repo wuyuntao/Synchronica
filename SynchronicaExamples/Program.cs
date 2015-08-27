@@ -11,10 +11,25 @@ namespace Synchronica.Examples
 
             Thread.Sleep(1000);
 
-            var client = new Client.DemoClient("127.0.0.1", 4000);
+            var client = new Client.DemoClient("Client1", "127.0.0.1", 4000);
 
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey();
+            var exit = false;
+            while (!exit)
+            {
+                var command = Console.ReadLine().Trim();
+                switch (command)
+                {
+                    case "login":
+                    case "l":
+                        client.Login();
+                        break;
+
+                    case "exit":
+                    case "x":
+                        exit = true;
+                        break;
+                }
+            }
 
             server.Close();
         }

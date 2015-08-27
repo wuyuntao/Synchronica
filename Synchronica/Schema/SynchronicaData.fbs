@@ -67,6 +67,7 @@ table GameObjectData {
 
 table SceneData {
 	startMilliseconds: int;
+	endMilliseconds: int;
 	objects: [GameObjectData];
 }
 

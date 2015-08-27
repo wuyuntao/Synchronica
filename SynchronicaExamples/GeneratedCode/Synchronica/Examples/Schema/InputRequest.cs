@@ -29,6 +29,7 @@ public sealed class InputRequest : Table {
     int o = builder.EndObject();
     return new Offset<InputRequest>(o);
   }
+  public static void FinishInputRequestBuffer(FlatBufferBuilder builder, Offset<InputRequest> offset) { builder.Finish(offset.Value); }
 };
 
 

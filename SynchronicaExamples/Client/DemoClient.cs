@@ -1,20 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using FlatBuffers;
+using FlatBuffers.Schema;
+using Synchronica.Examples.Schema;
+using Synchronica.Schema;
+using Synchronica.Simulation;
+using System;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 
 namespace Synchronica.Examples.Client
 {
     class DemoClient : LogObject
     {
+        private string name;
+
         private TcpClient tcpClient;
 
         private NetworkStream networkStream;
 
-        public DemoClient(string hostname, int port)
+        private int objectId;
+
+        public DemoClient(string name, string hostname, int port)
         {
+            this.name = name;
             this.tcpClient = new TcpClient();
             this.tcpClient.Connect(hostname, port);
             this.networkStream = this.tcpClient.GetStream();
@@ -26,11 +33,19 @@ namespace Synchronica.Examples.Client
 
         public override string ToString()
         {
-            return string.Format("{0}", GetType().Name);
+            return string.Format("{0}-{1}", GetType().Name, this.objectId);
         }
 
         private void ReadThread(object state)
         {
+            var schema = new MessageSchema();
+            schema.Register(ServerMessageIds.LoginResponse, LoginResponse.GetRootAsLoginResponse);
+            schema.Register(ServerMessageIds.SynchronicaData, SynchronicaData.GetRootAsSynchronicaData);
+
+            var processor = new MessageProcessor(schema);
+            processor.Attach((int)ServerMessageIds.LoginResponse, OnLoginResponse);
+            processor.Attach((int)ServerMessageIds.SynchronicaData, OnSynchronicaData);
+
             var buffer = new byte[this.tcpClient.ReceiveBufferSize];
 
             while (this.networkStream.CanRead)
@@ -41,7 +56,55 @@ namespace Synchronica.Examples.Client
                 Array.Copy(buffer, bytes, readSize);
 
                 Log("Received {0} bytes", readSize);
+
+                processor.Enqueue(bytes);
+                processor.Process();
             }
+        }
+
+        private void OnLoginResponse(Message msg)
+        {
+            var res = (LoginResponse)msg.Body;
+
+            this.objectId = res.ObjectId;
+
+            Log("Login succeeded: {0}", this.objectId);
+        }
+
+        private void OnSynchronicaData(Message msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Login()
+        {
+            var fbb = new FlatBufferBuilder(1024);
+
+            var oName = fbb.CreateString(this.name);
+            var oLogin = LoginRequest.CreateLoginRequest(fbb, oName);
+            LoginRequest.FinishLoginRequestBuffer(fbb, oLogin);
+
+            WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ClientMessageIds.LoginRequest));
+
+            Log("Login");
+        }
+
+        public void Input(int milliseconds, Command command)
+        {
+            var fbb = new FlatBufferBuilder(1024);
+
+            var oInput = InputRequest.CreateInputRequest(fbb, milliseconds, command);
+
+            WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ClientMessageIds.InputRequest));
+
+            Log("Input {0} {1}ms", command, milliseconds);
+        }
+
+        private void WriteBytes(byte[] bytes)
+        {
+            Log("Send {0} bytes", bytes.Length);
+
+            ThreadPool.QueueUserWorkItem(s => this.networkStream.Write(bytes, 0, bytes.Length));
         }
     }
 }
