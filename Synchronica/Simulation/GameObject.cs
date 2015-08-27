@@ -23,23 +23,22 @@
 */
 
 using Synchronica.Simulation.Data;
+using Synchronica.Simulation.Variables;
 using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
-    public abstract class GameObject
+    public sealed class GameObject
     {
         private Scene scene;
         private int id;
-        private int nextPropertyId;
+        private int nextVariableId;
         private List<Property> properties = new List<Property>();
 
-        protected GameObject(Scene scene)
+        internal GameObject(Scene scene, int id)
         {
             this.scene = scene;
-            this.id = scene.NextObjectId;
-
-            this.scene.AddObject(this);
+            this.id = id;
         }
 
         internal GameObjectData GetData(int startMilliseconds, int endMilliseconds)
@@ -61,17 +60,37 @@ namespace Synchronica.Simulation
             return od;
         }
 
-        protected int AddProperty<TValue>(Variable<TValue> variable)
+        #region Variable definitions
+
+        public VInt16 AddInt16(short value)
         {
-            var propertyId = this.nextPropertyId++;
-            this.properties.Add(new Property(propertyId, variable));
-            return propertyId;
+            var variable = new VInt16(NextVariableId, value);
+            this.properties.Add(new Property(variable.Id, variable));
+            return variable;
         }
 
-        protected void RemoveProperty(int propertyId)
+        public VInt32 AddInt32(short value)
         {
-            this.properties.RemoveAll(p => p.Id == propertyId);
+            var variable = new VInt32(NextVariableId, value);
+            this.properties.Add(new Property(variable.Id, variable));
+            return variable;
         }
+
+        public VInt64 AddInt64(short value)
+        {
+            var variable = new VInt64(NextVariableId, value);
+            this.properties.Add(new Property(variable.Id, variable));
+            return variable;
+        }
+
+        public VFloat AddFloat(short value)
+        {
+            var variable = new VFloat(NextVariableId, value);
+            this.properties.Add(new Property(variable.Id, variable));
+            return variable;
+        }
+        
+        #endregion
 
         #region Property
 
@@ -119,6 +138,11 @@ namespace Synchronica.Simulation
         public int Id
         {
             get { return this.id; }
+        }
+
+        private int NextVariableId
+        {
+            get { return this.nextVariableId++; }
         }
     }
 }

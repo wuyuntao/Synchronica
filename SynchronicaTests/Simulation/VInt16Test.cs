@@ -33,7 +33,7 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestAppendFrames()
         {
-            var value = new VInt16(-10);
+            var value = new VInt16(1, -10);
             Assert.AreEqual(-10, value.GetValue(-1));
             Assert.AreEqual(-10, value.GetValue(0));
             Assert.AreEqual(-10, value.GetValue(1));
@@ -56,7 +56,7 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestRemoveFramesBefore()
         {
-            var value = new VInt16();
+            var value = new VInt16(1);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesBefore(1));
 
             value.AppendStepFrame(10, 5);
@@ -79,7 +79,7 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestRemoveFramesAfter()
         {
-            var value = new VInt16();
+            var value = new VInt16(1);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesAfter(-1));
 
             value.AppendStepFrame(10, 5);

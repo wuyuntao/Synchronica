@@ -28,12 +28,12 @@ namespace Synchronica.Simulation.Variables
 {
     public sealed class VFloat : Variable<float>
     {
-        public VFloat(float initialValue)
-            : base(initialValue)
+        internal VFloat(int id, float initialValue)
+            : base(id, initialValue)
         { }
 
-        public VFloat()
-            : base(0)
+        internal VFloat(int id)
+            : this(id, 0)
         { }
 
         public void AppendStepFrame(int milliseconds, float value)

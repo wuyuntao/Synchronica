@@ -51,14 +51,13 @@ namespace Synchronica.Simulation
             return sceneData;
         }
 
-        internal void AddObject(GameObject obj)
+        internal GameObject CreateObject()
         {
-            this.objects.Add(obj);
-        }
+            var gameObject = new GameObject(this, this.nextObjectId++);
 
-        internal int NextObjectId
-        {
-            get { return this.nextObjectId++; }
+            this.objects.Add(gameObject);
+
+            return gameObject;
         }
     }
 }

@@ -28,12 +28,12 @@ namespace Synchronica.Simulation.Variables
 {
     public sealed class VBoolean : Variable<bool>
     {
-        public VBoolean(bool initialValue)
-            : base(initialValue)
+        internal VBoolean(int id, bool initialValue)
+            : base(id, initialValue)
         { }
 
-        public VBoolean()
-            : base(false)
+        internal VBoolean(int id)
+            : base(id, false)
         { }
 
         public void AppendStepFrame(int milliseconds, bool value)

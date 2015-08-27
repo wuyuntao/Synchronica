@@ -28,11 +28,11 @@ namespace Synchronica.Simulation.Variables
 {
     public sealed class VInt64 : Variable<long>
     {
-        public VInt64(long initialValue)
-            : base(initialValue)
+        internal VInt64(int id, long initialValue)
+            : base(id, initialValue)
         { }
-        public VInt64()
-            : base(0)
+        internal VInt64(int id)
+            : this(id, 0)
         { }
 
         public void AppendStepFrame(int milliseconds, long value)

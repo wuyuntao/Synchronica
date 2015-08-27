@@ -37,14 +37,16 @@ namespace Synchronica.Simulation
 
     public abstract class Variable<TValue> : IVariable
     {
+        int id;
         private KeyFrame<TValue> head;
         private KeyFrame<TValue> tail;
         private KeyFrame<TValue> current;
 
-        protected Variable(TValue initialValue)
+        protected Variable(int id, TValue initialValue)
         {
             var initialFrame = new KeyFrame<TValue>(null, null, 0, initialValue, new StepModifier<TValue>());
 
+            this.id = id;
             this.head = initialFrame;
             this.tail = initialFrame;
             this.current = initialFrame;
@@ -160,6 +162,11 @@ namespace Synchronica.Simulation
             }
 
             return frame;
+        }
+
+        public int Id
+        {
+            get { return this.id; }
         }
     }
 }

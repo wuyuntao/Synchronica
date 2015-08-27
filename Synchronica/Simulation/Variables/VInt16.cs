@@ -28,12 +28,12 @@ namespace Synchronica.Simulation.Variables
 {
     public sealed class VInt16 : Variable<short>
     {
-        public VInt16(short initialValue)
-            : base(initialValue)
+        internal VInt16(int id, short initialValue)
+            : base(id, initialValue)
         { }
 
-        public VInt16()
-            : base(0)
+        internal VInt16(int id)
+            : this(id, 0)
         { }
 
         public void AppendStepFrame(int milliseconds, short value)
