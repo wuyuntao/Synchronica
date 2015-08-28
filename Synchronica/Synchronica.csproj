@@ -74,6 +74,7 @@
     <Compile Include="Simulation\KeyFrames\PulseKeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\LinearKeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\StepKeyFrame.cs" />
+    <Compile Include="Simulation\Recorder.cs" />
     <Compile Include="Simulation\Scene.cs" />
     <Compile Include="Simulation\Variable.cs" />
     <Compile Include="Simulation\Variables\VBoolean.cs" />

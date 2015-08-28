@@ -28,51 +28,47 @@ using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
-    public sealed class Scene
+    public sealed class Recorder
     {
-        private int nextObjectId = 1;
-        private List<GameObject> objects = new List<GameObject>();
-        private int milliseconds;
+        private Scene scene = new Scene();
+        private List<SceneData> frames = new List<SceneData>();
+        private int nextStartMilliseconds = 0;
 
-        internal SceneData GetData(int startMilliseconds, int endMilliseconds)
+        public void CreateDataFrame(int duration)
         {
-            SceneData data = null;
+            if (duration <= 0)
+                throw new ArgumentException("duration must > 0");
 
-            foreach (var obj in this.objects)
+            var startMilliseconds = this.nextStartMilliseconds;
+            var endMilliseconds = this.nextStartMilliseconds + duration;
+
+            var data = scene.GetData(startMilliseconds, endMilliseconds);
+            if (data != null)
+                this.frames.Add(data);
+
+            this.nextStartMilliseconds = endMilliseconds + 1;
+        }
+
+        public SynchronicaData GetDataFrames(int startMilliseconds)
+        {
+            SynchronicaData data = null;
+            foreach (var frame in this.frames)
             {
-                var objectData = obj.GetData(startMilliseconds, endMilliseconds);
-                if (objectData != null)
-                {
-                    if (data == null)
-                        data = new SceneData(startMilliseconds, endMilliseconds);
+                if (frame.StartMilliseconds < startMilliseconds)
+                    continue;
 
-                    data.AddObject(objectData);
-                }
+                if (data == null)
+                    data = new SynchronicaData();
+
+                data.AddScene(frame);
             }
 
             return data;
         }
 
-        public GameObject CreateObject()
+        public Scene Scene
         {
-            var gameObject = new GameObject(this, this.nextObjectId++);
-
-            this.objects.Add(gameObject);
-
-            return gameObject;
-        }
-
-        public void IncreaseMilliseconds(int milliseconds)
-        {
-            if (milliseconds <= 0)
-                throw new ArgumentException("milliseconds must > 0");
-
-            this.milliseconds += milliseconds;
-        }
-
-        public int Milliseconds
-        {
-            get { return this.milliseconds; }
+            get { return this.scene; }
         }
     }
 }
