@@ -66,6 +66,9 @@
     <Compile Include="Simulation\Data\SceneData.cs" />
     <Compile Include="Simulation\Data\SynchronicaData.cs" />
     <Compile Include="Simulation\Data\SynchronicaDataSerializer.cs" />
+    <Compile Include="Simulation\Events\CreateObjectEvent.cs" />
+    <Compile Include="Simulation\Events\RemoveObjectEvent.cs" />
+    <Compile Include="Simulation\SceneEvent.cs" />
     <Compile Include="Simulation\GameObject.cs" />
     <Compile Include="Simulation\Command\ICommand.cs" />
     <Compile Include="Simulation\Command\CommandProcessor.cs" />

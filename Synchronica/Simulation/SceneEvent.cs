@@ -22,53 +22,15 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Data;
-using System;
-using System.Collections.Generic;
-
 namespace Synchronica.Simulation
 {
-    public sealed class Scene
+    public abstract class SceneEvent
     {
-        private int nextObjectId = 1;
-        private List<SceneEvent> events = new List<SceneEvent>();
-        private List<GameObject> objects = new List<GameObject>();
         private int milliseconds;
 
-        internal SceneData GetData(int startMilliseconds, int endMilliseconds)
+        protected SceneEvent(int milliseconds)
         {
-            SceneData data = null;
-
-            foreach (var obj in this.objects)
-            {
-                var objectData = obj.GetData(startMilliseconds, endMilliseconds);
-                if (objectData != null)
-                {
-                    if (data == null)
-                        data = new SceneData(startMilliseconds, endMilliseconds);
-
-                    data.AddObject(objectData);
-                }
-            }
-
-            return data;
-        }
-
-        public GameObject CreateObject()
-        {
-            var gameObject = new GameObject(this, this.nextObjectId++);
-
-            this.objects.Add(gameObject);
-
-            return gameObject;
-        }
-
-        public void IncreaseMilliseconds(int milliseconds)
-        {
-            if (milliseconds <= 0)
-                throw new ArgumentException("milliseconds must > 0");
-
-            this.milliseconds += milliseconds;
+            this.milliseconds = milliseconds;
         }
 
         public int Milliseconds
