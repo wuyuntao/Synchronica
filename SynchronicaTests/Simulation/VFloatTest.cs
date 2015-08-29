@@ -37,12 +37,11 @@ namespace Synchronica.Tests.Simulation
             var gameObject = new GameObject(new Scene(), 1, 0);
 
             var value = new VFloat(gameObject, 1, -10.5f);
-            Assert.AreEqual(-10.5f, value.GetValue(-1));
+            Assert.Throws<ArgumentException>(() => value.GetValue(-1));
             Assert.AreEqual(-10.5f, value.GetValue(0));
             Assert.AreEqual(-10.5f, value.GetValue(1));
 
             value.AddStepFrame(10, 5.6f);
-            Assert.AreEqual(-10.5f, value.GetValue(-1));
             Assert.AreEqual(-10.5f, value.GetValue(0));
             Assert.AreEqual(-10.5f, value.GetValue(9));
             Assert.AreEqual(5.6f, value.GetValue(10));

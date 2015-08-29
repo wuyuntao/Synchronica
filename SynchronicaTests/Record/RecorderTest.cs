@@ -38,18 +38,26 @@ namespace Synchronica.Tests.Record
             var obj1 = recorder.AddObject(2);
             var var1 = recorder.AddInt16(obj1, 10);
             var var2 = recorder.AddInt32(obj1, -10);
-            var var3 = recorder.AddFloat(obj1, 0);
+            var var3 = recorder.AddFloat(obj1, 5.7f);
 
             var obj2 = recorder.GetObject(1);
             Assert.AreEqual(obj1.Id, obj2.Id);
             Assert.AreEqual(obj1.StartTime, obj2.StartTime);
             Assert.AreEqual(obj1.EndTime, obj2.EndTime);
 
-            var var4 = obj2.GetVariable<VInt16>(var1.Id);
-            var var5 = obj2.GetVariable<VInt32>(var2.Id);
-            var var6 = obj2.GetVariable<VFloat>(var3.Id);
-            Assert.Throws<ArgumentException>(() => var4.GetValue(1));
+            var var4 = obj2.GetVariable<short>(var1.Id);
+            var var5 = obj2.GetVariable<int>(var2.Id);
+            var var6 = obj2.GetVariable<float>(var3.Id);
+            //Assert.Throws<ArgumentException>(() => var4.GetValue(1));
             Assert.AreEqual(10, var4.GetValue(2));
+
+            recorder.AddLinearFrame(var4, 100, (short)30);
+            recorder.AddStepFrame(var5, 110, 10);
+            recorder.AddLinearFrame(var6, 90, 9.3f);
+
+            var data = recorder.Record(100);
+            Assert.AreEqual(0, data.StartTime);
+            Assert.AreEqual(100, data.EndTime);
         }
     }
 }

@@ -60,7 +60,33 @@ namespace Synchronica.Tests.Mock
                              select variableData).ToArray(),
             };
 
+            if (gameObject.StartTime >= startTime)
+            {
+                data.Definitions = (from variable in gameObject.Variables
+                                    select DefineVariable(variable)).ToArray();
+            }
+
             return (data.StartTime >= startTime || data.EndTime >= startTime || data.Variables.Length > 0) ? data : null;
+        }
+
+        private VariableDefinition DefineVariable(Variable variable)
+        {
+            var definition = new VariableDefinition()
+            {
+                Id = variable.Id,
+                InitialValue = variable.Head.Value,
+            };
+
+            if (definition.InitialValue is short)
+                definition.Type = VariableType.VInt16;
+            else if (definition.InitialValue is int)
+                definition.Type = VariableType.VInt32;
+            else if (definition.InitialValue is long)
+                definition.Type = VariableType.VInt64;
+            else if (definition.InitialValue is float)
+                definition.Type = VariableType.VFloat;
+
+            return definition;
         }
 
         private VariableData RecordVariable(Variable variable, int startTime)
@@ -83,12 +109,33 @@ namespace Synchronica.Tests.Mock
                 Value = keyFrame.Value,
             };
 
-            if (keyFrame is LinearKeyFrame_Int32)
+            if (keyFrame is LinearKeyFrame_Int16)
+                data.Type = KeyFrameType.Linear_Int16;
+            else if (keyFrame is LinearKeyFrame_Int32)
                 data.Type = KeyFrameType.Linear_Int32;
+            else if (keyFrame is LinearKeyFrame_Int64)
+                data.Type = KeyFrameType.Linear_Int64;
+            else if (keyFrame is LinearKeyFrame_Float)
+                data.Type = KeyFrameType.Linear_Float;
+
+            else if (keyFrame is PulseKeyFrame_Int16)
+                data.Type = KeyFrameType.Pulse_Int16;
             else if (keyFrame is PulseKeyFrame_Int32)
                 data.Type = KeyFrameType.Pulse_Int32;
+            else if (keyFrame is PulseKeyFrame_Int64)
+                data.Type = KeyFrameType.Pulse_Int64;
+            else if (keyFrame is PulseKeyFrame_Float)
+                data.Type = KeyFrameType.Pulse_Float;
+
+            else if (keyFrame is StepKeyFrame<short>)
+                data.Type = KeyFrameType.Step_Int16;
             else if (keyFrame is StepKeyFrame<int>)
                 data.Type = KeyFrameType.Step_Int32;
+            else if (keyFrame is StepKeyFrame<long>)
+                data.Type = KeyFrameType.Step_Int64;
+            else if (keyFrame is StepKeyFrame<float>)
+                data.Type = KeyFrameType.Step_Float;
+
             else
                 throw new NotSupportedException("KeyFrameType");
 

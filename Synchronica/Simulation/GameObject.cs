@@ -38,7 +38,7 @@ namespace Synchronica.Simulation
 
         internal GameObject(Scene scene, int id, int startTime)
         {
-            if (startTime <= scene.LockTime)
+            if (startTime < scene.LockTime)
                 throw new ArgumentException("Cannot create object before lock time of scene");
 
             this.scene = scene;
@@ -100,10 +100,9 @@ namespace Synchronica.Simulation
             return this.variables.Find(v => v.Id == id);
         }
 
-        public TVariable GetVariable<TVariable>(int id)
-            where TVariable : Variable
+        public Variable<TValue> GetVariable<TValue>(int id)
         {
-            return (TVariable)this.variables.Find(v => v.Id == id);
+            return (Variable<TValue>)this.variables.Find(v => v.Id == id);
         }
 
         internal Scene Scene

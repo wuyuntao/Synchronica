@@ -130,10 +130,10 @@ namespace Synchronica.Record
 
         public TData Record(int time)
         {
-            if (time <= this.lastRecordTime)
+            if (time < this.lastRecordTime)
                 throw new ArgumentException("Cannot create record before last record time");
 
-            var data = (TData)Record(this.lastRecordTime + 1, time);
+            var data = (TData)Record(this.lastRecordTime, time);
 
             if (data != null)
             {
