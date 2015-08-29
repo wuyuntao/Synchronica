@@ -60,6 +60,10 @@
     <Compile Include="GeneratedCode\Synchronica\Schema\StepKeyFrameData_Int64.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\SynchronicaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Replay\ReplayerGameObject.cs" />
+    <Compile Include="Record\RecorderGameObject.cs" />
+    <Compile Include="Record\Recorder.cs" />
+    <Compile Include="Replay\Replayer.cs" />
     <Compile Include="Simulation\Events\CreateObjectEvent.cs" />
     <Compile Include="Simulation\Events\Event.cs" />
     <Compile Include="Simulation\Events\RemoveObjectEvent.cs" />
@@ -72,7 +76,7 @@
     <Compile Include="Simulation\KeyFrames\PulseKeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\LinearKeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\StepKeyFrame.cs" />
-    <Compile Include="Simulation\Scene.cs" />
+    <Compile Include="Simulation\GameObjectManager.cs" />
     <Compile Include="Simulation\Variable.cs" />
     <Compile Include="Simulation\Variables\VBoolean.cs" />
     <Compile Include="Simulation\Variables\VFloat.cs" />

@@ -65,6 +65,15 @@ namespace Synchronica.Simulation
             this.current = frame;
         }
 
+        public IEnumerable<KeyFrame> GetFramesAfter(int milliseconds)
+        {
+            for (var frame = this.head; frame.Next != null; frame = frame.Next)
+            {
+                if (frame.Milliseconds >= milliseconds)
+                    yield return frame;
+            }
+        }
+
         public void RemoveFramesBefore(int milliseconds)
         {
             if (milliseconds <= this.head.Milliseconds)

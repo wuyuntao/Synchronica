@@ -22,39 +22,30 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Events;
+using Synchronica.Simulation;
 using System;
-using System.Collections.Generic;
 
-namespace Synchronica.Simulation
+namespace Synchronica.Replay
 {
-    public sealed class Scene
+    public abstract class Replayer<TData>
     {
-        private int nextObjectId = 1;
-        private List<SceneEvent> events = new List<SceneEvent>();
-        private List<GameObject> objects = new List<GameObject>();
-        private int milliseconds;
+        private GameObjectManager<ReplayerGameObject> objects = new GameObjectManager<ReplayerGameObject>();
 
-        public GameObject CreateObject()
+        private int lastReplayTime = 0;
+
+        public void Replay(int startTime, int endTime, TData data)
         {
-            var gameObject = new GameObject(this, this.nextObjectId++);
+            if (startTime != lastReplayTime + 1)
+                throw new ArgumentException("Cannot replay data before last replay time");
 
-            this.objects.Add(gameObject);
+            if (data != null)
+            {
+                Deserialize(data);
+            }
 
-            return gameObject;
+            this.lastReplayTime = endTime;
         }
 
-        public void IncreaseMilliseconds(int milliseconds)
-        {
-            if (milliseconds <= 0)
-                throw new ArgumentException("milliseconds must > 0");
-
-            this.milliseconds += milliseconds;
-        }
-
-        public int Milliseconds
-        {
-            get { return this.milliseconds; }
-        }
+        protected abstract void Deserialize(TData data);
     }
 }

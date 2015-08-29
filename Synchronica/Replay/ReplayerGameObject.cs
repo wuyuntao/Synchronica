@@ -22,41 +22,14 @@
  * SOFTWARE.
 */
 
-using System.Collections.Generic;
+using Synchronica.Simulation;
 
-namespace Synchronica.Simulation.Command
+namespace Synchronica.Replay
 {
-    public abstract class CommandProcessor
+    class ReplayerGameObject : GameObject
     {
-        private List<ICommand> commands = new List<ICommand>();
-        private List<CommandFrame> commandFrames = new List<CommandFrame>();
-
-        protected CommandProcessor()
-        {
-        }
-
-        public void AppendInput(ICommand command)
-        {
-            this.commands.Add(command);
-        }
-
-        public void Process(int milliseconds)
-        {
-            this.commands.RemoveAll(command =>
-            {
-                var process = command.Milliseconds <= milliseconds;
-                if (process)
-                {
-                    var frame = new CommandFrame(milliseconds, command);
-                    this.commandFrames.Add(frame);
-
-                    ProcessCommand(frame);
-                }
-
-                return process;
-            });
-        }
-
-        protected abstract void ProcessCommand(CommandFrame frame);
+        internal ReplayerGameObject(int id, int startTime)
+            : base(id, startTime)
+        { }
     }
 }

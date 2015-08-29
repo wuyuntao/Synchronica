@@ -22,41 +22,53 @@
  * SOFTWARE.
 */
 
-using System.Collections.Generic;
+using Synchronica.Simulation;
+using Synchronica.Simulation.Variables;
 
-namespace Synchronica.Simulation.Command
+namespace Synchronica.Record
 {
-    public abstract class CommandProcessor
+    class RecorderGameObject : GameObject
     {
-        private List<ICommand> commands = new List<ICommand>();
-        private List<CommandFrame> commandFrames = new List<CommandFrame>();
+        private int lastVariableId;
 
-        protected CommandProcessor()
+        internal RecorderGameObject(int id, int startTime)
+            : base(id, startTime)
         {
         }
 
-        public void AppendInput(ICommand command)
+        public VBoolean CreateBoolean(bool value)
         {
-            this.commands.Add(command);
+            var variable = new VBoolean(++this.lastVariableId, value);
+            AddVariable(variable);
+            return variable;
         }
 
-        public void Process(int milliseconds)
+        public VInt16 CreateInt16(short value)
         {
-            this.commands.RemoveAll(command =>
-            {
-                var process = command.Milliseconds <= milliseconds;
-                if (process)
-                {
-                    var frame = new CommandFrame(milliseconds, command);
-                    this.commandFrames.Add(frame);
-
-                    ProcessCommand(frame);
-                }
-
-                return process;
-            });
+            var variable = new VInt16(++this.lastVariableId, value);
+            AddVariable(variable);
+            return variable;
         }
 
-        protected abstract void ProcessCommand(CommandFrame frame);
+        public VInt32 CreateInt32(int value)
+        {
+            var variable = new VInt32(++this.lastVariableId, value);
+            AddVariable(variable);
+            return variable;
+        }
+
+        public VInt64 CreateInt64(long value)
+        {
+            var variable = new VInt64(++this.lastVariableId, value);
+            AddVariable(variable);
+            return variable;
+        }
+
+        public VFloat CreateFloat(float value)
+        {
+            var variable = new VFloat(++this.lastVariableId, value);
+            AddVariable(variable);
+            return variable;
+        }
     }
 }

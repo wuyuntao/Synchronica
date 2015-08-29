@@ -22,93 +22,46 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Variables;
 using System;
 using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
-    public sealed class GameObject
+    public abstract class GameObject
     {
-        public const int MaxInternalEventId = 10;
-        private const int CreateEventId = 1;
-        private const int DestroyEventId = 2;
-
-        private Scene scene;
         private int id;
-        private int nextVariableId;
+        private int startTime;
+        private int endTime;
         private List<Variable> variables = new List<Variable>();
-        private VInt32 events;
 
-        internal GameObject(Scene scene, int id)
+        internal GameObject(int id, int startTime)
         {
-            this.scene = scene;
+            if (startTime < 0)
+                throw new ArgumentException("Start time must >= 0");
+
             this.id = id;
-
-            this.events = CreateInt32(0);
-            CreateEventTrigger(scene.Milliseconds, CreateEventId, true);
+            this.startTime = startTime;
         }
 
-        public void Destroy(int milliseconds)
+        protected void Destroy(int endTime)
         {
-            CreateEventTrigger(milliseconds, DestroyEventId, true);
+            if (this.endTime > 0)
+                throw new ArgumentException("Already destroyed");
+
+            if (this.endTime <= this.startTime)
+                throw new ArgumentException("Cannot destroy before start");
+
+            this.endTime = endTime;
         }
 
-        #region Variable definitions
-
-        public VBoolean CreateBoolean(bool value)
+        protected void AddVariable(Variable variable)
         {
-            var variable = new VBoolean(GetNextVariableId(), value);
             this.variables.Add(variable);
-            return variable;
         }
 
-        public VInt16 CreateInt16(short value)
+        public Variable GetVariable(int id)
         {
-            var variable = new VInt16(GetNextVariableId(), value);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        public VInt32 CreateInt32(int value)
-        {
-            var variable = new VInt32(GetNextVariableId(), value);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        public VInt64 CreateInt64(long value)
-        {
-            var variable = new VInt64(GetNextVariableId(), value);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        public VFloat CreateFloat(float value)
-        {
-            var variable = new VFloat(GetNextVariableId(), value);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        private int GetNextVariableId()
-        {
-            return this.nextVariableId++;
-        }
-
-        #endregion
-        
-        public void CreateEventTrigger(int milliseconds, int eventId)
-        {
-            CreateEventTrigger(milliseconds, eventId, false);
-        }
-
-        private void CreateEventTrigger(int milliseconds, int eventId, bool isInternalEvent)
-        {
-            if (!isInternalEvent && eventId <= MaxInternalEventId)
-                throw new ArgumentException("Event id is reserved for internal usage");
-
-            this.events.AppendPulseFrame(milliseconds, eventId);
+            return this.variables.Find(v => v.Id == id);
         }
 
         public int Id
@@ -116,13 +69,19 @@ namespace Synchronica.Simulation
             get { return this.id; }
         }
 
-        public bool IsDestroyed
+        public int StartTime
         {
-            get
-            {
-                var lastEvent = this.events.Tail;
-                return lastEvent.Value == DestroyEventId && lastEvent.Milliseconds <= scene.Milliseconds;
-            }
+            get { return this.startTime; }
+        }
+
+        public int EndTime
+        {
+            get { return this.endTime; }
+        }
+
+        public IEnumerable<Variable> Variables
+        {
+            get { return this.variables; }
         }
     }
 }
