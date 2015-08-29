@@ -30,12 +30,14 @@ namespace Synchronica.Simulation
 {
     public abstract class Variable
     {
+        private GameObject gameObject;
         private int id;
         private KeyFrame head;
         private KeyFrame tail;
 
-        internal Variable(int id, KeyFrame initialFrame)
+        internal Variable(GameObject gameObject, int id, KeyFrame initialFrame)
         {
+            this.gameObject = gameObject;
             this.id = id;
             this.head = initialFrame;
             this.tail = initialFrame;
@@ -43,6 +45,9 @@ namespace Synchronica.Simulation
 
         public TValue GetValue<TValue>(int milliseconds)
         {
+            if (milliseconds < this.gameObject.StartTime)
+                throw new ArgumentException("Cannot get value before game object starts");
+
             if (milliseconds <= this.head.Milliseconds)
                 return ((KeyFrame<TValue>)this.head).Value;
 
@@ -53,7 +58,7 @@ namespace Synchronica.Simulation
             return frame.GetValue(milliseconds);
         }
 
-        internal void AppendFrame(KeyFrame frame)
+        protected void AddKeyFrame(KeyFrame frame)
         {
             if (this.tail.Milliseconds >= frame.Milliseconds)
                 throw new ArgumentException("milliseconds must be greater than last frame");
@@ -165,8 +170,8 @@ namespace Synchronica.Simulation
 
     public abstract class Variable<TValue> : Variable
     {
-        protected Variable(int id, TValue initialValue)
-            : base(id, new StepKeyFrame<TValue>(null, null, 0, initialValue))
+        protected Variable(GameObject gameObject, int id, TValue initialValue)
+            : base(gameObject, id, new StepKeyFrame<TValue>(null, null, 0, initialValue))
         { }
 
         public TValue GetValue(int milliseconds)

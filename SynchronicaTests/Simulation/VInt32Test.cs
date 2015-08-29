@@ -32,21 +32,23 @@ namespace Synchronica.Tests.Simulation
     public class VInt32Test
     {
         [Test]
-        public void TestAppendFrames()
+        public void TestAddFrames()
         {
-            var value = new VInt32(1, -10);
+            var gameObject = new GameObject(new Scene(), 1, 0);
+
+            var value = new VInt32(gameObject, 1, -10);
             Assert.AreEqual(-10, value.GetValue(-1));
             Assert.AreEqual(-10, value.GetValue(0));
             Assert.AreEqual(-10, value.GetValue(1));
 
-            value.AppendStepFrame(10, 5);
+            value.AddStepFrame(10, 5);
             Assert.AreEqual(-10, value.GetValue(-1));
             Assert.AreEqual(-10, value.GetValue(0));
             Assert.AreEqual(-10, value.GetValue(9));
             Assert.AreEqual(5, value.GetValue(10));
             Assert.AreEqual(5, value.GetValue(11));
 
-            value.AppendLinearFrame(20, 15);
+            value.AddLinearFrame(20, 15);
             Assert.AreEqual(5, value.GetValue(10));
             Assert.AreEqual(6, value.GetValue(11));
             Assert.AreEqual(14, value.GetValue(19));
@@ -57,10 +59,12 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestRemoveFramesBefore()
         {
-            var value = new VInt32(1, 0);
+            var gameObject = new GameObject(new Scene(), 1, 0);
+
+            var value = new VInt32(gameObject, 1, 0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesBefore(1));
 
-            value.AppendStepFrame(10, 5);
+            value.AddStepFrame(10, 5);
             value.RemoveFramesBefore(5);
             Assert.AreEqual(0, value.GetValue(4));
             Assert.AreEqual(0, value.GetValue(5));
@@ -68,7 +72,7 @@ namespace Synchronica.Tests.Simulation
             Assert.AreEqual(5, value.GetValue(10));
             Assert.AreEqual(5, value.GetValue(11));
 
-            value.AppendLinearFrame(20, 15);
+            value.AddLinearFrame(20, 15);
             value.RemoveFramesBefore(12);
             Assert.AreEqual(7, value.GetValue(11));
             Assert.AreEqual(7, value.GetValue(12));
@@ -80,16 +84,18 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestRemoveFramesAfter()
         {
-            var value = new VInt32(1, 0);
+            var gameObject = new GameObject(new Scene(), 1, 0);
+
+            var value = new VInt32(gameObject, 1, 0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesAfter(-1));
 
-            value.AppendStepFrame(10, 5);
+            value.AddStepFrame(10, 5);
             value.RemoveFramesAfter(9);
             Assert.AreEqual(0, value.GetValue(8), 0);
             Assert.AreEqual(0, value.GetValue(9), 0);
             Assert.AreEqual(0, value.GetValue(10), 0);
 
-            value.AppendLinearFrame(19, 10);
+            value.AddLinearFrame(19, 10);
             value.RemoveFramesAfter(17);
             Assert.AreEqual(7, value.GetValue(16));
             Assert.AreEqual(8, value.GetValue(17));

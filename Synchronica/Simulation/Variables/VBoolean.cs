@@ -26,15 +26,15 @@ using Synchronica.Simulation.KeyFrames;
 
 namespace Synchronica.Simulation.Variables
 {
-    public sealed class VBoolean : Variable<bool>
+    sealed class VBoolean : Variable<bool>, IStepKeyFrameVariable<bool>
     {
-        internal VBoolean(int id, bool initialValue)
-            : base(id, initialValue)
+        internal VBoolean(GameObject gameObject, int id, bool initialValue)
+            : base(gameObject, id, initialValue)
         { }
 
-        public void AppendStepFrame(int milliseconds, bool value)
+        public void AddStepFrame(int time, bool value)
         {
-            AppendFrame(new StepKeyFrame<bool>(Tail, null, milliseconds, value));
+            AddKeyFrame(new StepKeyFrame<bool>(Tail, null, time, value));
         }
     }
 }

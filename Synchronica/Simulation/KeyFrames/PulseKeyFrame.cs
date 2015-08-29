@@ -26,6 +26,11 @@ using System;
 
 namespace Synchronica.Simulation.KeyFrames
 {
+    interface IPulseKeyFrameVariable<TValue>
+    {
+        void AddPulseFrame(int time, TValue value);
+    }
+
     public sealed class PulseKeyFrame_Int16 : KeyFrame<short>
     {
         public PulseKeyFrame_Int16(KeyFrame<short> previous, KeyFrame<short> next, int milliseconds, short value)

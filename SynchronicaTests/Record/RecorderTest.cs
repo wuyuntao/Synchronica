@@ -22,43 +22,34 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation;
+using NUnit.Framework;
 using Synchronica.Simulation.Variables;
+using Synchronica.Tests.Mock;
+using System;
 
-namespace Synchronica.Record
+namespace Synchronica.Tests.Record
 {
-    class RecorderGameObject : GameObject
+    public class RecorderTest
     {
-        private int lastVariableId;
-
-        internal RecorderGameObject(Scene scene, int id, int startTime)
-            : base(scene, id, startTime)
+        [Test]
+        public void TestRecorder()
         {
-        }
+            var recorder = new Recorder();
+            var obj1 = recorder.AddObject(2);
+            var var1 = recorder.AddInt16(obj1, 10);
+            var var2 = recorder.AddInt32(obj1, -10);
+            var var3 = recorder.AddFloat(obj1, 0);
 
-        public VBoolean CreateBoolean(bool value)
-        {
-            return CreateBoolean(++this.lastVariableId, value);
-        }
+            var obj2 = recorder.GetObject(1);
+            Assert.AreEqual(obj1.Id, obj2.Id);
+            Assert.AreEqual(obj1.StartTime, obj2.StartTime);
+            Assert.AreEqual(obj1.EndTime, obj2.EndTime);
 
-        public VInt16 CreateInt16(short value)
-        {
-            return CreateInt16(++this.lastVariableId, value);
-        }
-
-        public VInt32 CreateInt32(int value)
-        {
-            return CreateInt32(++this.lastVariableId, value);
-        }
-
-        public VInt64 CreateInt64(long value)
-        {
-            return CreateInt64(++this.lastVariableId, value);
-        }
-
-        public VFloat CreateFloat(float value)
-        {
-            return CreateFloat(++this.lastVariableId, value);
+            var var4 = obj2.GetVariable<VInt16>(var1.Id);
+            var var5 = obj2.GetVariable<VInt32>(var2.Id);
+            var var6 = obj2.GetVariable<VFloat>(var3.Id);
+            Assert.Throws<ArgumentException>(() => var4.GetValue(1));
+            Assert.AreEqual(10, var4.GetValue(2));
         }
     }
 }

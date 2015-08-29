@@ -26,25 +26,25 @@ using Synchronica.Simulation.KeyFrames;
 
 namespace Synchronica.Simulation.Variables
 {
-    public sealed class VInt16 : Variable<short>
+    sealed class VInt16 : Variable<short>, ILinearKeyFrameVariable<short>, IPulseKeyFrameVariable<short>, IStepKeyFrameVariable<short>
     {
-        internal VInt16(int id, short initialValue)
-            : base(id, initialValue)
+        internal VInt16(GameObject gameObject, int id, short initialValue)
+            : base(gameObject, id, initialValue)
         { }
 
-        public void AppendLinearFrame(int milliseconds, short value)
+        public void AddLinearFrame(int time, short value)
         {
-            AppendFrame(new LinearKeyFrame_Int16(Tail, null, milliseconds, value));
+            AddKeyFrame(new LinearKeyFrame_Int16(Tail, null, time, value));
         }
 
-        public void AppendPulseFrame(int milliseconds, short value)
+        public void AddPulseFrame(int time, short value)
         {
-            AppendFrame(new PulseKeyFrame_Int16(Tail, null, milliseconds, value));
+            AddKeyFrame(new PulseKeyFrame_Int16(Tail, null, time, value));
         }
 
-        public void AppendStepFrame(int milliseconds, short value)
+        public void AddStepFrame(int time, short value)
         {
-            AppendFrame(new StepKeyFrame<short>(Tail, null, milliseconds, value));
+            AddKeyFrame(new StepKeyFrame<short>(Tail, null, time, value));
         }
     }
 }

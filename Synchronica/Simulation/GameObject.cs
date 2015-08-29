@@ -28,7 +28,7 @@ using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
-    public abstract class GameObject
+    public sealed class GameObject
     {
         private Scene scene;
         private int id;
@@ -60,37 +60,37 @@ namespace Synchronica.Simulation
             this.endTime = endTime;
         }
 
-        internal VBoolean CreateBoolean(int id, bool value)
+        internal VBoolean AddBoolean(int id, bool value)
         {
-            var variable = new VBoolean(id, value);
+            var variable = new VBoolean(this, id, value);
             this.variables.Add(variable);
             return variable;
         }
 
-        internal VInt16 CreateInt16(int id, short value)
+        internal VInt16 AddInt16(int id, short value)
         {
-            var variable = new VInt16(id, value);
+            var variable = new VInt16(this, id, value);
             this.variables.Add(variable);
             return variable;
         }
 
-        internal VInt32 CreateInt32(int id, int value)
+        internal VInt32 AddInt32(int id, int value)
         {
-            var variable = new VInt32(id, value);
+            var variable = new VInt32(this, id, value);
             this.variables.Add(variable);
             return variable;
         }
 
-        internal VInt64 CreateInt64(int id, long value)
+        internal VInt64 AddInt64(int id, long value)
         {
-            var variable = new VInt64(id, value);
+            var variable = new VInt64(this, id, value);
             this.variables.Add(variable);
             return variable;
         }
 
-        internal VFloat CreateFloat(int id, float value)
+        internal VFloat AddFloat(int id, float value)
         {
-            var variable = new VFloat(id, value);
+            var variable = new VFloat(this, id, value);
             this.variables.Add(variable);
             return variable;
         }
@@ -98,6 +98,12 @@ namespace Synchronica.Simulation
         public Variable GetVariable(int id)
         {
             return this.variables.Find(v => v.Id == id);
+        }
+
+        public TVariable GetVariable<TVariable>(int id)
+            where TVariable : Variable
+        {
+            return (TVariable)this.variables.Find(v => v.Id == id);
         }
 
         internal Scene Scene

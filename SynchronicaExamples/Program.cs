@@ -8,7 +8,7 @@ namespace Synchronica.Examples
         static void Main(string[] args)
         {
             var t = new Synchronica.Tests.Simulation.VFloatTest();
-            t.TestAppendFrames();
+            t.TestAddFrames();
 
             /*
             var server = new Server.DemoServer(4000);

@@ -41,7 +41,7 @@ namespace Synchronica.Tests.Mock
                     gameObject = CreateGameObject(gameObjectData);
                 }
 
-                ReplayGameObject((ReplayerGameObject)gameObject, gameObjectData, data.StartTime);
+                ReplayGameObject((GameObject)gameObject, gameObjectData, data.StartTime);
             }
         }
 
@@ -56,23 +56,23 @@ namespace Synchronica.Tests.Mock
                     switch (definition.Type)
                     {
                         case VariableType.VBoolean:
-                            gameObject.CreateBoolean(definition.Id, (bool)definition.InitialValue);
+                            gameObject.AddBoolean(definition.Id, (bool)definition.InitialValue);
                             break;
 
                         case VariableType.VInt16:
-                            gameObject.CreateInt16(definition.Id, (short)definition.InitialValue);
+                            gameObject.AddInt16(definition.Id, (short)definition.InitialValue);
                             break;
 
                         case VariableType.VInt32:
-                            gameObject.CreateInt32(definition.Id, (int)definition.InitialValue);
+                            gameObject.AddInt32(definition.Id, (int)definition.InitialValue);
                             break;
 
                         case VariableType.VInt64:
-                            gameObject.CreateInt64(definition.Id, (long)definition.InitialValue);
+                            gameObject.AddInt64(definition.Id, (long)definition.InitialValue);
                             break;
 
                         case VariableType.VFloat:
-                            gameObject.CreateFloat(definition.Id, (float)definition.InitialValue);
+                            gameObject.AddFloat(definition.Id, (float)definition.InitialValue);
                             break;
 
                         default:
@@ -84,7 +84,7 @@ namespace Synchronica.Tests.Mock
             return gameObject;
         }
 
-        private void ReplayGameObject(ReplayerGameObject gameObject, GameObjectData data, int startTime)
+        private void ReplayGameObject(GameObject gameObject, GameObjectData data, int startTime)
         {
             if (data.Variables != null)
             {
@@ -113,15 +113,15 @@ namespace Synchronica.Tests.Mock
                 switch (keyFrame.Type)
                 {
                     case KeyFrameType.Linear_Int32:
-                        ((VInt32)variable).AppendLinearFrame(keyFrame.Time, (int)keyFrame.Value);
+                        ((VInt32)variable).AddLinearFrame(keyFrame.Time, (int)keyFrame.Value);
                         break;
 
                     case KeyFrameType.Pulse_Int32:
-                        ((VInt32)variable).AppendPulseFrame(keyFrame.Time, (int)keyFrame.Value);
+                        ((VInt32)variable).AddPulseFrame(keyFrame.Time, (int)keyFrame.Value);
                         break;
 
                     case KeyFrameType.Step_Int32:
-                        ((VInt32)variable).AppendStepFrame(keyFrame.Time, (int)keyFrame.Value);
+                        ((VInt32)variable).AddStepFrame(keyFrame.Time, (int)keyFrame.Value);
                         break;
 
                     default:

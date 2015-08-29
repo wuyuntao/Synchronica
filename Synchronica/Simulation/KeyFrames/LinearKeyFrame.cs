@@ -26,6 +26,11 @@ using System;
 
 namespace Synchronica.Simulation.KeyFrames
 {
+    interface ILinearKeyFrameVariable<TValue>
+    {
+        void AddLinearFrame(int time, TValue value);
+    }
+
     public sealed class LinearKeyFrame_Int16 : KeyFrame<short>
     {
         public LinearKeyFrame_Int16(KeyFrame<short> previous, KeyFrame<short> next, int milliseconds, short value)

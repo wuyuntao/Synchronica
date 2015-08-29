@@ -37,7 +37,7 @@ namespace Synchronica.Replay
             if (startTime < this.lastReplayTime)
                 throw new ArgumentException("Cannot create object before last replay time");
 
-            var gameObject = new ReplayerGameObject(this.scene, id, startTime);
+            var gameObject = new GameObject(this.scene, id, startTime);
             this.scene.AddObject(gameObject);
             return gameObject;
         }
