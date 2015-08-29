@@ -22,7 +22,6 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Data;
 using Synchronica.Simulation.Variables;
 using System;
 using System.Collections.Generic;
@@ -48,25 +47,6 @@ namespace Synchronica.Simulation
 
             this.events = CreateInt32(0);
             CreateEventTrigger(scene.Milliseconds, CreateEventId, true);
-        }
-
-        internal GameObjectData GetData(int startMilliseconds, int endMilliseconds)
-        {
-            GameObjectData data = null;
-
-            foreach (var variable in this.variables)
-            {
-                var variableData = variable.GetData(startMilliseconds, endMilliseconds);
-                if (variableData != null)
-                {
-                    if (data == null)
-                        data = new GameObjectData(this.id);
-
-                    data.AddVariable(variableData);
-                }
-            }
-
-            return data;
         }
 
         public void Destroy(int milliseconds)

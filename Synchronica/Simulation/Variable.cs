@@ -22,7 +22,6 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Data;
 using Synchronica.Simulation.KeyFrames;
 using System;
 using System.Collections.Generic;
@@ -94,22 +93,6 @@ namespace Synchronica.Simulation
 
             this.tail = newTail;
             this.current = newTail;
-        }
-
-        public VariableData GetData(int startMilliseconds, int endMilliseconds)
-        {
-            VariableData data = null;
-
-            var keyFrames = FindFrames(startMilliseconds, endMilliseconds);
-            foreach (var frame in keyFrames)
-            {
-                if (data == null)
-                    data = new VariableData(this.id);
-
-                data.AddFrame(frame.GetData());
-            }
-
-            return data;
         }
 
         private KeyFrame FindFrame(int milliseconds)

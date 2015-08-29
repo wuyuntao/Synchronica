@@ -22,33 +22,20 @@
  * SOFTWARE.
 */
 
-using System.Collections.Generic;
-
-namespace Synchronica.Simulation.Data
+namespace Synchronica.Simulation.Events
 {
-    public sealed class GameObjectData
+    public abstract class Event
     {
-        private int id;
-        private List<VariableData> variables = new List<VariableData>();
+        private int milliseconds;
 
-        public GameObjectData(int id)
+        protected Event(int milliseconds)
         {
-            this.id = id;
+            this.milliseconds = milliseconds;
         }
 
-        public void AddVariable(VariableData variable)
+        public int Milliseconds
         {
-            this.variables.Add(variable);
-        }
-
-        public int Id
-        {
-            get { return this.id; }
-        }
-
-        public IEnumerable<VariableData> Variables
-        {
-            get { return this.variables; }
+            get { return this.milliseconds; }
         }
     }
 }

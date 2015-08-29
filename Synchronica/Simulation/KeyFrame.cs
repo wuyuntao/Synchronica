@@ -22,7 +22,6 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Data;
 using System;
 
 namespace Synchronica.Simulation
@@ -44,8 +43,6 @@ namespace Synchronica.Simulation
         }
 
         internal abstract KeyFrame Interpolate(int milliseconds);
-
-        internal abstract KeyFrameData GetData();
 
         public KeyFrame Previous
         {

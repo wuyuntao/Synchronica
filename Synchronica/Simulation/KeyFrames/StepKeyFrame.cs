@@ -22,8 +22,6 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Data;
-
 namespace Synchronica.Simulation.KeyFrames
 {
     sealed class StepKeyFrame<TValue> : KeyFrame<TValue>
@@ -43,11 +41,6 @@ namespace Synchronica.Simulation.KeyFrames
         internal override KeyFrame Interpolate(int milliseconds)
         {
             return new StepKeyFrame<TValue>(Previous, this, milliseconds, GetValue(milliseconds));
-        }
-
-        internal override KeyFrameData GetData()
-        {
-            return new StepKeyFrameData(Milliseconds, Value);
         }
     }
 }

@@ -22,7 +22,6 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.Data;
 using System;
 
 namespace Synchronica.Simulation.KeyFrames
@@ -42,11 +41,6 @@ namespace Synchronica.Simulation.KeyFrames
         {
             return new PulseKeyFrame_Int16(Previous, this, milliseconds, GetValue(milliseconds));
         }
-
-        internal override KeyFrameData GetData()
-        {
-            return new PulseKeyFrameData(Milliseconds, Value);
-        }
     }
 
     sealed class PulseKeyFrame_Int32 : KeyFrame<int>
@@ -63,11 +57,6 @@ namespace Synchronica.Simulation.KeyFrames
         internal override KeyFrame Interpolate(int milliseconds)
         {
             return new PulseKeyFrame_Int32(Previous, this, milliseconds, GetValue(milliseconds));
-        }
-
-        internal override KeyFrameData GetData()
-        {
-            return new PulseKeyFrameData(Milliseconds, Value);
         }
     }
 
@@ -86,11 +75,6 @@ namespace Synchronica.Simulation.KeyFrames
         {
             return new PulseKeyFrame_Int64(Previous, this, milliseconds, GetValue(milliseconds));
         }
-
-        internal override KeyFrameData GetData()
-        {
-            return new PulseKeyFrameData(Milliseconds, Value);
-        }
     }
 
     sealed class PulseKeyFrame_Float : KeyFrame<float>
@@ -107,11 +91,6 @@ namespace Synchronica.Simulation.KeyFrames
         internal override KeyFrame Interpolate(int milliseconds)
         {
             return new PulseKeyFrame_Float(Previous, this, milliseconds, GetValue(milliseconds));
-        }
-
-        internal override KeyFrameData GetData()
-        {
-            return new PulseKeyFrameData(Milliseconds, Value);
         }
     }
 }

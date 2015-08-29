@@ -22,20 +22,12 @@
  * SOFTWARE.
 */
 
-namespace Synchronica.Simulation
+namespace Synchronica.Simulation.Events
 {
-    public abstract class SceneEvent
+    public abstract class SceneEvent : Event
     {
-        private int milliseconds;
-
         protected SceneEvent(int milliseconds)
-        {
-            this.milliseconds = milliseconds;
-        }
-
-        public int Milliseconds
-        {
-            get { return this.milliseconds; }
-        }
+            : base(milliseconds)
+        { }
     }
 }
