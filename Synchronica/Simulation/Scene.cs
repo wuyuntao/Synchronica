@@ -22,44 +22,54 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation;
 using System;
+using System.Collections.Generic;
 
-namespace Synchronica.Replay
+namespace Synchronica.Simulation
 {
-    public abstract class Replayer<TData>
+    sealed class Scene
     {
-        private Scene scene = new Scene();
-        private int lastReplayTime = 0;
+        private int lockTime;
+        private Dictionary<int, GameObject> objects = new Dictionary<int, GameObject>();
 
-        protected GameObject AddObject(int id, int startTime)
+        internal void Lock(int time)
         {
-            if (startTime < this.lastReplayTime)
-                throw new ArgumentException("Cannot create object before last replay time");
+            if (time <= this.lockTime)
+                throw new ArgumentException("Already locked");
 
-            var gameObject = new ReplayerGameObject(this.scene, id, startTime);
-            this.scene.AddObject(gameObject);
-            return gameObject;
+            this.lockTime = time;
         }
 
         public GameObject GetObject(int id)
         {
-            return this.scene.GetObject(id);
+            GameObject obj;
+            this.objects.TryGetValue(id, out obj);
+            return obj;
         }
 
-        public void Replay(int startTime, int endTime, TData data)
+        internal void AddObject(GameObject gameObject)
         {
-            if (startTime != lastReplayTime + 1)
-                throw new ArgumentException("Cannot replay data before last replay time");
-
-            if (data != null)
-            {
-                Replay(data);
-            }
-
-            this.lastReplayTime = endTime;
+            this.objects.Add(gameObject.Id, gameObject);
         }
 
-        protected abstract void Replay(TData data);
+        internal void RemoveObject(GameObject gameObject)
+        {
+            this.objects.Remove(gameObject.Id);
+        }
+
+        public int LockTime
+        {
+            get { return this.lockTime; }
+        }
+
+        public IEnumerable<GameObject> Objects
+        {
+            get { return this.objects.Values; }
+        }
+
+        public int Count
+        {
+            get { return this.objects.Count; }
+        }
     }
 }

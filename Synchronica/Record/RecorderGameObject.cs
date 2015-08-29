@@ -31,44 +31,34 @@ namespace Synchronica.Record
     {
         private int lastVariableId;
 
-        internal RecorderGameObject(int id, int startTime)
-            : base(id, startTime)
+        internal RecorderGameObject(Scene scene, int id, int startTime)
+            : base(scene, id, startTime)
         {
         }
 
         public VBoolean CreateBoolean(bool value)
         {
-            var variable = new VBoolean(++this.lastVariableId, value);
-            AddVariable(variable);
-            return variable;
+            return CreateBoolean(++this.lastVariableId, value);
         }
 
         public VInt16 CreateInt16(short value)
         {
-            var variable = new VInt16(++this.lastVariableId, value);
-            AddVariable(variable);
-            return variable;
+            return CreateInt16(++this.lastVariableId, value);
         }
 
         public VInt32 CreateInt32(int value)
         {
-            var variable = new VInt32(++this.lastVariableId, value);
-            AddVariable(variable);
-            return variable;
+            return CreateInt32(++this.lastVariableId, value);
         }
 
         public VInt64 CreateInt64(long value)
         {
-            var variable = new VInt64(++this.lastVariableId, value);
-            AddVariable(variable);
-            return variable;
+            return CreateInt64(++this.lastVariableId, value);
         }
 
         public VFloat CreateFloat(float value)
         {
-            var variable = new VFloat(++this.lastVariableId, value);
-            AddVariable(variable);
-            return variable;
+            return CreateFloat(++this.lastVariableId, value);
         }
     }
 }

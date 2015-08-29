@@ -28,8 +28,13 @@ namespace Synchronica.Replay
 {
     class ReplayerGameObject : GameObject
     {
-        internal ReplayerGameObject(int id, int startTime)
-            : base(id, startTime)
+        internal ReplayerGameObject(Scene scene, int id, int startTime)
+            : base(scene, id, startTime)
         { }
+
+        public new void Destroy(int endTime)
+        {
+            base.Destroy(endTime);
+        }
     }
 }

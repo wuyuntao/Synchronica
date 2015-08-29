@@ -33,14 +33,12 @@ namespace Synchronica.Simulation
         private int id;
         private KeyFrame head;
         private KeyFrame tail;
-        private KeyFrame current;
 
         internal Variable(int id, KeyFrame initialFrame)
         {
             this.id = id;
             this.head = initialFrame;
             this.tail = initialFrame;
-            this.current = initialFrame;
         }
 
         public TValue GetValue<TValue>(int milliseconds)
@@ -52,7 +50,6 @@ namespace Synchronica.Simulation
                 return ((KeyFrame<TValue>)this.tail).Value;
 
             var frame = (KeyFrame<TValue>)FindFrame(milliseconds);
-            this.current = frame;
             return frame.GetValue(milliseconds);
         }
 
@@ -62,10 +59,9 @@ namespace Synchronica.Simulation
                 throw new ArgumentException("milliseconds must be greater than last frame");
 
             this.tail = frame;
-            this.current = frame;
         }
 
-        public IEnumerable<KeyFrame> GetFramesAfter(int milliseconds)
+        public IEnumerable<KeyFrame> GetKeyFramesAfter(int milliseconds)
         {
             for (var frame = this.head; frame.Next != null; frame = frame.Next)
             {
@@ -86,7 +82,6 @@ namespace Synchronica.Simulation
             newHead.Previous = null;
 
             this.head = newHead;
-            this.current = newHead;
         }
 
         public void RemoveFramesAfter(int milliseconds)
@@ -101,7 +96,6 @@ namespace Synchronica.Simulation
             newTail.Next = null;
 
             this.tail = newTail;
-            this.current = newTail;
         }
 
         private KeyFrame FindFrame(int milliseconds)
@@ -112,10 +106,7 @@ namespace Synchronica.Simulation
             if (milliseconds >= this.tail.Milliseconds)
                 return this.tail;
 
-            if (milliseconds > this.current.Milliseconds)
-                return FindNextFrame(this.current.Next, f => f.Milliseconds >= milliseconds);
-
-            return FindPreviousFrame(this.current, f => f.Previous.Milliseconds < milliseconds);
+            return FindNextFrame(this.head, f => f.Milliseconds >= milliseconds);
         }
 
         private IEnumerable<KeyFrame> FindFrames(int startMilliseconds, int endMilliseconds)

@@ -33,16 +33,21 @@ namespace Synchronica.Record
     {
         private int lastRecordTime = 0;
         private int lastObjectId = 0;
-        private GameObjectManager<RecorderGameObject> objects = new GameObjectManager<RecorderGameObject>();
+        private Scene scene = new Scene();
 
         public GameObject AddObject(int startTime)
         {
             if (startTime < this.lastRecordTime)
                 throw new ArgumentException("Cannot create object before last record time");
 
-            var gameObject = new RecorderGameObject(++this.lastObjectId, startTime);
-            this.objects.AddObject(gameObject);
+            var gameObject = new RecorderGameObject(this.scene, ++this.lastObjectId, startTime);
+            this.scene.AddObject(gameObject);
             return gameObject;
+        }
+
+        public GameObject GetObject(int id)
+        {
+            return this.scene.GetObject(id);
         }
 
         public TData Record(int time)
@@ -50,7 +55,7 @@ namespace Synchronica.Record
             if (time <= this.lastRecordTime)
                 throw new ArgumentException("Cannot create record before last record time");
 
-            var data = (TData)Serialize(this.lastRecordTime + 1, time);
+            var data = (TData)Record(this.lastRecordTime + 1, time);
 
             if (data != null)
             {
@@ -62,7 +67,7 @@ namespace Synchronica.Record
             return data;
         }
 
-        protected abstract TData Serialize(int startTime, int endTime);
+        protected abstract TData Record(int startTime, int endTime);
 
         public int LastRecordTime
         {
@@ -73,7 +78,7 @@ namespace Synchronica.Record
         {
             get
             {
-                return from obj in this.objects.Objects
+                return from obj in this.scene.Objects
                        select (GameObject)obj;
             }
         }
