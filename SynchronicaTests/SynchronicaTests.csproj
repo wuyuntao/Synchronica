@@ -39,6 +39,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mock\Recorder.cs" />
+    <Compile Include="Mock\RecorderData.cs" />
+    <Compile Include="Mock\Replayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation\VFloatTest.cs" />
     <Compile Include="Simulation\VInt64Test.cs" />

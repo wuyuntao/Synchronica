@@ -27,7 +27,7 @@ using Synchronica.Simulation;
 using Synchronica.Simulation.Variables;
 using System;
 
-namespace Synchronica.Mock
+namespace Synchronica.Tests.Mock
 {
     public sealed class Replayer : Replayer<RecorderData>
     {

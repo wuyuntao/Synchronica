@@ -28,7 +28,7 @@ using Synchronica.Simulation.KeyFrames;
 using System;
 using System.Linq;
 
-namespace Synchronica.Mock
+namespace Synchronica.Tests.Mock
 {
     public sealed class Recorder : Recorder<RecorderData>
     {

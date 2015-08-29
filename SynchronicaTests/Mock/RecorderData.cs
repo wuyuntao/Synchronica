@@ -22,7 +22,7 @@
  * SOFTWARE.
 */
 
-namespace Synchronica.Mock
+namespace Synchronica.Tests.Mock
 {
     public class RecorderData
     {
