@@ -27,18 +27,10 @@ using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
-    sealed class Scene
+    public sealed class Scene
     {
-        private int lockTime;
+        private int elapsedTime;
         private Dictionary<int, GameObject> objects = new Dictionary<int, GameObject>();
-
-        internal void Lock(int time)
-        {
-            if (time <= this.lockTime)
-                throw new ArgumentException("Already locked");
-
-            this.lockTime = time;
-        }
 
         public GameObject GetObject(int id)
         {
@@ -57,9 +49,16 @@ namespace Synchronica.Simulation
             this.objects.Remove(gameObject.Id);
         }
 
-        public int LockTime
+        public int ElapsedTime
         {
-            get { return this.lockTime; }
+            get { return this.elapsedTime; }
+            internal set
+            {
+                if (value <= this.elapsedTime)
+                    throw new ArgumentException("Already locked");
+
+                this.elapsedTime = value;
+            }
         }
 
         public IEnumerable<GameObject> Objects

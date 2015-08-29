@@ -54,12 +54,12 @@ namespace Synchronica.Replay
 
             if (data != null)
             {
-                Replay(data);
+                DeserializeRecord(data);
             }
 
             this.lastReplayTime = endTime;
         }
 
-        protected abstract void Replay(TData data);
+        protected abstract void DeserializeRecord(TData data);
     }
 }

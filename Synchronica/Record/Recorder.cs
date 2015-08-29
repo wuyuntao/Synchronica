@@ -33,7 +33,6 @@ namespace Synchronica.Record
 {
     public abstract class Recorder<TData>
     {
-        private int lastRecordTime = 0;
         private int lastObjectId = 0;
         private Scene scene = new Scene();
 
@@ -46,8 +45,8 @@ namespace Synchronica.Record
 
         public GameObject AddObject(int startTime)
         {
-            if (startTime < this.lastRecordTime)
-                throw new ArgumentException("Cannot create object before last record time");
+            if (startTime < this.scene.ElapsedTime)
+                throw new ArgumentException("Cannot create object before lock time");
 
             var gameObject = new GameObject(this.scene, GetNextObjectId(), startTime);
             this.scene.AddObject(gameObject);
@@ -130,38 +129,32 @@ namespace Synchronica.Record
 
         public TData Record(int time)
         {
-            if (time < this.lastRecordTime)
-                throw new ArgumentException("Cannot create record before last record time");
+            if (time < this.scene.ElapsedTime)
+                throw new ArgumentException("Cannot create record before lock time");
 
-            var data = (TData)Record(this.lastRecordTime, time);
+            var data = (TData)SerializeRecord(time);
 
             if (data != null)
             {
                 // TODO Remove obsolete objects?
-                this.scene.Lock(time);
-
-                this.lastRecordTime = time;
+                this.scene.ElapsedTime = time;
             }
 
             return data;
         }
 
-        protected abstract TData Record(int startTime, int endTime);
+        protected abstract TData SerializeRecord(int endTime);
 
         #endregion
 
-        public int LastRecordTime
+        public Scene Scene
         {
-            get { return this.lastObjectId; }
+            get { return this.scene; }
         }
 
         public IEnumerable<GameObject> Objects
         {
-            get
-            {
-                return from obj in this.scene.Objects
-                       select (GameObject)obj;
-            }
+            get { return this.scene.Objects; }
         }
     }
 }

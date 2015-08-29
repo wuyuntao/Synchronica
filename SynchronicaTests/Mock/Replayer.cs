@@ -31,7 +31,7 @@ namespace Synchronica.Tests.Mock
 {
     public sealed class Replayer : Replayer<RecorderData>
     {
-        protected override void Replay(RecorderData data)
+        protected override void DeserializeRecord(RecorderData data)
         {
             foreach (var gameObjectData in data.GameObjects)
             {

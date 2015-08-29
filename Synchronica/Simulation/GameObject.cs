@@ -38,7 +38,7 @@ namespace Synchronica.Simulation
 
         internal GameObject(Scene scene, int id, int startTime)
         {
-            if (startTime < scene.LockTime)
+            if (startTime < scene.ElapsedTime)
                 throw new ArgumentException("Cannot create object before lock time of scene");
 
             this.scene = scene;
@@ -54,7 +54,7 @@ namespace Synchronica.Simulation
             if (endTime <= this.startTime)
                 throw new ArgumentException("Cannot destroy before start time");
 
-            if (endTime <= scene.LockTime)
+            if (endTime <= scene.ElapsedTime)
                 throw new ArgumentException("Cannot destroy object before lock time of scene");
 
             this.endTime = endTime;

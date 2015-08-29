@@ -32,14 +32,14 @@ namespace Synchronica.Tests.Mock
 {
     public sealed class Recorder : Recorder<RecorderData>
     {
-        protected override RecorderData Record(int startTime, int endTime)
+        protected override RecorderData SerializeRecord(int endTime)
         {
             var data = new RecorderData()
             {
-                StartTime = startTime,
+                StartTime = Scene.ElapsedTime,
                 EndTime = endTime,
                 GameObjects = (from gameObject in Objects
-                               select RecordGameObject(gameObject, startTime) into gameObjectData
+                               select RecordGameObject(gameObject) into gameObjectData
                                where gameObjectData != null
                                select gameObjectData).ToArray(),
             };
@@ -47,7 +47,7 @@ namespace Synchronica.Tests.Mock
             return data.GameObjects.Length > 0 ? data : null;
         }
 
-        private GameObjectData RecordGameObject(GameObject gameObject, int startTime)
+        private GameObjectData RecordGameObject(GameObject gameObject)
         {
             var data = new GameObjectData()
             {
@@ -55,18 +55,18 @@ namespace Synchronica.Tests.Mock
                 StartTime = gameObject.StartTime,
                 EndTime = gameObject.EndTime,
                 Variables = (from variable in gameObject.Variables
-                             select RecordVariable(variable, startTime) into variableData
+                             select RecordVariable(variable) into variableData
                              where variableData != null
                              select variableData).ToArray(),
             };
 
-            if (gameObject.StartTime >= startTime)
+            if (gameObject.StartTime >= Scene.ElapsedTime)
             {
                 data.Definitions = (from variable in gameObject.Variables
                                     select DefineVariable(variable)).ToArray();
             }
 
-            return (data.StartTime >= startTime || data.EndTime >= startTime || data.Variables.Length > 0) ? data : null;
+            return (data.StartTime >= Scene.ElapsedTime || data.EndTime >= Scene.ElapsedTime || data.Variables.Length > 0) ? data : null;
         }
 
         private VariableDefinition DefineVariable(Variable variable)
@@ -89,12 +89,12 @@ namespace Synchronica.Tests.Mock
             return definition;
         }
 
-        private VariableData RecordVariable(Variable variable, int startTime)
+        private VariableData RecordVariable(Variable variable)
         {
             var data = new VariableData()
             {
                 Id = variable.Id,
-                KeyFrames = (from keyFrame in variable.GetKeyFramesAfter(startTime)
+                KeyFrames = (from keyFrame in variable.GetKeyFramesAfter(Scene.ElapsedTime)
                              select RecordKeyFrame(keyFrame)).ToArray(),
             };
 
