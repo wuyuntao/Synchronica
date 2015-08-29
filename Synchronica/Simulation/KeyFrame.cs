@@ -26,13 +26,14 @@ using System;
 
 namespace Synchronica.Simulation
 {
-    abstract class KeyFrame
+    public abstract class KeyFrame
     {
         private KeyFrame previous;
         private KeyFrame next;
         private int milliseconds;
+        private object value;
 
-        protected KeyFrame(KeyFrame previous, KeyFrame next, int milliseconds)
+        protected KeyFrame(KeyFrame previous, KeyFrame next, int milliseconds, object value)
         {
             if (previous != null && previous.milliseconds >= milliseconds)
                 throw new ArgumentException("time must be greater than time of previous frame");
@@ -40,6 +41,7 @@ namespace Synchronica.Simulation
             Previous = previous;
             Next = next;
             this.milliseconds = milliseconds;
+            this.value = value;
         }
 
         internal abstract KeyFrame Interpolate(int milliseconds);
@@ -73,16 +75,18 @@ namespace Synchronica.Simulation
         {
             get { return this.milliseconds; }
         }
+
+        public object Value
+        {
+            get { return this.value; }
+        }
     }
 
-    abstract class KeyFrame<TValue> : KeyFrame
+    public abstract class KeyFrame<TValue> : KeyFrame
     {
-        private TValue value;
-
         protected KeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value)
-            : base(previous, next, milliseconds)
+            : base(previous, next, milliseconds, value)
         {
-            this.value = value;
         }
 
         internal abstract TValue GetValue(int milliseconds);
@@ -99,9 +103,9 @@ namespace Synchronica.Simulation
             internal set { base.Next = value; }
         }
 
-        public TValue Value
+        public new TValue Value
         {
-            get { return this.value; }
+            get { return (TValue)base.Value; }
         }
     }
 }

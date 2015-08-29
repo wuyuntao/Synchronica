@@ -32,10 +32,6 @@ namespace Synchronica.Simulation.Variables
             : base(id, initialValue)
         { }
 
-        internal VInt32(int id)
-            : this(id, 0)
-        { }
-
         public void AppendLinearFrame(int milliseconds, int value)
         {
             AppendFrame(new LinearKeyFrame_Int32(Tail, null, milliseconds, value));

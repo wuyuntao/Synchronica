@@ -31,9 +31,6 @@ namespace Synchronica.Simulation.Variables
         internal VInt64(int id, long initialValue)
             : base(id, initialValue)
         { }
-        internal VInt64(int id)
-            : this(id, 0)
-        { }
 
         public void AppendLinearFrame(int milliseconds, long value)
         {

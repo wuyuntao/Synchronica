@@ -24,6 +24,7 @@
 
 using NUnit.Framework;
 using Synchronica.Simulation;
+using Synchronica.Simulation.Variables;
 using System;
 
 namespace Synchronica.Tests.Simulation
@@ -33,10 +34,7 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestAppendFrames()
         {
-            var scene = new Scene();
-            var go = scene.CreateObject();
-
-            var value = go.CreateInt16(-10);
+            var value = new VInt16(1, -10);
             Assert.AreEqual(-10, value.GetValue(-1));
             Assert.AreEqual(-10, value.GetValue(0));
             Assert.AreEqual(-10, value.GetValue(1));
@@ -59,10 +57,7 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestRemoveFramesBefore()
         {
-            var scene = new Scene();
-            var go = scene.CreateObject();
-
-            var value = go.CreateInt16(0);
+            var value = new VInt16(1, 0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesBefore(1));
 
             value.AppendStepFrame(10, 5);
@@ -85,10 +80,7 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestRemoveFramesAfter()
         {
-            var scene = new Scene();
-            var go = scene.CreateObject();
-
-            var value = go.CreateInt16(0);
+            var value = new VInt16(1, 0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesAfter(-1));
 
             value.AppendStepFrame(10, 5);

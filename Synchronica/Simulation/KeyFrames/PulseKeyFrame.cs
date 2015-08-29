@@ -26,7 +26,7 @@ using System;
 
 namespace Synchronica.Simulation.KeyFrames
 {
-    sealed class PulseKeyFrame_Int16 : KeyFrame<short>
+    public sealed class PulseKeyFrame_Int16 : KeyFrame<short>
     {
         public PulseKeyFrame_Int16(KeyFrame<short> previous, KeyFrame<short> next, int milliseconds, short value)
             : base(previous, next, milliseconds, value)
@@ -43,7 +43,7 @@ namespace Synchronica.Simulation.KeyFrames
         }
     }
 
-    sealed class PulseKeyFrame_Int32 : KeyFrame<int>
+    public sealed class PulseKeyFrame_Int32 : KeyFrame<int>
     {
         public PulseKeyFrame_Int32(KeyFrame<int> previous, KeyFrame<int> next, int milliseconds, int value)
             : base(previous, next, milliseconds, value)
@@ -60,7 +60,7 @@ namespace Synchronica.Simulation.KeyFrames
         }
     }
 
-    sealed class PulseKeyFrame_Int64 : KeyFrame<long>
+    public sealed class PulseKeyFrame_Int64 : KeyFrame<long>
     {
         public PulseKeyFrame_Int64(KeyFrame<long> previous, KeyFrame<long> next, int milliseconds, long value)
             : base(previous, next, milliseconds, value)
@@ -77,7 +77,7 @@ namespace Synchronica.Simulation.KeyFrames
         }
     }
 
-    sealed class PulseKeyFrame_Float : KeyFrame<float>
+    public sealed class PulseKeyFrame_Float : KeyFrame<float>
     {
         public PulseKeyFrame_Float(KeyFrame<float> previous, KeyFrame<float> next, int milliseconds, float value)
             : base(previous, next, milliseconds, value)

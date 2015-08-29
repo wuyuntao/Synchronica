@@ -24,7 +24,7 @@
 
 namespace Synchronica.Simulation.KeyFrames
 {
-    sealed class StepKeyFrame<TValue> : KeyFrame<TValue>
+    public sealed class StepKeyFrame<TValue> : KeyFrame<TValue>
     {
         public StepKeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value)
             : base(previous, next, milliseconds, value)

@@ -32,10 +32,6 @@ namespace Synchronica.Simulation.Variables
             : base(id, initialValue)
         { }
 
-        internal VFloat(int id)
-            : this(id, 0)
-        { }
-
         public void AppendLinearFrame(int milliseconds, float value)
         {
             AppendFrame(new LinearKeyFrame_Float(Tail, null, milliseconds, value));

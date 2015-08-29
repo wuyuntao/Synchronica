@@ -32,10 +32,6 @@ namespace Synchronica.Simulation.Variables
             : base(id, initialValue)
         { }
 
-        internal VBoolean(int id)
-            : base(id, false)
-        { }
-
         public void AppendStepFrame(int milliseconds, bool value)
         {
             AppendFrame(new StepKeyFrame<bool>(Tail, null, milliseconds, value));
