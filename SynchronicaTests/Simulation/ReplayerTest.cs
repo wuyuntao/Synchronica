@@ -25,7 +25,7 @@
 using NUnit.Framework;
 using Synchronica.Tests.Mock;
 
-namespace Synchronica.Tests.Replay
+namespace Synchronica.Tests.Simulation
 {
     public class ReplayerTest
     {

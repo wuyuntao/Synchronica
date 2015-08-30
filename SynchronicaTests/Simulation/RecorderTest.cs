@@ -26,7 +26,7 @@ using NUnit.Framework;
 using Synchronica.Tests.Mock;
 using System;
 
-namespace Synchronica.Tests.Record
+namespace Synchronica.Tests.Simulation
 {
     public class RecorderTest
     {
