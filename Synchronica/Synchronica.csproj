@@ -62,10 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Record\Recorder.cs" />
     <Compile Include="Replay\Replayer.cs" />
-    <Compile Include="Simulation\Events\CreateObjectEvent.cs" />
-    <Compile Include="Simulation\Events\Event.cs" />
-    <Compile Include="Simulation\Events\RemoveObjectEvent.cs" />
-    <Compile Include="Simulation\Events\SceneEvent.cs" />
     <Compile Include="Simulation\GameObject.cs" />
     <Compile Include="Simulation\Command\ICommand.cs" />
     <Compile Include="Simulation\Command\CommandProcessor.cs" />
