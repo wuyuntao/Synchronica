@@ -22,29 +22,35 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation;
 using Synchronica.Simulation.KeyFrames;
 using System;
+using System.Collections.Generic;
 
-namespace Synchronica.Replay
+namespace Synchronica.Simulation
 {
-    public abstract class Replayer<TData>
+    public abstract class Recorder<TData>
     {
+        private int lastObjectId = 0;
         private Scene scene = new Scene();
+
+        private int GetNextObjectId()
+        {
+            return ++this.lastObjectId;
+        }
 
         #region GameObject
 
-        protected GameObject AddObject(int id, int startTime)
+        public GameObject AddObject(int startTime)
         {
             if (startTime < this.scene.ElapsedTime)
-                throw new ArgumentException("Cannot create object before last replay time");
+                throw new ArgumentException("Cannot create object before lock time");
 
-            var gameObject = new GameObject(this.scene, id, startTime);
+            var gameObject = new GameObject(this.scene, GetNextObjectId(), startTime);
             this.scene.AddObject(gameObject);
             return gameObject;
         }
 
-        protected void RemoveObject(GameObject gameObject, int endTime)
+        public void RemoveObject(GameObject gameObject, int endTime)
         {
             gameObject.Destroy(endTime);
         }
@@ -58,36 +64,36 @@ namespace Synchronica.Replay
 
         #region Variable
 
-        protected Variable<bool> AddBoolean(GameObject gameObject, int id)
+        public Variable<bool> AddBoolean(GameObject gameObject, bool value)
         {
-            return gameObject.AddBoolean(id);
+            return gameObject.AddBoolean(GetNextObjectId(), value);
         }
 
-        protected Variable<short> AddInt16(GameObject gameObject, int id)
+        public Variable<short> AddInt16(GameObject gameObject, short value)
         {
-            return gameObject.AddInt16(id);
+            return gameObject.AddInt16(GetNextObjectId(), value);
         }
 
-        protected Variable<int> AddInt32(GameObject gameObject, int id)
+        public Variable<int> AddInt32(GameObject gameObject, int value)
         {
-            return gameObject.AddInt32(id);
+            return gameObject.AddInt32(GetNextObjectId(), value);
         }
 
-        protected Variable<long> AddInt64(GameObject gameObject, int id)
+        public Variable<long> AddInt64(GameObject gameObject, long value)
         {
-            return gameObject.AddInt64(id);
+            return gameObject.AddInt64(GetNextObjectId(), value);
         }
 
-        protected Variable<float> AddFloat(GameObject gameObject, int id)
+        public Variable<float> AddFloat(GameObject gameObject, float value)
         {
-            return gameObject.AddFloat(id);
+            return gameObject.AddFloat(GetNextObjectId(), value);
         }
 
         #endregion
 
         #region KeyFrame
 
-        protected void AddLinearFrame<TValue>(Variable<TValue> variable, int time, TValue value)
+        public void AddLinearFrame<TValue>(Variable<TValue> variable, int time, TValue value)
         {
             var v = variable as ILinearKeyFrameVariable<TValue>;
             if (v == null)
@@ -96,7 +102,7 @@ namespace Synchronica.Replay
             v.AddLinearFrame(time, value);
         }
 
-        protected void AddPulseFrame<TValue>(Variable<TValue> variable, int time, TValue value)
+        public void AddPulseFrame<TValue>(Variable<TValue> variable, int time, TValue value)
         {
             var v = variable as IPulseKeyFrameVariable<TValue>;
             if (v == null)
@@ -105,7 +111,7 @@ namespace Synchronica.Replay
             v.AddPulseFrame(time, value);
         }
 
-        protected void AddStepFrame<TValue>(Variable<TValue> variable, int time, TValue value)
+        public void AddStepFrame<TValue>(Variable<TValue> variable, int time, TValue value)
         {
             var v = variable as IStepKeyFrameVariable<TValue>;
             if (v == null)
@@ -114,32 +120,38 @@ namespace Synchronica.Replay
             v.AddStepFrame(time, value);
         }
 
-
-        protected void RemoveFramesAfter(Variable variable, int startTime)
-        {
-            if (!variable.IsNew)
-                variable.RemoveFramesAfter(startTime);
-        }
-
         #endregion
 
-        #region Replay
+        #region Record
 
-        public void Replay(int startTime, int endTime, TData data)
+        public TData Record(int time)
         {
-            if (startTime != this.scene.ElapsedTime)
-                throw new ArgumentException("Cannot replay data before last replay time");
+            if (time < this.scene.ElapsedTime)
+                throw new ArgumentException("Cannot create record before lock time");
+
+            var data = (TData)SerializeRecord(time);
 
             if (data != null)
             {
-                DeserializeRecord(data);
+                // TODO Remove obsolete objects?
+                this.scene.ElapsedTime = time;
             }
 
-            this.scene.ElapsedTime = endTime;
+            return data;
         }
 
-        protected abstract void DeserializeRecord(TData data);
+        protected abstract TData SerializeRecord(int endTime);
 
         #endregion
+
+        public Scene Scene
+        {
+            get { return this.scene; }
+        }
+
+        public IEnumerable<GameObject> Objects
+        {
+            get { return this.scene.Objects; }
+        }
     }
 }

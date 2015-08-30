@@ -24,10 +24,6 @@
 
 using NUnit.Framework;
 using Synchronica.Tests.Mock;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Synchronica.Tests.Replay
 {

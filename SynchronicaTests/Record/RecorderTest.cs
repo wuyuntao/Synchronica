@@ -23,7 +23,6 @@
 */
 
 using NUnit.Framework;
-using Synchronica.Simulation.Variables;
 using Synchronica.Tests.Mock;
 using System;
 
