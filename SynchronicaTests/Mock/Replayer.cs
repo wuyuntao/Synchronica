@@ -112,16 +112,56 @@ namespace Synchronica.Tests.Mock
             {
                 switch (keyFrame.Type)
                 {
+                    case KeyFrameType.Linear_Int16:
+                        ((VInt16)variable).AddLinearFrame(keyFrame.Time, (short)keyFrame.Value);
+                        break;
+
                     case KeyFrameType.Linear_Int32:
                         ((VInt32)variable).AddLinearFrame(keyFrame.Time, (int)keyFrame.Value);
+                        break;
+
+                    case KeyFrameType.Linear_Int64:
+                        ((VInt64)variable).AddLinearFrame(keyFrame.Time, (long)keyFrame.Value);
+                        break;
+
+                    case KeyFrameType.Linear_Float:
+                        ((VFloat)variable).AddLinearFrame(keyFrame.Time, (float)keyFrame.Value);
+                        break;
+
+                    case KeyFrameType.Pulse_Int16:
+                        ((VInt16)variable).AddPulseFrame(keyFrame.Time, (short)keyFrame.Value);
                         break;
 
                     case KeyFrameType.Pulse_Int32:
                         ((VInt32)variable).AddPulseFrame(keyFrame.Time, (int)keyFrame.Value);
                         break;
 
+                    case KeyFrameType.Pulse_Int64:
+                        ((VInt64)variable).AddPulseFrame(keyFrame.Time, (long)keyFrame.Value);
+                        break;
+
+                    case KeyFrameType.Pulse_Float:
+                        ((VFloat)variable).AddPulseFrame(keyFrame.Time, (float)keyFrame.Value);
+                        break;
+
+                    case KeyFrameType.Step_Boolean:
+                        ((VBoolean)variable).AddStepFrame(keyFrame.Time, (bool)keyFrame.Value);
+                        break;
+
+                    case KeyFrameType.Step_Int16:
+                        ((VInt16)variable).AddStepFrame(keyFrame.Time, (short)keyFrame.Value);
+                        break;
+
                     case KeyFrameType.Step_Int32:
                         ((VInt32)variable).AddStepFrame(keyFrame.Time, (int)keyFrame.Value);
+                        break;
+
+                    case KeyFrameType.Step_Int64:
+                        ((VInt64)variable).AddStepFrame(keyFrame.Time, (long)keyFrame.Value);
+                        break;
+
+                    case KeyFrameType.Step_Float:
+                        ((VFloat)variable).AddStepFrame(keyFrame.Time, (float)keyFrame.Value);
                         break;
 
                     default:

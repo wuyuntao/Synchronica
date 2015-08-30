@@ -22,51 +22,35 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation;
+using NUnit.Framework;
+using Synchronica.Tests.Mock;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Synchronica.Replay
+namespace Synchronica.Tests.Replay
 {
-    public abstract class Replayer<TData>
+    public class ReplayerTest
     {
-        private Scene scene = new Scene();
-
-        #region GameObject
-        
-        protected GameObject AddObject(int id, int startTime)
+        [Test]
+        public void TestReplayer()
         {
-            if (startTime < this.scene.ElapsedTime)
-                throw new ArgumentException("Cannot create object before last replay time");
+            var recorder = new Recorder();
+            var obj1 = recorder.AddObject(2);
+            var var1 = recorder.AddInt16(obj1, 10);
+            var var2 = recorder.AddInt32(obj1, -10);
+            var var3 = recorder.AddFloat(obj1, 5.7f);
 
-            var gameObject = new GameObject(this.scene, id, startTime);
-            this.scene.AddObject(gameObject);
-            return gameObject;
+            recorder.AddLinearFrame(var1, 100, (short)30);
+            recorder.AddStepFrame(var2, 110, 10);
+            recorder.AddLinearFrame(var3, 90, 9.3f);
+
+            var data = recorder.Record(100);
+
+            var replayer = new Replayer();
+            replayer.Replay(data.StartTime, data.EndTime, data);
         }
 
-        public GameObject GetObject(int id)
-        {
-            return this.scene.GetObject(id);
-        }
-
-        #endregion
-
-        #region Replay
-
-        public void Replay(int startTime, int endTime, TData data)
-        {
-            if (startTime != this.scene.ElapsedTime)
-                throw new ArgumentException("Cannot replay data before last replay time");
-
-            if (data != null)
-            {
-                DeserializeRecord(data);
-            }
-
-            this.scene.ElapsedTime = endTime;
-        }
-
-        protected abstract void DeserializeRecord(TData data);
-        
-        #endregion
     }
 }

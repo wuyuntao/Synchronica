@@ -44,6 +44,7 @@
     <Compile Include="Mock\Replayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Record\RecorderTest.cs" />
+    <Compile Include="Replay\ReplayerTest.cs" />
     <Compile Include="Simulation\VFloatTest.cs" />
     <Compile Include="Simulation\VInt64Test.cs" />
     <Compile Include="Simulation\VInt16Test.cs" />
