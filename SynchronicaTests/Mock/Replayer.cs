@@ -23,8 +23,6 @@
 */
 
 using Synchronica.Simulation;
-using Synchronica.Simulation;
-using Synchronica.Simulation.Variables;
 using System;
 
 namespace Synchronica.Tests.Mock

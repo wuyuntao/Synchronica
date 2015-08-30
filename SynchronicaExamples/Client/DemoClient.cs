@@ -40,11 +40,11 @@ namespace Synchronica.Examples.Client
         {
             var schema = new MessageSchema();
             schema.Register(ServerMessageIds.LoginResponse, LoginResponse.GetRootAsLoginResponse);
-            schema.Register(ServerMessageIds.SynchronicaData, SynchronicaData.GetRootAsSynchronicaData);
+            schema.Register(ServerMessageIds.SynchronizeSceneData, SynchronizeSceneData.GetRootAsSynchronizeSceneData);
 
             var processor = new MessageProcessor(schema);
             processor.Attach((int)ServerMessageIds.LoginResponse, OnLoginResponse);
-            processor.Attach((int)ServerMessageIds.SynchronicaData, OnSynchronicaData);
+            processor.Attach((int)ServerMessageIds.SynchronizeSceneData, OnSynchronizeSceneData);
 
             var buffer = new byte[this.tcpClient.ReceiveBufferSize];
 
@@ -71,7 +71,7 @@ namespace Synchronica.Examples.Client
             Log("Login succeeded: {0}", this.objectId);
         }
 
-        private void OnSynchronicaData(Message msg)
+        private void OnSynchronizeSceneData(Message msg)
         {
             throw new NotImplementedException();
         }

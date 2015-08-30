@@ -1,67 +1,69 @@
 namespace Synchronica.Schema;
 
+// KeyFrame
+
 table LinearKeyFrameData_Int16 {
-	milliseconds: int;
+	time: int;
 	value: short;
 }
 
 table LinearKeyFrameData_Int32 {
-	milliseconds: int;
+	time: int;
 	value: int;
 }
 
 table LinearKeyFrameData_Int64 {
-	milliseconds: int;
+	time: int;
 	value: long;
 }
 
 table LinearKeyFrameData_Float {
-	milliseconds: int;
+	time: int;
 	value: float;
 }
 
 table PulseKeyFrameData_Int16 {
-	milliseconds: int;
+	time: int;
 	value: short;
 }
 
 table PulseKeyFrameData_Int32 {
-	milliseconds: int;
+	time: int;
 	value: int;
 }
 
 table PulseKeyFrameData_Int64 {
-	milliseconds: int;
+	time: int;
 	value: long;
 }
 
 table PulseKeyFrameData_Float {
-	milliseconds: int;
+	time: int;
 	value: float;
 }
 
 table StepKeyFrameData_Boolean {
-	milliseconds: int;
+	time: int;
 	value: bool;
 }
 
 table StepKeyFrameData_Int16 {
-	milliseconds: int;
+	time: int;
 	value: short;
 }
 
 table StepKeyFrameData_Int32 {
-	milliseconds: int;
+	time: int;
 	value: int;
 }
 
 table StepKeyFrameData_Int64 {
-	milliseconds: int;
+	time: int;
 	value: long;
 }
 
 table StepKeyFrameData_Float {
-	milliseconds: int;
+	time: int;
 	value: float;
 }
 
@@ -87,24 +89,50 @@ table KeyFrameData {
 	data: KeyFrameUnion;
 }
 
+// Variable
+
+enum VariableType : byte {
+	Boolean,
+	Int16,
+	Int32,
+	Int64,
+	Float,
+}
+
+table VariableParameters {
+	type: VariableType;
+}
+
 table VariableData {
 	id: int;
+	parameters: VariableParameters;
 	keyFrames: [KeyFrameData];
+}
+
+// GameObject
+
+enum GameObjectEventType : byte {
+	Start,
+	End,
+}
+
+table GameObjectEventData {
+	type: GameObjectEventType;
+	time: int;
 }
 
 table GameObjectData {
 	id: int;
-	properties: [VariableData];
+	events: [GameObjectEventData];
+	variables: [VariableData];
 }
 
-table SceneData {
-	startMilliseconds: int;
-	endMilliseconds: int;
+// Scene
+
+table SynchronizeSceneData {
+	startTime: int;
+	endTime: int;
 	objects: [GameObjectData];
 }
 
-table SynchronicaData {
-	scenes: [SceneData];
-}
-
-root_type SynchronicaData;
+root_type SynchronizeSceneData;

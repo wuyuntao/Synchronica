@@ -23,7 +23,6 @@
 */
 
 using Synchronica.Simulation;
-using Synchronica.Simulation;
 using Synchronica.Simulation.KeyFrames;
 using System;
 using System.Linq;
