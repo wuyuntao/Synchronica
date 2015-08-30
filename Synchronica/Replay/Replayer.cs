@@ -23,6 +23,7 @@
 */
 
 using Synchronica.Simulation;
+using Synchronica.Simulation.KeyFrames;
 using System;
 
 namespace Synchronica.Replay
@@ -32,7 +33,7 @@ namespace Synchronica.Replay
         private Scene scene = new Scene();
 
         #region GameObject
-        
+
         protected GameObject AddObject(int id, int startTime)
         {
             if (startTime < this.scene.ElapsedTime)
@@ -43,9 +44,81 @@ namespace Synchronica.Replay
             return gameObject;
         }
 
+        protected void RemoveObject(GameObject gameObject, int endTime)
+        {
+            gameObject.Destroy(endTime);
+        }
+
         public GameObject GetObject(int id)
         {
             return this.scene.GetObject(id);
+        }
+
+        #endregion
+
+        #region Variable
+
+        protected Variable<bool> AddBoolean(GameObject gameObject, int id)
+        {
+            return gameObject.AddBoolean(id);
+        }
+
+        protected Variable<short> AddInt16(GameObject gameObject, int id)
+        {
+            return gameObject.AddInt16(id);
+        }
+
+        protected Variable<int> AddInt32(GameObject gameObject, int id)
+        {
+            return gameObject.AddInt32(id);
+        }
+
+        protected Variable<long> AddInt64(GameObject gameObject, int id)
+        {
+            return gameObject.AddInt64(id);
+        }
+
+        protected Variable<float> AddFloat(GameObject gameObject, int id)
+        {
+            return gameObject.AddFloat(id);
+        }
+
+        #endregion
+
+        #region KeyFrame
+
+        protected void AddLinearFrame<TValue>(Variable<TValue> variable, int time, TValue value)
+        {
+            var v = variable as ILinearKeyFrameVariable<TValue>;
+            if (v == null)
+                throw new ArgumentException("Cannot add linear key frame");
+
+            v.AddLinearFrame(time, value);
+        }
+
+        protected void AddPulseFrame<TValue>(Variable<TValue> variable, int time, TValue value)
+        {
+            var v = variable as IPulseKeyFrameVariable<TValue>;
+            if (v == null)
+                throw new ArgumentException("Cannot add pulse key frame");
+
+            v.AddPulseFrame(time, value);
+        }
+
+        protected void AddStepFrame<TValue>(Variable<TValue> variable, int time, TValue value)
+        {
+            var v = variable as IStepKeyFrameVariable<TValue>;
+            if (v == null)
+                throw new ArgumentException("Cannot add step key frame");
+
+            v.AddStepFrame(time, value);
+        }
+
+
+        protected void RemoveFramesAfter(Variable variable, int startTime)
+        {
+            if (!variable.IsNew)
+                variable.RemoveFramesAfter(startTime);
         }
 
         #endregion
@@ -66,7 +139,7 @@ namespace Synchronica.Replay
         }
 
         protected abstract void DeserializeRecord(TData data);
-        
+
         #endregion
     }
 }

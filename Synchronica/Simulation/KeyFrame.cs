@@ -28,52 +28,24 @@ namespace Synchronica.Simulation
 {
     public abstract class KeyFrame
     {
-        private KeyFrame previous;
-        private KeyFrame next;
-        private int milliseconds;
+        private int time;
         private object value;
 
-        protected KeyFrame(KeyFrame previous, KeyFrame next, int milliseconds, object value)
+        protected KeyFrame(int time, object value)
         {
-            if (previous != null && previous.milliseconds >= milliseconds)
-                throw new ArgumentException("time must be greater than time of previous frame");
-
-            Previous = previous;
-            Next = next;
-            this.milliseconds = milliseconds;
+            this.time = time;
             this.value = value;
         }
 
-        internal abstract KeyFrame Interpolate(int milliseconds);
+        internal abstract KeyFrame Clone(int time);
 
-        public KeyFrame Previous
+        internal KeyFrame Previous { get; set; }
+
+        internal KeyFrame Next { get; set; }
+
+        public int Time
         {
-            get { return this.previous; }
-            internal set
-            {
-                this.previous = value;
-
-                if (value != null)
-                    value.next = this;
-            }
-        }
-
-        public KeyFrame Next
-        {
-            get { return this.next; }
-            internal set
-            {
-                this.next = value;
-
-                if (value != null)
-                    value.previous = this;
-            }
-
-        }
-
-        public int Milliseconds
-        {
-            get { return this.milliseconds; }
+            get { return this.time; }
         }
 
         public object Value
@@ -84,12 +56,12 @@ namespace Synchronica.Simulation
 
     public abstract class KeyFrame<TValue> : KeyFrame
     {
-        protected KeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value)
-            : base(previous, next, milliseconds, value)
+        protected KeyFrame(int time, TValue value)
+            : base(time, value)
         {
         }
 
-        internal abstract TValue GetValue(int milliseconds);
+        internal abstract TValue GetValue(int time);
 
         public new KeyFrame<TValue> Previous
         {

@@ -67,9 +67,23 @@ namespace Synchronica.Simulation
             return variable;
         }
 
+        internal VBoolean AddBoolean(int id)
+        {
+            var variable = new VBoolean(this, id);
+            this.variables.Add(variable);
+            return variable;
+        }
+
         internal VInt16 AddInt16(int id, short value)
         {
             var variable = new VInt16(this, id, value);
+            this.variables.Add(variable);
+            return variable;
+        }
+
+        internal VInt16 AddInt16(int id)
+        {
+            var variable = new VInt16(this, id);
             this.variables.Add(variable);
             return variable;
         }
@@ -81,6 +95,13 @@ namespace Synchronica.Simulation
             return variable;
         }
 
+        internal VInt32 AddInt32(int id)
+        {
+            var variable = new VInt32(this, id);
+            this.variables.Add(variable);
+            return variable;
+        }
+
         internal VInt64 AddInt64(int id, long value)
         {
             var variable = new VInt64(this, id, value);
@@ -88,9 +109,23 @@ namespace Synchronica.Simulation
             return variable;
         }
 
+        internal VInt64 AddInt64(int id)
+        {
+            var variable = new VInt64(this, id);
+            this.variables.Add(variable);
+            return variable;
+        }
+
         internal VFloat AddFloat(int id, float value)
         {
             var variable = new VFloat(this, id, value);
+            this.variables.Add(variable);
+            return variable;
+        }
+
+        internal VFloat AddFloat(int id)
+        {
+            var variable = new VFloat(this, id);
             this.variables.Add(variable);
             return variable;
         }

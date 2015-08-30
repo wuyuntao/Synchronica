@@ -14,11 +14,15 @@ namespace Synchronica.Examples
 
         static void RunUnitTest()
         {
-            var t = new Synchronica.Tests.Record.RecorderTest();
-            t.TestRecorder();
+            //var t = new Synchronica.Tests.Record.RecorderTest();
+            //t.TestRecorder();
 
-            //var t = new Synchronica.Tests.Simulation.VFloatTest();
-            //t.TestAddFrames();
+            //var t = new Synchronica.Tests.Replay.ReplayerTest();
+            //t.TestReplayer();
+
+            var t = new Synchronica.Tests.Simulation.VFloatTest();
+            t.TestRemoveFramesBefore();
+            t.TestRemoveFramesAfter();
         }
 
         static void StartServer()

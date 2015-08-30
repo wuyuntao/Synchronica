@@ -74,17 +74,18 @@ namespace Synchronica.Tests.Mock
             var definition = new VariableDefinition()
             {
                 Id = variable.Id,
-                InitialValue = variable.Head.Value,
             };
 
-            if (definition.InitialValue is short)
+            if (variable.ValueType == typeof(short))
                 definition.Type = VariableType.VInt16;
-            else if (definition.InitialValue is int)
+            else if (variable.ValueType == typeof(int))
                 definition.Type = VariableType.VInt32;
-            else if (definition.InitialValue is long)
+            else if (variable.ValueType == typeof(long))
                 definition.Type = VariableType.VInt64;
-            else if (definition.InitialValue is float)
+            else if (variable.ValueType == typeof(float))
                 definition.Type = VariableType.VFloat;
+            else
+                throw new NotSupportedException("VariableType");
 
             return definition;
         }
@@ -94,7 +95,7 @@ namespace Synchronica.Tests.Mock
             var data = new VariableData()
             {
                 Id = variable.Id,
-                KeyFrames = (from keyFrame in variable.GetKeyFramesAfter(Scene.ElapsedTime)
+                KeyFrames = (from keyFrame in variable.FindFramesAfter(Scene.ElapsedTime)
                              select RecordKeyFrame(keyFrame)).ToArray(),
             };
 
@@ -105,7 +106,7 @@ namespace Synchronica.Tests.Mock
         {
             var data = new KeyFrameData()
             {
-                Time = keyFrame.Milliseconds,
+                Time = keyFrame.Time,
                 Value = keyFrame.Value,
             };
 
@@ -118,13 +119,13 @@ namespace Synchronica.Tests.Mock
             else if (keyFrame is LinearKeyFrame_Float)
                 data.Type = KeyFrameType.Linear_Float;
 
-            else if (keyFrame is PulseKeyFrame_Int16)
+            else if (keyFrame is PulseKeyFrame<short>)
                 data.Type = KeyFrameType.Pulse_Int16;
-            else if (keyFrame is PulseKeyFrame_Int32)
+            else if (keyFrame is PulseKeyFrame<int>)
                 data.Type = KeyFrameType.Pulse_Int32;
-            else if (keyFrame is PulseKeyFrame_Int64)
+            else if (keyFrame is PulseKeyFrame<long>)
                 data.Type = KeyFrameType.Pulse_Int64;
-            else if (keyFrame is PulseKeyFrame_Float)
+            else if (keyFrame is PulseKeyFrame<float>)
                 data.Type = KeyFrameType.Pulse_Float;
 
             else if (keyFrame is StepKeyFrame<short>)

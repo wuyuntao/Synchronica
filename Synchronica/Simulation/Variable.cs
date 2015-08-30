@@ -25,6 +25,7 @@
 using Synchronica.Simulation.KeyFrames;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Synchronica.Simulation
 {
@@ -32,124 +33,174 @@ namespace Synchronica.Simulation
     {
         private GameObject gameObject;
         private int id;
-        private KeyFrame head;
-        private KeyFrame tail;
+        private Type valueType;
 
-        internal Variable(GameObject gameObject, int id, KeyFrame initialFrame)
+        private KeyFrame firstFrame;
+        private KeyFrame lastFrame;
+
+        protected Variable(GameObject gameObject, int id, Type valueType)
         {
             this.gameObject = gameObject;
             this.id = id;
-            this.head = initialFrame;
-            this.tail = initialFrame;
+            this.valueType = valueType;
         }
 
-        public TValue GetValue<TValue>(int milliseconds)
+        protected KeyFrame FindFrameBefore(int time)
         {
-            if (milliseconds < this.gameObject.StartTime)
-                throw new ArgumentException("Cannot get value before game object starts");
-
-            if (milliseconds <= this.head.Milliseconds)
-                return ((KeyFrame<TValue>)this.head).Value;
-
-            if (milliseconds >= this.tail.Milliseconds)
-                return ((KeyFrame<TValue>)this.tail).Value;
-
-            var frame = (KeyFrame<TValue>)FindFrame(milliseconds);
-            return frame.GetValue(milliseconds);
+            return FindFramesBefore(time).LastOrDefault();
         }
 
-        protected void AddKeyFrame(KeyFrame frame)
+        protected KeyFrame FindFrameAfter(int time)
         {
-            if (this.tail.Milliseconds >= frame.Milliseconds)
-                throw new ArgumentException("milliseconds must be greater than last frame");
-
-            this.tail = frame;
+            return FindFramesAfter(time).FirstOrDefault();
         }
 
-        public IEnumerable<KeyFrame> GetKeyFramesAfter(int milliseconds)
+        public IEnumerable<KeyFrame> FindFramesBefore(int time)
         {
-            for (var frame = this.head; frame.Next != null; frame = frame.Next)
+            return from frame in KeyFrames
+                   where frame.Time <= time
+                   select frame;
+        }
+
+        public IEnumerable<KeyFrame> FindFramesAfter(int time)
+        {
+            return from frame in KeyFrames
+                   where frame.Time >= time
+                   select frame;
+        }
+
+        protected void AddFirstFrame(KeyFrame frame)
+        {
+            if (this.firstFrame == null)
             {
-                if (frame.Milliseconds >= milliseconds)
-                    yield return frame;
+                this.firstFrame = frame;
+                this.lastFrame = frame;
+            }
+            else
+            {
+                if (frame.Time >= this.firstFrame.Time)
+                    throw new ArgumentException("time must be greater than last frame");
+
+                AddFrameAfter(this.firstFrame, frame);
             }
         }
 
-        public void RemoveFramesBefore(int milliseconds)
+        protected void AddLastFrame(KeyFrame frame)
         {
-            if (milliseconds <= this.head.Milliseconds)
-                return;
+            if (this.lastFrame == null)
+            {
+                this.firstFrame = frame;
+                this.lastFrame = frame;
+            }
+            else
+            {
+                if (frame.Time <= this.lastFrame.Time)
+                    throw new ArgumentException("time must be greater than last frame");
 
-            if (milliseconds > this.tail.Milliseconds)
-                throw new ArgumentException("Cannot remove last frame");
-
-            var newHead = FindFrame(milliseconds).Interpolate(milliseconds);
-            newHead.Previous = null;
-
-            this.head = newHead;
+                AddFrameAfter(this.lastFrame, frame);
+            }
         }
 
-        public void RemoveFramesAfter(int milliseconds)
+        protected void AddFrameBefore(KeyFrame frame, KeyFrame newFrame)
         {
-            if (milliseconds >= this.tail.Milliseconds)
-                return;
+            if (frame.Previous != null)
+            {
+                frame.Previous.Next = newFrame;
+                newFrame.Previous = frame.Previous;
+            }
+            else
+            {
+                this.firstFrame = newFrame;
+            }
 
-            if (milliseconds < this.head.Milliseconds)
+            frame.Previous = newFrame;
+            newFrame.Next = frame;
+        }
+
+        protected void AddFrameAfter(KeyFrame frame, KeyFrame newFrame)
+        {
+            if (frame.Next != null)
+            {
+                frame.Next.Previous = newFrame;
+                newFrame.Next = frame.Next;
+            }
+            else
+            {
+                this.lastFrame = newFrame;
+            }
+
+            frame.Next = newFrame;
+            newFrame.Previous = frame;
+        }
+
+        internal void Interpolate(int time)
+        {
+            if (this.firstFrame == null)
+                throw new ArgumentException("No key frame is added");
+
+            if (time < this.firstFrame.Time)
+            {
+                AddFirstFrame(this.firstFrame.Clone(time));
+            }
+            else if (time > this.lastFrame.Time)
+            {
+                AddLastFrame(this.lastFrame.Clone(time));
+            }
+            else
+            {
+                foreach (var frame in KeyFrames)
+                {
+                    if (time == frame.Time)
+                    {
+                        throw new ArgumentException("Key frame exists");
+                    }
+
+                    if (time < frame.Time)
+                    {
+                        AddFrameBefore(frame, frame.Clone(time));
+                        break;
+                    }
+                }
+            }
+        }
+
+        internal void RemoveFramesBefore(int time)
+        {
+            if (LastFrame == null)
+                throw new ArgumentException("No key frame is added");
+
+            if (time >= LastFrame.Time)
                 throw new ArgumentException("Cannot remove first frame");
 
-            var newTail = FindFrame(milliseconds).Interpolate(milliseconds);
-            newTail.Next = null;
-
-            this.tail = newTail;
-        }
-
-        private KeyFrame FindFrame(int milliseconds)
-        {
-            if (milliseconds <= this.head.Milliseconds)
-                return this.head;
-
-            if (milliseconds >= this.tail.Milliseconds)
-                return this.tail;
-
-            return FindNextFrame(this.head, f => f.Milliseconds >= milliseconds);
-        }
-
-        private IEnumerable<KeyFrame> FindFrames(int startMilliseconds, int endMilliseconds)
-        {
-            for (var frame = this.head; frame.Next != null; frame = frame.Next)
+            var frame = FindFrameBefore(time);
+            if (frame != null)
             {
-                if (frame.Milliseconds > endMilliseconds)
-                {
-                    yield return frame;
-                    yield break;
-                }
-                else if (frame.Milliseconds > startMilliseconds)
-                {
-                    yield return frame;
-                }
+                frame.Next.Previous = null;
+
+                this.firstFrame = frame.Next;
             }
         }
 
-        private static KeyFrame FindNextFrame(KeyFrame frame, Func<KeyFrame, bool> predicate)
+        internal void RemoveFramesAfter(int time)
         {
-            for (; frame != null; frame = frame.Next)
-            {
-                if (predicate(frame))
-                    break;
-            }
+            if (FirstFrame == null)
+                throw new ArgumentException("No key frame is added");
 
-            return frame;
+            if (time <= FirstFrame.Time)
+                throw new ArgumentException("Cannot remove first frame");
+
+            var frame = FindFrameAfter(time);
+            if (frame != null)
+            {
+                frame.Previous.Next = null;
+
+                this.lastFrame = frame.Previous;
+            }
         }
 
-        private static KeyFrame FindPreviousFrame(KeyFrame frame, Func<KeyFrame, bool> predicate)
+        public GameObject GameObject
         {
-            for (; frame != null; frame = frame.Previous)
-            {
-                if (predicate(frame))
-                    break;
-            }
-
-            return frame;
+            get { return this.gameObject; }
         }
 
         public int Id
@@ -157,36 +208,80 @@ namespace Synchronica.Simulation
             get { return this.id; }
         }
 
-        internal KeyFrame Head
+        public Type ValueType
         {
-            get { return this.head; }
+            get { return this.valueType; }
         }
 
-        internal KeyFrame Tail
+        internal bool IsNew
         {
-            get { return this.tail; }
+            get { return this.firstFrame == null; }
+        }
+
+        protected KeyFrame FirstFrame
+        {
+            get { return this.firstFrame; }
+        }
+
+        protected KeyFrame LastFrame
+        {
+            get { return this.lastFrame; }
+        }
+
+        protected IEnumerable<KeyFrame> KeyFrames
+        {
+            get
+            {
+                for (var frame = this.firstFrame; frame != null; frame = frame.Next)
+                    yield return frame;
+            }
         }
     }
 
-    public abstract class Variable<TValue> : Variable
+    public class Variable<TValue> : Variable
     {
-        protected Variable(GameObject gameObject, int id, TValue initialValue)
-            : base(gameObject, id, new StepKeyFrame<TValue>(null, null, 0, initialValue))
+        internal Variable(GameObject gameObject, int id)
+            : base(gameObject, id, typeof(TValue))
         { }
 
-        public TValue GetValue(int milliseconds)
+        protected Variable(GameObject gameObject, int id, TValue initialValue)
+            : base(gameObject, id, typeof(TValue))
         {
-            return base.GetValue<TValue>(milliseconds);
+            AddFirstFrame(new StepKeyFrame<TValue>(gameObject.StartTime, initialValue));
         }
 
-        internal new KeyFrame<TValue> Head
+        public TValue GetValue(int time)
         {
-            get { return (KeyFrame<TValue>)base.Head; }
-        }
+            if (time < GameObject.StartTime)
+                throw new ArgumentException("Cannot get value before game object starts");
 
-        internal new KeyFrame<TValue> Tail
-        {
-            get { return (KeyFrame<TValue>)base.Tail; }
+            if (FirstFrame == null)
+                throw new ArgumentException("No key frame is added");
+
+            object value;
+            if (time <= FirstFrame.Time)
+            {
+                value = FirstFrame.Value;
+            }
+            else
+            {
+                var frame = FindFrameAfter(time);
+                if (frame == null)
+                {
+                    value = LastFrame.Value;
+
+                }
+                else if (frame.Previous == null)
+                {
+                    value = frame.Value;
+                }
+                else
+                {
+                    value = ((KeyFrame<TValue>)frame).GetValue(time);
+                }
+            }
+
+            return (TValue)value;
         }
     }
 }

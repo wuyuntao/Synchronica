@@ -32,9 +32,13 @@ namespace Synchronica.Simulation.Variables
             : base(gameObject, id, initialValue)
         { }
 
+        internal VBoolean(GameObject gameObject, int id)
+            : base(gameObject, id)
+        { }
+
         public void AddStepFrame(int time, bool value)
         {
-            AddKeyFrame(new StepKeyFrame<bool>(Tail, null, time, value));
+            AddLastFrame(new StepKeyFrame<bool>(time, value));
         }
     }
 }

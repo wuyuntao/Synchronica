@@ -60,8 +60,6 @@ namespace Synchronica.Tests.Mock
         public int Id;
 
         public VariableType Type;
-
-        public object InitialValue;
     }
 
     public class VariableData

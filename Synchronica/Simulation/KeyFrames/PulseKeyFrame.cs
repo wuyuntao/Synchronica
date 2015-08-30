@@ -31,71 +31,20 @@ namespace Synchronica.Simulation.KeyFrames
         void AddPulseFrame(int time, TValue value);
     }
 
-    public sealed class PulseKeyFrame_Int16 : KeyFrame<short>
+    sealed class PulseKeyFrame<TValue> : KeyFrame<TValue>
     {
-        internal PulseKeyFrame_Int16(KeyFrame<short> previous, KeyFrame<short> next, int milliseconds, short value)
-            : base(previous, next, milliseconds, value)
+        internal PulseKeyFrame(int time, TValue value)
+            : base(time, value)
         { }
 
-        internal override short GetValue(int milliseconds)
+        internal override TValue GetValue(int time)
         {
-            return Milliseconds == milliseconds ? Value : (short)0;
+            return Time == time ? Value : default(TValue);
         }
 
-        internal override KeyFrame Interpolate(int milliseconds)
+        internal override KeyFrame Clone(int time)
         {
-            return new PulseKeyFrame_Int16(Previous, this, milliseconds, GetValue(milliseconds));
-        }
-    }
-
-    public sealed class PulseKeyFrame_Int32 : KeyFrame<int>
-    {
-        internal PulseKeyFrame_Int32(KeyFrame<int> previous, KeyFrame<int> next, int milliseconds, int value)
-            : base(previous, next, milliseconds, value)
-        { }
-
-        internal override int GetValue(int milliseconds)
-        {
-            return Milliseconds == milliseconds ? Value : 0;
-        }
-
-        internal override KeyFrame Interpolate(int milliseconds)
-        {
-            return new PulseKeyFrame_Int32(Previous, this, milliseconds, GetValue(milliseconds));
-        }
-    }
-
-    public sealed class PulseKeyFrame_Int64 : KeyFrame<long>
-    {
-        internal PulseKeyFrame_Int64(KeyFrame<long> previous, KeyFrame<long> next, int milliseconds, long value)
-            : base(previous, next, milliseconds, value)
-        { }
-
-        internal override long GetValue(int milliseconds)
-        {
-            return Milliseconds == milliseconds ? Value : 0;
-        }
-
-        internal override KeyFrame Interpolate(int milliseconds)
-        {
-            return new PulseKeyFrame_Int64(Previous, this, milliseconds, GetValue(milliseconds));
-        }
-    }
-
-    public sealed class PulseKeyFrame_Float : KeyFrame<float>
-    {
-        internal PulseKeyFrame_Float(KeyFrame<float> previous, KeyFrame<float> next, int milliseconds, float value)
-            : base(previous, next, milliseconds, value)
-        { }
-
-        internal override float GetValue(int milliseconds)
-        {
-            return Milliseconds == milliseconds ? Value : 0;
-        }
-
-        internal override KeyFrame Interpolate(int milliseconds)
-        {
-            return new PulseKeyFrame_Float(Previous, this, milliseconds, GetValue(milliseconds));
+            return new PulseKeyFrame<TValue>(time, GetValue(time));
         }
     }
 }

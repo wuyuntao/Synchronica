@@ -32,19 +32,23 @@ namespace Synchronica.Simulation.Variables
             : base(gameObject, id, initialValue)
         { }
 
+        internal VFloat(GameObject gameObject, int id)
+            : base(gameObject, id)
+        { }
+
         public void AddLinearFrame(int time, float value)
         {
-            AddKeyFrame(new LinearKeyFrame_Float(Tail, null, time, value));
+            AddLastFrame(new LinearKeyFrame_Float(time, value));
         }
 
         public void AddPulseFrame(int time, float value)
         {
-            AddKeyFrame(new PulseKeyFrame_Float(Tail, null, time, value));
+            AddLastFrame(new PulseKeyFrame<float>(time, value));
         }
 
         public void AddStepFrame(int time, float value)
         {
-            AddKeyFrame(new StepKeyFrame<float>(Tail, null, time, value));
+            AddLastFrame(new StepKeyFrame<float>(time, value));
         }
     }
 }

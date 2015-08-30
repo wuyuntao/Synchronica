@@ -48,7 +48,7 @@ namespace Synchronica.Tests.Record
             var var4 = obj2.GetVariable<short>(var1.Id);
             var var5 = obj2.GetVariable<int>(var2.Id);
             var var6 = obj2.GetVariable<float>(var3.Id);
-            //Assert.Throws<ArgumentException>(() => var4.GetValue(1));
+            Assert.Throws<ArgumentException>(() => var4.GetValue(1));
             Assert.AreEqual(10, var4.GetValue(2));
 
             recorder.AddLinearFrame(var4, 100, (short)30);

@@ -29,23 +29,23 @@ namespace Synchronica.Simulation.KeyFrames
         void AddStepFrame(int time, TValue value);
     }
 
-    public sealed class StepKeyFrame<TValue> : KeyFrame<TValue>
+    sealed class StepKeyFrame<TValue> : KeyFrame<TValue>
     {
-        internal StepKeyFrame(KeyFrame<TValue> previous, KeyFrame<TValue> next, int milliseconds, TValue value)
-            : base(previous, next, milliseconds, value)
+        internal StepKeyFrame(int time, TValue value)
+            : base(time, value)
         { }
 
-        internal override TValue GetValue(int milliseconds)
+        internal override TValue GetValue(int time)
         {
-            if (Previous != null && milliseconds < Milliseconds)
+            if (Previous != null && time < Time)
                 return Previous.Value;
             else
                 return Value;
         }
 
-        internal override KeyFrame Interpolate(int milliseconds)
+        internal override KeyFrame Clone(int time)
         {
-            return new StepKeyFrame<TValue>(Previous, this, milliseconds, GetValue(milliseconds));
+            return new StepKeyFrame<TValue>(time, GetValue(time));
         }
     }
 }

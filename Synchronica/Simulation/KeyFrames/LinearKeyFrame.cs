@@ -31,85 +31,85 @@ namespace Synchronica.Simulation.KeyFrames
         void AddLinearFrame(int time, TValue value);
     }
 
-    public sealed class LinearKeyFrame_Int16 : KeyFrame<short>
+    sealed class LinearKeyFrame_Int16 : KeyFrame<short>
     {
-        internal LinearKeyFrame_Int16(KeyFrame<short> previous, KeyFrame<short> next, int milliseconds, short value)
-            : base(previous, next, milliseconds, value)
+        internal LinearKeyFrame_Int16(int time, short value)
+            : base(time, value)
         { }
 
-        internal override short GetValue(int milliseconds)
+        internal override short GetValue(int time)
         {
-            var slope = (float)(Value - Previous.Value) / (float)(Milliseconds - Previous.Milliseconds);
+            var slope = (float)(Value - Previous.Value) / (float)(Time - Previous.Time);
             var intercept = Previous.Value;
-            var value = slope * (milliseconds - Previous.Milliseconds) + intercept;
+            var value = slope * (time - Previous.Time) + intercept;
 
             return (short)Math.Round(value);
         }
 
-        internal override KeyFrame Interpolate(int milliseconds)
+        internal override KeyFrame Clone(int time)
         {
-            return new LinearKeyFrame_Int16(Previous, this, milliseconds, GetValue(milliseconds));
+            return new LinearKeyFrame_Int16(time, GetValue(time));
         }
     }
 
-    public sealed class LinearKeyFrame_Int32 : KeyFrame<int>
+    sealed class LinearKeyFrame_Int32 : KeyFrame<int>
     {
-        internal LinearKeyFrame_Int32(KeyFrame<int> previous, KeyFrame<int> next, int milliseconds, int value)
-            : base(previous, next, milliseconds, value)
+        internal LinearKeyFrame_Int32(int time, int value)
+            : base(time, value)
         { }
 
-        internal override int GetValue(int milliseconds)
+        internal override int GetValue(int time)
         {
-            var slope = (float)(Value - Previous.Value) / (float)(Milliseconds - Previous.Milliseconds);
+            var slope = (float)(Value - Previous.Value) / (float)(Time - Previous.Time);
             var intercept = Previous.Value;
-            var value = slope * (milliseconds - Previous.Milliseconds) + intercept;
+            var value = slope * (time - Previous.Time) + intercept;
 
             return (int)Math.Round(value);
         }
 
-        internal override KeyFrame Interpolate(int milliseconds)
+        internal override KeyFrame Clone(int time)
         {
-            return new LinearKeyFrame_Int32(Previous, this, milliseconds, GetValue(milliseconds));
+            return new LinearKeyFrame_Int32(time, GetValue(time));
         }
     }
 
-    public sealed class LinearKeyFrame_Int64 : KeyFrame<long>
+    sealed class LinearKeyFrame_Int64 : KeyFrame<long>
     {
-        internal LinearKeyFrame_Int64(KeyFrame<long> previous, KeyFrame<long> next, int milliseconds, long value)
-            : base(previous, next, milliseconds, value)
+        internal LinearKeyFrame_Int64(int time, long value)
+            : base(time, value)
         { }
 
-        internal override long GetValue(int milliseconds)
+        internal override long GetValue(int time)
         {
-            var slope = (float)(Value - Previous.Value) / (float)(Milliseconds - Previous.Milliseconds);
+            var slope = (float)(Value - Previous.Value) / (float)(Time - Previous.Time);
             var intercept = Previous.Value;
-            var value = slope * (milliseconds - Previous.Milliseconds) + intercept;
+            var value = slope * (time - Previous.Time) + intercept;
 
             return (long)Math.Round(value);
         }
 
-        internal override KeyFrame Interpolate(int milliseconds)
+        internal override KeyFrame Clone(int time)
         {
-            return new LinearKeyFrame_Int64(Previous, this, milliseconds, GetValue(milliseconds));
+            return new LinearKeyFrame_Int64(time, GetValue(time));
         }
     }
 
-    public sealed class LinearKeyFrame_Float : KeyFrame<float>
+    sealed class LinearKeyFrame_Float : KeyFrame<float>
     {
-        internal LinearKeyFrame_Float(KeyFrame<float> previous, KeyFrame<float> next, int milliseconds, float value)
-            : base(previous, next, milliseconds, value)
+        internal LinearKeyFrame_Float(int time, float value)
+            : base(time, value)
         { }
 
-        internal override float GetValue(int milliseconds)
+        internal override float GetValue(int time)
         {
-            var slope = (float)(Value - Previous.Value) / (float)(Milliseconds - Previous.Milliseconds);
+            var slope = (float)(Value - Previous.Value) / (float)(Time - Previous.Time);
             var intercept = Previous.Value;
-            return slope * (milliseconds - Previous.Milliseconds) + intercept;
+            return slope * (time - Previous.Time) + intercept;
         }
 
-        internal override KeyFrame Interpolate(int milliseconds)
+        internal override KeyFrame Clone(int time)
         {
-            return new LinearKeyFrame_Float(Previous, this, milliseconds, GetValue(milliseconds));
+            return new LinearKeyFrame_Float(time, GetValue(time));
         }
     }
 }
