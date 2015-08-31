@@ -72,7 +72,7 @@ namespace Synchronica.Examples.Client
 
         private void OnSynchronizeSceneData(Message msg)
         {
-            throw new NotImplementedException();
+            Log("Received SynchronizeSceneData");
         }
 
         public void Login()

@@ -89,10 +89,10 @@ namespace Synchronica.Examples.Server
         {
             var req = (InputRequest)msg.Body;
 
-            this.scene.Input(this.objectId, req.Milliseconds, req.Command);
+            this.scene.AddInput(this.objectId, req.Milliseconds, req.Command);
         }
 
-        private void WriteBytes(byte[] bytes)
+        public void WriteBytes(byte[] bytes)
         {
             ThreadPool.QueueUserWorkItem(s => this.networkStream.Write(bytes, 0, bytes.Length));
         }

@@ -25,7 +25,8 @@ namespace Synchronica.Examples.Server
 
             Log("Started at {0}", this.tcpListener.Server.LocalEndPoint);
 
-            ThreadPool.QueueUserWorkItem(WorkThread);
+            ThreadPool.QueueUserWorkItem(AcceptThread);
+            ThreadPool.QueueUserWorkItem(SceneThread);
         }
 
         public override string ToString()
@@ -43,7 +44,7 @@ namespace Synchronica.Examples.Server
             }
         }
 
-        private void WorkThread(object state)
+        private void AcceptThread(object state)
         {
             while (!this.isClosed)
             {
@@ -62,6 +63,26 @@ namespace Synchronica.Examples.Server
                     Log("Disconnect {0}", ex.Message);
 
                     break;
+                }
+            }
+        }
+
+        private void SceneThread(object state)
+        {
+            while(!this.isClosed)
+            {
+                Thread.Sleep(100);
+
+                var bytes = this.scene.Process();
+                if (bytes != null)
+                {
+                    lock(this.clientsLock)
+                    {
+                        foreach(var client in this.clients)
+                        {
+                            client.WriteBytes(bytes);
+                        }
+                    }
                 }
             }
         }

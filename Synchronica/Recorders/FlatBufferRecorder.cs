@@ -115,17 +115,26 @@ namespace Synchronica.Recorders
 
             if (oFrames.Count > 0 || includingParameters)
             {
-                VariableData.StartVariableData(fbb);
-
+                VectorOffset vFrames = default(VectorOffset);
                 if (oFrames.Count > 0)
                 {
-                    var vFrames = VariableData.CreateKeyFramesVector(fbb, oFrames.ToArray());
+                    vFrames = VariableData.CreateKeyFramesVector(fbb, oFrames.ToArray());
+                }
+
+                Offset<VariableParameters> oParameters = default(Offset<VariableParameters>);
+                if (includingParameters)
+                {
+                    oParameters = VariableParameters.CreateVariableParameters(fbb, GetVariableType(variable));
+                }
+
+                VariableData.StartVariableData(fbb);
+                if (oFrames.Count > 0)
+                {
                     VariableData.AddKeyFrames(fbb, vFrames);
                 }
 
                 if (includingParameters)
                 {
-                    var oParameters = VariableParameters.CreateVariableParameters(fbb, GetVariableType(variable));
                     VariableData.AddParameters(fbb, oParameters);
                 }
 
