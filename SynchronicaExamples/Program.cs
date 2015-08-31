@@ -7,9 +7,9 @@ namespace Synchronica.Examples
     {
         static void Main(string[] args)
         {
-            RunUnitTest();
+            // RunUnitTest();
 
-            //StartServer();
+            StartSimpleServer();
         }
 
         static void RunUnitTest()
@@ -25,13 +25,13 @@ namespace Synchronica.Examples
             t.TestRemoveFramesAfter();
         }
 
-        static void StartServer()
+        static void StartSimpleServer()
         {
-            var server = new Server.DemoServer(4000);
+            var server = new Server.SimpleServer(4000);
 
             Thread.Sleep(1000);
 
-            var client = new Client.DemoClient("Client1", "127.0.0.1", 4000);
+            var client = new Client.SimpleClient("Client1", "127.0.0.1", 4000);
 
             var exit = false;
             while (!exit)

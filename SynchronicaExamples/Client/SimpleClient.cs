@@ -2,14 +2,13 @@
 using FlatBuffers.Schema;
 using Synchronica.Examples.Schema;
 using Synchronica.Schema;
-using Synchronica.Simulation;
 using System;
 using System.Net.Sockets;
 using System.Threading;
 
 namespace Synchronica.Examples.Client
 {
-    class DemoClient : LogObject
+    class SimpleClient : LogObject
     {
         private string name;
 
@@ -19,7 +18,7 @@ namespace Synchronica.Examples.Client
 
         private int objectId;
 
-        public DemoClient(string name, string hostname, int port)
+        public SimpleClient(string name, string hostname, int port)
         {
             this.name = name;
             this.tcpClient = new TcpClient();

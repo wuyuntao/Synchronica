@@ -1,21 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using Synchronica.Examples.Scene;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
 namespace Synchronica.Examples.Server
 {
-    class DemoServer : LogObject
+    class SimpleServer : LogObject
     {
+        private SimpleScene scene = new SimpleScene();
+
         private TcpListener tcpListener;
 
-        private List<DemoClient> clients = new List<DemoClient>();
+        private List<SimpleClient> clients = new List<SimpleClient>();
 
         private object clientsLock = new object();
 
         private bool isClosed = false;
 
-        public DemoServer(int port)
+        public SimpleServer(int port)
         {
             this.tcpListener = new TcpListener(new IPAddress(0), port);
             this.tcpListener.Start();
@@ -47,7 +50,7 @@ namespace Synchronica.Examples.Server
                 try
                 {
                     var tcpClient = this.tcpListener.AcceptTcpClient();
-                    var client = new DemoClient(tcpClient);
+                    var client = new SimpleClient(tcpClient, this.scene);
 
                     lock (this.clientsLock)
                     {

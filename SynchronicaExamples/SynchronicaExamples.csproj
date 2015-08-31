@@ -42,7 +42,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\DemoClient.cs" />
+    <Compile Include="Client\SimpleClient.cs" />
     <Compile Include="GeneratedCode\Synchronica\Examples\Schema\ClientMessageIds.cs" />
     <Compile Include="GeneratedCode\Synchronica\Examples\Schema\Command.cs" />
     <Compile Include="GeneratedCode\Synchronica\Examples\Schema\InputRequest.cs" />
@@ -52,8 +52,9 @@
     <Compile Include="LogObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server\DemoServer.cs" />
-    <Compile Include="Server\DemoClient.cs" />
+    <Compile Include="Scene\SimpleScene.cs" />
+    <Compile Include="Server\SimpleServer.cs" />
+    <Compile Include="Server\SimpleClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SynchronicaTests\SynchronicaTests.csproj">

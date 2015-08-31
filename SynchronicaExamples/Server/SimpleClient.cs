@@ -1,19 +1,15 @@
 ﻿using FlatBuffers;
 using FlatBuffers.Schema;
+using Synchronica.Examples.Scene;
 using Synchronica.Examples.Schema;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 
 namespace Synchronica.Examples.Server
 {
-    class DemoClient : LogObject
+    class SimpleClient : LogObject
     {
-        private static int nextObjectId = 1;
-
         private string name = "NoName";
 
         private int objectId;
@@ -22,10 +18,13 @@ namespace Synchronica.Examples.Server
 
         private NetworkStream networkStream;
 
-        public DemoClient(TcpClient tcpClient)
+        private SimpleScene scene;
+
+        public SimpleClient(TcpClient tcpClient, SimpleScene scene)
         {
             this.tcpClient = tcpClient;
             this.networkStream = tcpClient.GetStream();
+            this.scene = scene;
 
             Log("Connected from {0}", tcpClient.Client.RemoteEndPoint);
 
@@ -68,20 +67,29 @@ namespace Synchronica.Examples.Server
             var req = (LoginRequest)msg.Body;
 
             this.name = req.Name;
-            this.objectId = nextObjectId++;
+            this.objectId = this.scene.AllocateCube(this.name);
 
-            Log("Login succeeded: {0}", this.name);
+            if (this.objectId > 0)
+            {
+                Log("Login succeeded: {0}, ObjectId: {1}", this.name, this.objectId);
 
-            var fbb = new FlatBufferBuilder(1024);
-            var oRes = LoginResponse.CreateLoginResponse(fbb, this.objectId);
-            LoginResponse.FinishLoginResponseBuffer(fbb, oRes);
+                var fbb = new FlatBufferBuilder(1024);
+                var oRes = LoginResponse.CreateLoginResponse(fbb, this.objectId);
+                LoginResponse.FinishLoginResponseBuffer(fbb, oRes);
 
-            WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ServerMessageIds.LoginResponse));
+                WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ServerMessageIds.LoginResponse));
+            }
+            else
+            {
+                Log("Login failed.");
+            }
         }
 
         private void OnInputRequest(Message msg)
         {
-            throw new NotImplementedException();
+            var req = (InputRequest)msg.Body;
+
+            this.scene.Input(this.objectId, req.Milliseconds, req.Command);
         }
 
         private void WriteBytes(byte[] bytes)
