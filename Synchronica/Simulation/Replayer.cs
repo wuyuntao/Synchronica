@@ -24,6 +24,7 @@
 
 using Synchronica.Simulation.KeyFrames;
 using System;
+using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
@@ -140,5 +141,15 @@ namespace Synchronica.Simulation
         protected abstract void DeserializeRecord(TData data);
 
         #endregion
+
+        public Scene Scene
+        {
+            get { return this.scene; }
+        }
+
+        public IEnumerable<GameObject> Objects
+        {
+            get { return this.scene.Objects; }
+        }
     }
 }

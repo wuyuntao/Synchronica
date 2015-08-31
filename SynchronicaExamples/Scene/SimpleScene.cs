@@ -22,38 +22,70 @@ namespace Synchronica.Examples.Scene
 
         private Stopwatch stopwatch = Stopwatch.StartNew();
 
+        private List<byte[]> sceneData = new List<byte[]>();
+
+        private object sceneDataLock = new object();
+
         #region Cube
 
         class Cube
         {
-            public FlatBufferRecorder recorder;
+            public SimpleScene scene;
             public GameObject gameObject;
             public string clientName;
 
-            public Cube(FlatBufferRecorder recorder, GameObject gameObject)
+            private Variable<float> posX;
+            private Variable<float> posY;
+            private Variable<float> posZ;
+
+            public Cube(SimpleScene scene, float posX, float posY, float posZ)
             {
-                this.recorder = recorder;
-                this.gameObject = gameObject;
+                this.scene = scene;
+
+                this.gameObject = this.scene.recorder.AddObject(0);
+                this.posX = this.scene.recorder.AddFloat(gameObject, posX);
+                this.posY = this.scene.recorder.AddFloat(gameObject, posY);
+                this.posZ = this.scene.recorder.AddFloat(gameObject, posZ);
             }
 
             internal void Forward(int time)
             {
-                throw new NotImplementedException();
+                var recorder = this.scene.recorder;
+                recorder.InterpolateKeyFrame(this.posZ, time);
+                recorder.RemoveKeyFramesAfter(this.posZ, time + 1);
+
+                var value = this.posZ.GetValue(time) + 100;
+                recorder.AddLinearFrame(this.posZ, time + 1000, value);
             }
 
             internal void Back(int time)
             {
-                throw new NotImplementedException();
+                var recorder = this.scene.recorder;
+                recorder.InterpolateKeyFrame(this.posZ, time);
+                recorder.RemoveKeyFramesAfter(this.posZ, time + 1);
+
+                var value = this.posZ.GetValue(time) - 100;
+                recorder.AddLinearFrame(this.posZ, time + 1000, value);
             }
 
             internal void TurnLeft(int time)
             {
-                throw new NotImplementedException();
+                var recorder = this.scene.recorder;
+                recorder.InterpolateKeyFrame(this.posX, time);
+                recorder.RemoveKeyFramesAfter(this.posX, time + 1);
+
+                var value = this.posZ.GetValue(time) - 100;
+                recorder.AddLinearFrame(this.posX, time + 1000, value);
             }
 
             internal void TurnRight(int time)
             {
-                throw new NotImplementedException();
+                var recorder = this.scene.recorder;
+                recorder.InterpolateKeyFrame(this.posX, time);
+                recorder.RemoveKeyFramesAfter(this.posX, time + 1);
+
+                var value = this.posZ.GetValue(time) + 100;
+                recorder.AddLinearFrame(this.posX, time + 1000, value);
             }
         }
 
@@ -87,12 +119,7 @@ namespace Synchronica.Examples.Scene
 
         private void CreateCube(float posX, float posY, float posZ)
         {
-            var gameObject = recorder.AddObject(0);
-            recorder.AddFloat(gameObject, posX);
-            recorder.AddFloat(gameObject, posY);
-            recorder.AddFloat(gameObject, posZ);
-
-            var cube = new Cube(this.recorder, gameObject);
+            var cube = new Cube(this, posX, posY, posZ);
             this.cubes.Add(cube);
         }
 
@@ -115,13 +142,20 @@ namespace Synchronica.Examples.Scene
                     if (cube == null)
                         throw new InvalidOperationException("Invalid object id");
 
-                    ProcessCommand(cube, input.command, Math.Max(input.time, startTime));
+                    ProcessCommand(cube, input.command, startTime);
                 }
 
                 var fbb = this.recorder.Record(endTime);
                 if (fbb != null)
                 {
-                    return fbb.ToProtocolMessage(ServerMessageIds.SynchronizeSceneData);
+                    var data = fbb.ToProtocolMessage(ServerMessageIds.SynchronizeSceneData);
+
+                    lock(this.sceneDataLock)
+                    {
+                        this.sceneData.Add(data);
+                    }
+
+                    return data;
                 }
             }
 
@@ -195,6 +229,14 @@ namespace Synchronica.Examples.Scene
             lock (this.inputsLock)
             {
                 this.inputs.Add(new Input(objectId, time, command));
+            }
+        }
+
+        public IEnumerable<byte[]> GetSceneData()
+        {
+            lock(this.sceneDataLock)
+            {
+                return this.sceneData.ToArray();
             }
         }
     }

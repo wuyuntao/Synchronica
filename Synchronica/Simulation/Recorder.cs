@@ -120,6 +120,16 @@ namespace Synchronica.Simulation
             v.AddStepFrame(time, value);
         }
 
+        public void InterpolateKeyFrame<TValue>(Variable<TValue> variable, int time)
+        {
+            variable.Interpolate(time);
+        }
+
+        public void RemoveKeyFramesAfter<TValue>(Variable<TValue> variable, int time)
+        {
+            variable.RemoveFramesAfter(time);
+        }
+
         #endregion
 
         #region Record

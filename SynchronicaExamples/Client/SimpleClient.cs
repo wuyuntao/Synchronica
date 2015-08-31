@@ -1,6 +1,7 @@
 ﻿using FlatBuffers;
 using FlatBuffers.Schema;
 using Synchronica.Examples.Schema;
+using Synchronica.Replayers;
 using Synchronica.Schema;
 using System;
 using System.Net.Sockets;
@@ -18,6 +19,8 @@ namespace Synchronica.Examples.Client
 
         private int objectId;
 
+        private FlatBufferReplayer replayer = new FlatBufferReplayer();
+
         public SimpleClient(string name, string hostname, int port)
         {
             this.name = name;
@@ -28,6 +31,8 @@ namespace Synchronica.Examples.Client
             Log("Connected to {0}:{1}", hostname, port);
 
             ThreadPool.QueueUserWorkItem(ReadThread);
+
+            Login();
         }
 
         public override string ToString()
@@ -72,7 +77,10 @@ namespace Synchronica.Examples.Client
 
         private void OnSynchronizeSceneData(Message msg)
         {
-            Log("Received SynchronizeSceneData");
+            var data = (SynchronizeSceneData)msg.Body;
+
+            Log("Received SynchronizeSceneData: {0} -> {1}", data.StartTime, data.EndTime);
+            this.replayer.Replay(data.StartTime, data.EndTime, data);
         }
 
         public void Login()
@@ -88,15 +96,16 @@ namespace Synchronica.Examples.Client
             Log("Login");
         }
 
-        public void Input(int milliseconds, Command command)
+        public void Input(Command command)
         {
+            var time = this.replayer.Scene.ElapsedTime;
             var fbb = new FlatBufferBuilder(1024);
 
-            var oInput = InputRequest.CreateInputRequest(fbb, milliseconds, command);
+            var oInput = InputRequest.CreateInputRequest(fbb, time, command);
 
             WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ClientMessageIds.InputRequest));
 
-            Log("Input {0} {1}ms", command, milliseconds);
+            Log("Input {0} {1}ms", command, time);
         }
 
         private void WriteBytes(byte[] bytes)

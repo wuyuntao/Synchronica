@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Synchronica.Examples.Schema;
+using System;
 using System.Threading;
 
 namespace Synchronica.Examples
@@ -47,6 +48,26 @@ namespace Synchronica.Examples
                     case "exit":
                     case "x":
                         exit = true;
+                        break;
+
+                    case "forward":
+                    case "w":
+                        client.Input(Command.Up);
+                        break;
+
+                    case "back":
+                    case "s":
+                        client.Input(Command.Down);
+                        break;
+
+                    case "left":
+                    case "a":
+                        client.Input(Command.Left);
+                        break;
+                    
+                    case "right":
+                    case "d":
+                        client.Input(Command.Right);
                         break;
                 }
             }

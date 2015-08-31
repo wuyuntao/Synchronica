@@ -78,6 +78,9 @@ namespace Synchronica.Examples.Server
                 LoginResponse.FinishLoginResponseBuffer(fbb, oRes);
 
                 WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ServerMessageIds.LoginResponse));
+
+                foreach (var bytes in this.scene.GetSceneData())
+                    WriteBytes(bytes);
             }
             else
             {

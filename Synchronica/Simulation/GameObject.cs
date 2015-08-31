@@ -44,6 +44,7 @@ namespace Synchronica.Simulation
             this.scene = scene;
             this.id = id;
             this.startTime = startTime;
+            this.endTime = -1;      // TODO Is it good to use -1 as default value of endTime?
         }
 
         internal void Destroy(int endTime)
