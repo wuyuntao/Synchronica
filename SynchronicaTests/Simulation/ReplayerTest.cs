@@ -33,7 +33,7 @@ namespace Synchronica.Tests.Simulation
         public void TestReplayer()
         {
             var recorder = new Recorder();
-            var obj1 = recorder.AddObject(2);
+            var obj1 = recorder.AddObject(0);
             var var1 = recorder.AddInt16(obj1, 10);
             var var2 = recorder.AddInt32(obj1, -10);
             var var3 = recorder.AddFloat(obj1, 5.7f);
@@ -46,7 +46,15 @@ namespace Synchronica.Tests.Simulation
 
             var replayer = new Replayer();
             replayer.Replay(data.StartTime, data.EndTime, data);
-        }
+            
+            var mObj1 = replayer.GetObject(1);
+            Assert.AreEqual(obj1.StartTime, mObj1.StartTime);
+            Assert.AreEqual(obj1.EndTime, mObj1.EndTime);
 
+            var mVar1 = mObj1.GetVariable<short>(2);
+            Assert.AreEqual(10, mVar1.GetValue(0));
+            Assert.AreEqual(20, mVar1.GetValue(50));
+            Assert.AreEqual(30, mVar1.GetValue(100));
+        }
     }
 }
