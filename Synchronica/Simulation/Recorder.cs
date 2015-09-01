@@ -67,6 +67,9 @@ namespace Synchronica.Simulation
 
         public Variable<bool> AddBoolean(GameObject gameObject, int id, bool value)
         {
+            if (gameObject.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after game object starts");
+
             var variable = new VBoolean(gameObject, id, value);
             gameObject.AddVariable(variable);
             return variable;
@@ -74,6 +77,9 @@ namespace Synchronica.Simulation
 
         public Variable<short> AddInt16(GameObject gameObject, int id, short value)
         {
+            if (gameObject.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after game object starts");
+
             var variable = new VInt16(gameObject, id, value);
             gameObject.AddVariable(variable);
             return variable;
@@ -81,6 +87,9 @@ namespace Synchronica.Simulation
 
         public Variable<int> AddInt32(GameObject gameObject, int id, int value)
         {
+            if (gameObject.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after game object starts");
+
             var variable = new VInt32(gameObject, id, value);
             gameObject.AddVariable(variable);
             return variable;
@@ -88,6 +97,9 @@ namespace Synchronica.Simulation
 
         public Variable<long> AddInt64(GameObject gameObject, int id, long value)
         {
+            if (gameObject.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after game object starts");
+
             var variable = new VInt64(gameObject, id, value);
             gameObject.AddVariable(variable);
             return variable;
@@ -95,6 +107,9 @@ namespace Synchronica.Simulation
 
         public Variable<float> AddFloat(GameObject gameObject, int id, float value)
         {
+            if (gameObject.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after game object starts");
+
             var variable = new VFloat(gameObject, id, value);
             gameObject.AddVariable(variable);
             return variable;
