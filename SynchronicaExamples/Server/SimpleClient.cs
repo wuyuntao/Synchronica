@@ -1,5 +1,6 @@
 ﻿using FlatBuffers;
 using FlatBuffers.Schema;
+using NLog;
 using Synchronica.Examples.Scene;
 using Synchronica.Examples.Schema;
 using System;
@@ -8,8 +9,10 @@ using System.Threading;
 
 namespace Synchronica.Examples.Server
 {
-    class SimpleClient : LogObject
+    class SimpleClient 
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private string name = "NoName";
 
         private int objectId;
@@ -26,7 +29,7 @@ namespace Synchronica.Examples.Server
             this.networkStream = tcpClient.GetStream();
             this.scene = scene;
 
-            Log("Connected from {0}", tcpClient.Client.RemoteEndPoint);
+            logger.Info("Connected from {0}", tcpClient.Client.RemoteEndPoint);
 
             ThreadPool.QueueUserWorkItem(ReadThread);
         }
@@ -55,7 +58,7 @@ namespace Synchronica.Examples.Server
                 var bytes = new byte[readSize];
                 Array.Copy(buffer, bytes, readSize);
 
-                Log("Received {0} bytes", readSize);
+                logger.Info("Received {0} bytes", readSize);
 
                 processor.Enqueue(bytes);
                 processor.Process();
@@ -71,7 +74,7 @@ namespace Synchronica.Examples.Server
 
             if (this.objectId > 0)
             {
-                Log("Login succeeded: {0}, ObjectId: {1}", this.name, this.objectId);
+                logger.Info("Login succeeded: {0}, ObjectId: {1}", this.name, this.objectId);
 
                 var fbb = new FlatBufferBuilder(1024);
                 var oRes = LoginResponse.CreateLoginResponse(fbb, this.objectId);
@@ -84,7 +87,7 @@ namespace Synchronica.Examples.Server
             }
             else
             {
-                Log("Login failed.");
+                logger.Info("Login failed.");
             }
         }
 

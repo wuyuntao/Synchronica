@@ -1,4 +1,5 @@
 ﻿using FlatBuffers.Schema;
+using NLog;
 using Synchronica.Examples.Schema;
 using Synchronica.Recorders;
 using Synchronica.Simulation;
@@ -10,6 +11,8 @@ namespace Synchronica.Examples.Scene
 {
     class SimpleScene
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private FlatBufferRecorder recorder = new FlatBufferRecorder();
 
         private List<Cube> cubes = new List<Cube>();

@@ -1,5 +1,6 @@
 ﻿using FlatBuffers;
 using FlatBuffers.Schema;
+using NLog;
 using Synchronica.Examples.Schema;
 using Synchronica.Replayers;
 using Synchronica.Schema;
@@ -9,8 +10,10 @@ using System.Threading;
 
 namespace Synchronica.Examples.Client
 {
-    class SimpleClient : LogObject
+    class SimpleClient 
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private string name;
 
         private TcpClient tcpClient;
@@ -28,7 +31,7 @@ namespace Synchronica.Examples.Client
             this.tcpClient.Connect(hostname, port);
             this.networkStream = this.tcpClient.GetStream();
 
-            Log("Connected to {0}:{1}", hostname, port);
+            logger.Info("Connected to {0}:{1}", hostname, port);
 
             ThreadPool.QueueUserWorkItem(ReadThread);
 
@@ -59,7 +62,7 @@ namespace Synchronica.Examples.Client
                 var bytes = new byte[readSize];
                 Array.Copy(buffer, bytes, readSize);
 
-                Log("Received {0} bytes", readSize);
+                logger.Info("Received {0} bytes", readSize);
 
                 processor.Enqueue(bytes);
                 processor.Process();
@@ -72,14 +75,14 @@ namespace Synchronica.Examples.Client
 
             this.objectId = res.ObjectId;
 
-            Log("Login succeeded: {0}", this.objectId);
+            logger.Info("Login succeeded: {0}", this.objectId);
         }
 
         private void OnSynchronizeSceneData(Message msg)
         {
             var data = (SynchronizeSceneData)msg.Body;
 
-            Log("Received SynchronizeSceneData: {0} -> {1}", data.StartTime, data.EndTime);
+            logger.Info("Received SynchronizeSceneData: {0} -> {1}", data.StartTime, data.EndTime);
             this.replayer.Replay(data.StartTime, data.EndTime, data);
         }
 
@@ -93,7 +96,7 @@ namespace Synchronica.Examples.Client
 
             WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ClientMessageIds.LoginRequest));
 
-            Log("Login");
+            logger.Info("Login");
         }
 
         public void Input(Command command)
@@ -105,12 +108,12 @@ namespace Synchronica.Examples.Client
 
             WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ClientMessageIds.InputRequest));
 
-            Log("Input {0} {1}ms", command, time);
+            logger.Info("Input {0} {1}ms", command, time);
         }
 
         private void WriteBytes(byte[] bytes)
         {
-            Log("Send {0} bytes", bytes.Length);
+            logger.Info("Send {0} bytes", bytes.Length);
 
             ThreadPool.QueueUserWorkItem(s => this.networkStream.Write(bytes, 0, bytes.Length));
         }

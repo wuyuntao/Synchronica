@@ -1,4 +1,5 @@
-﻿using Synchronica.Examples.Scene;
+﻿using NLog;
+using Synchronica.Examples.Scene;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -6,8 +7,10 @@ using System.Threading;
 
 namespace Synchronica.Examples.Server
 {
-    class SimpleServer : LogObject
+    class SimpleServer 
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private SimpleScene scene = new SimpleScene();
 
         private TcpListener tcpListener;
@@ -23,7 +26,7 @@ namespace Synchronica.Examples.Server
             this.tcpListener = new TcpListener(new IPAddress(0), port);
             this.tcpListener.Start();
 
-            Log("Started at {0}", this.tcpListener.Server.LocalEndPoint);
+            logger.Info("Started at {0}", this.tcpListener.Server.LocalEndPoint);
 
             ThreadPool.QueueUserWorkItem(AcceptThread);
             ThreadPool.QueueUserWorkItem(SceneThread);
@@ -60,7 +63,7 @@ namespace Synchronica.Examples.Server
                 }
                 catch (SocketException ex)
                 {
-                    Log("Disconnect {0}", ex.Message);
+                    logger.Info("Disconnect {0}", ex.Message);
 
                     break;
                 }
