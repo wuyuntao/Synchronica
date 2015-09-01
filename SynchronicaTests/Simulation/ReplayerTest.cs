@@ -33,6 +33,10 @@ namespace Synchronica.Tests.Simulation
         public void TestReplayer()
         {
             var recorder = new Recorder();
+            var replayer = new Replayer();
+
+            #region Time: 0-100ms
+            
             var obj1 = recorder.AddObject(0);
             var var1 = recorder.AddInt16(obj1, 10);
             var var2 = recorder.AddInt32(obj1, -10);
@@ -43,8 +47,9 @@ namespace Synchronica.Tests.Simulation
             recorder.AddLinearFrame(var3, 90, 9.3f);
 
             var data = recorder.Record(100);
+            Assert.AreEqual(0, data.StartTime);
+            Assert.AreEqual(100, data.EndTime);
 
-            var replayer = new Replayer();
             replayer.Replay(data.StartTime, data.EndTime, data);
             
             var mObj1 = replayer.GetObject(1);
@@ -55,6 +60,23 @@ namespace Synchronica.Tests.Simulation
             Assert.AreEqual(10, mVar1.GetValue(0));
             Assert.AreEqual(20, mVar1.GetValue(50));
             Assert.AreEqual(30, mVar1.GetValue(100));
+
+            var mVar2 = mObj1.GetVariable<int>(3);
+            Assert.AreEqual(-10, mVar2.GetValue(50));
+
+            var mVar3 = mObj1.GetVariable<float>(4);
+            Assert.AreEqual(7.7f, mVar3.GetValue(50));
+            Assert.AreEqual(9.3f, mVar3.GetValue(95));
+
+            #endregion
+
+            #region Time: 100-200ms
+
+            recorder.InterpolateKeyFrame(var1, 110);
+            recorder.RemoveKeyFramesAfter(var1, 111);
+            recorder.AddLinearFrame(var1, 150, (short)40);
+
+            #endregion
         }
     }
 }
