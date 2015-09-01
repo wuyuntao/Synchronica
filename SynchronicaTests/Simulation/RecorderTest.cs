@@ -35,9 +35,9 @@ namespace Synchronica.Tests.Simulation
         {
             var recorder = new Recorder();
             var obj1 = recorder.AddObject(2);
-            var var1 = recorder.AddInt16(obj1, 10);
-            var var2 = recorder.AddInt32(obj1, -10);
-            var var3 = recorder.AddFloat(obj1, 5.7f);
+            var var1 = recorder.AddInt16(obj1, 1, 10);
+            var var2 = recorder.AddInt32(obj1, 2, -10);
+            var var3 = recorder.AddFloat(obj1, 3, 5.7f);
 
             var obj2 = recorder.GetObject(1);
             Assert.AreEqual(obj1.Id, obj2.Id);

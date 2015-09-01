@@ -23,6 +23,7 @@
 */
 
 using Synchronica.Simulation.KeyFrames;
+using Synchronica.Simulation.Variables;
 using System;
 using System.Collections.Generic;
 
@@ -60,27 +61,37 @@ namespace Synchronica.Simulation
 
         protected Variable<bool> AddBoolean(GameObject gameObject, int id)
         {
-            return gameObject.AddBoolean(id);
+            var variable = new VBoolean(gameObject, id);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
         protected Variable<short> AddInt16(GameObject gameObject, int id)
         {
-            return gameObject.AddInt16(id);
+            var variable = new VInt16(gameObject, id);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
         protected Variable<int> AddInt32(GameObject gameObject, int id)
         {
-            return gameObject.AddInt32(id);
+            var variable = new VInt32(gameObject, id);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
         protected Variable<long> AddInt64(GameObject gameObject, int id)
         {
-            return gameObject.AddInt64(id);
+            var variable = new VInt64(gameObject, id);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
         protected Variable<float> AddFloat(GameObject gameObject, int id)
         {
-            return gameObject.AddFloat(id);
+            var variable = new VFloat(gameObject, id);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
         #endregion

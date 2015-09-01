@@ -61,74 +61,13 @@ namespace Synchronica.Simulation
             this.endTime = endTime;
         }
 
-        internal VBoolean AddBoolean(int id, bool value)
+        internal void AddVariable<TVariable>(TVariable variable)
+            where TVariable : Variable
         {
-            var variable = new VBoolean(this, id, value);
-            this.variables.Add(variable);
-            return variable;
-        }
+            if (this.variables.Exists(v => v.Id == variable.Id))
+                throw new InvalidOperationException("Duplicate variable id");
 
-        internal VBoolean AddBoolean(int id)
-        {
-            var variable = new VBoolean(this, id);
             this.variables.Add(variable);
-            return variable;
-        }
-
-        internal VInt16 AddInt16(int id, short value)
-        {
-            var variable = new VInt16(this, id, value);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        internal VInt16 AddInt16(int id)
-        {
-            var variable = new VInt16(this, id);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        internal VInt32 AddInt32(int id, int value)
-        {
-            var variable = new VInt32(this, id, value);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        internal VInt32 AddInt32(int id)
-        {
-            var variable = new VInt32(this, id);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        internal VInt64 AddInt64(int id, long value)
-        {
-            var variable = new VInt64(this, id, value);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        internal VInt64 AddInt64(int id)
-        {
-            var variable = new VInt64(this, id);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        internal VFloat AddFloat(int id, float value)
-        {
-            var variable = new VFloat(this, id, value);
-            this.variables.Add(variable);
-            return variable;
-        }
-
-        internal VFloat AddFloat(int id)
-        {
-            var variable = new VFloat(this, id);
-            this.variables.Add(variable);
-            return variable;
         }
 
         public Variable GetVariable(int id)

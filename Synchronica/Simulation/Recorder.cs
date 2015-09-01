@@ -23,6 +23,7 @@
 */
 
 using Synchronica.Simulation.KeyFrames;
+using Synchronica.Simulation.Variables;
 using System;
 using System.Collections.Generic;
 
@@ -64,29 +65,39 @@ namespace Synchronica.Simulation
 
         #region Variable
 
-        public Variable<bool> AddBoolean(GameObject gameObject, bool value)
+        public Variable<bool> AddBoolean(GameObject gameObject, int id, bool value)
         {
-            return gameObject.AddBoolean(GetNextObjectId(), value);
+            var variable = new VBoolean(gameObject, id, value);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
-        public Variable<short> AddInt16(GameObject gameObject, short value)
+        public Variable<short> AddInt16(GameObject gameObject, int id, short value)
         {
-            return gameObject.AddInt16(GetNextObjectId(), value);
+            var variable = new VInt16(gameObject, id, value);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
-        public Variable<int> AddInt32(GameObject gameObject, int value)
+        public Variable<int> AddInt32(GameObject gameObject, int id, int value)
         {
-            return gameObject.AddInt32(GetNextObjectId(), value);
+            var variable = new VInt32(gameObject, id, value);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
-        public Variable<long> AddInt64(GameObject gameObject, long value)
+        public Variable<long> AddInt64(GameObject gameObject, int id, long value)
         {
-            return gameObject.AddInt64(GetNextObjectId(), value);
+            var variable = new VInt64(gameObject, id, value);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
-        public Variable<float> AddFloat(GameObject gameObject, float value)
+        public Variable<float> AddFloat(GameObject gameObject, int id, float value)
         {
-            return gameObject.AddFloat(GetNextObjectId(), value);
+            var variable = new VFloat(gameObject, id, value);
+            gameObject.AddVariable(variable);
+            return variable;
         }
 
         #endregion

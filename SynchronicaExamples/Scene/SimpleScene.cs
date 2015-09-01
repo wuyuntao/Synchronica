@@ -46,9 +46,9 @@ namespace Synchronica.Examples.Scene
                 this.scene = scene;
 
                 this.gameObject = this.scene.recorder.AddObject(0);
-                this.posX = this.scene.recorder.AddFloat(gameObject, posX);
-                this.posY = this.scene.recorder.AddFloat(gameObject, posY);
-                this.posZ = this.scene.recorder.AddFloat(gameObject, posZ);
+                this.posX = this.scene.recorder.AddFloat(gameObject, 1, posX);
+                this.posY = this.scene.recorder.AddFloat(gameObject, 2, posY);
+                this.posZ = this.scene.recorder.AddFloat(gameObject, 3, posZ);
             }
 
             internal void Forward(int time)

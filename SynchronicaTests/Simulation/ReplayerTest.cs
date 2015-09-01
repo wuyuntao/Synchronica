@@ -38,9 +38,9 @@ namespace Synchronica.Tests.Simulation
             #region Time: 0-100ms
             
             var obj1 = recorder.AddObject(0);
-            var var1 = recorder.AddInt16(obj1, 10);
-            var var2 = recorder.AddInt32(obj1, -10);
-            var var3 = recorder.AddFloat(obj1, 5.7f);
+            var var1 = recorder.AddInt16(obj1, 1, 10);
+            var var2 = recorder.AddInt32(obj1, 2, -10);
+            var var3 = recorder.AddFloat(obj1, 3, 5.7f);
 
             recorder.AddLinearFrame(var1, 100, (short)30);
             recorder.AddStepFrame(var2, 110, 10);
