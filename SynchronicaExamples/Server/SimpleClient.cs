@@ -102,5 +102,10 @@ namespace Synchronica.Examples.Server
         {
             ThreadPool.QueueUserWorkItem(s => this.networkStream.Write(bytes, 0, bytes.Length));
         }
+
+        public bool LoginSucceeded
+        {
+            get { return this.objectId > 0; }
+        }
     }
 }

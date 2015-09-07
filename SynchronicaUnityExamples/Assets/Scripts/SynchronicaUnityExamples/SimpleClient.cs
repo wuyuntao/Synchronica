@@ -4,13 +4,14 @@ using Synchronica.Examples.Schema;
 using Synchronica.Replayers;
 using Synchronica.Schema;
 using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
 
 namespace Synchronica.Unity.Examples
 {
-    class SimpleClient 
+    class SimpleClient
     {
         private string name;
 
@@ -22,6 +23,10 @@ namespace Synchronica.Unity.Examples
 
         private FlatBufferReplayer replayer = new FlatBufferReplayer();
 
+        private List<SynchronizeSceneData> sceneDataBuffer = new List<SynchronizeSceneData>();
+
+        private object sceneDataBufferLock = new object();
+
         public SimpleClient(string name, string hostname, int port)
         {
             this.name = name;
@@ -32,8 +37,6 @@ namespace Synchronica.Unity.Examples
             Debug.Log(string.Format("Connected to {0}:{1}", hostname, port));
 
             ThreadPool.QueueUserWorkItem(ReadThread);
-
-            Login();
         }
 
         public override string ToString()
@@ -81,7 +84,10 @@ namespace Synchronica.Unity.Examples
             var data = (SynchronizeSceneData)msg.Body;
 
             Debug.Log(string.Format("Received SynchronizeSceneData: {0} -> {1}", data.StartTime, data.EndTime));
-            this.replayer.Replay(data.StartTime, data.EndTime, data);
+            lock (this.sceneDataBufferLock)
+            {
+                this.sceneDataBuffer.Add(data);
+            }
         }
 
         public void Login()
@@ -108,6 +114,31 @@ namespace Synchronica.Unity.Examples
             WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ClientMessageIds.InputRequest));
 
             Debug.Log(string.Format("Input {0} {1}ms", command, time));
+        }
+
+        public void Update()
+        {
+            IEnumerable<SynchronizeSceneData> dataBuffer = null;
+            lock (this.sceneDataBufferLock)
+            {
+                if (this.sceneDataBuffer.Count > 0)
+                {
+                    dataBuffer = this.sceneDataBuffer;
+                    this.sceneDataBuffer = new List<SynchronizeSceneData>();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (dataBuffer != null)
+            {
+                foreach (var data in dataBuffer)
+                {
+                    this.replayer.Replay(data.StartTime, data.EndTime, data);
+                }
+            }
         }
 
         private void WriteBytes(byte[] bytes)

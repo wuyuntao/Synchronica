@@ -34,8 +34,6 @@ namespace Synchronica.Examples.Client
             logger.Info("Connected to {0}:{1}", hostname, port);
 
             ThreadPool.QueueUserWorkItem(ReadThread);
-
-            Login();
         }
 
         public override string ToString()

@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Synchronica.Examples.Server
 {
-    class SimpleServer 
+    class SimpleServer
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -72,18 +72,21 @@ namespace Synchronica.Examples.Server
 
         private void SceneThread(object state)
         {
-            while(!this.isClosed)
+            while (!this.isClosed)
             {
                 Thread.Sleep(100);
 
                 var bytes = this.scene.Process();
                 if (bytes != null)
                 {
-                    lock(this.clientsLock)
+                    lock (this.clientsLock)
                     {
-                        foreach(var client in this.clients)
+                        foreach (var client in this.clients)
                         {
-                            client.WriteBytes(bytes);
+                            if (client.LoginSucceeded)
+                            {
+                                client.WriteBytes(bytes);
+                            }
                         }
                     }
                 }
