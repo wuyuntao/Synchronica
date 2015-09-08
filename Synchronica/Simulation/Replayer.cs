@@ -29,8 +29,12 @@ using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
+    public delegate void NewGameObjectEventHandler(GameObject gameObject);
+
     public abstract class Replayer<TData>
     {
+        public event NewGameObjectEventHandler OnNewGameObject;
+
         private Scene scene = new Scene();
 
         #region GameObject
@@ -42,6 +46,10 @@ namespace Synchronica.Simulation
 
             var gameObject = new GameObject(this.scene, id, startTime);
             this.scene.AddObject(gameObject);
+
+            if (OnNewGameObject != null)
+                OnNewGameObject(gameObject);
+
             return gameObject;
         }
 

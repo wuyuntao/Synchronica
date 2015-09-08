@@ -11,7 +11,14 @@ public class SceneController : MonoBehaviour
     private void Start()
     {
         this.client = new SimpleClient("Unity1", "127.0.0.1", 4000);
+        this.client.Replayer.OnNewGameObject += Replayer_OnNewGameObject;
+
         this.client.Login();
+    }
+
+    private void Replayer_OnNewGameObject(Synchronica.Simulation.GameObject gameObject)
+    {
+        CubeController.Instantiate(this, gameObject);
     }
 
     private void Update()
@@ -50,5 +57,10 @@ public class SceneController : MonoBehaviour
 
             this.client.Input(command);
         }
+    }
+
+    public int ElapsedTime
+    {
+        get { return Mathf.FloorToInt(Mathf.Max(0, this.elapsedTime * 1000)); }
     }
 }

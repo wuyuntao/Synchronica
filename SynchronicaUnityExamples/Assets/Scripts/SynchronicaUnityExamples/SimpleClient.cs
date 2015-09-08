@@ -126,10 +126,6 @@ namespace Synchronica.Unity.Examples
                     dataBuffer = this.sceneDataBuffer;
                     this.sceneDataBuffer = new List<SynchronizeSceneData>();
                 }
-                else
-                {
-                    return;
-                }
             }
 
             if (dataBuffer != null)
@@ -146,6 +142,11 @@ namespace Synchronica.Unity.Examples
             Debug.Log(string.Format("Send {0} bytes", bytes.Length));
 
             ThreadPool.QueueUserWorkItem(s => this.networkStream.Write(bytes, 0, bytes.Length));
+        }
+
+        public FlatBufferReplayer Replayer
+        {
+            get { return this.replayer; }
         }
     }
 }
