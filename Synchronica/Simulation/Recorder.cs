@@ -41,12 +41,12 @@ namespace Synchronica.Simulation
 
         #region Actor
 
-        public Actor AddActor(int startTime)
+        public Actor AddActor(int startTime, object context = null)
         {
             if (startTime < this.scene.ElapsedTime)
                 throw new ArgumentException("Cannot create actor before lock time");
 
-            var actor = new Actor(this.scene, GetNextActorId(), startTime);
+            var actor = new Actor(this.scene, GetNextActorId(), startTime, context);
             this.scene.AddActor(actor);
             return actor;
         }

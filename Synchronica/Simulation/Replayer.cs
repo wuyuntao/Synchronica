@@ -39,12 +39,12 @@ namespace Synchronica.Simulation
 
         #region Actor
 
-        protected Actor AddActor(int id, int startTime)
+        protected Actor AddActor(int id, int startTime, object context = null)
         {
             if (startTime < this.scene.ElapsedTime)
                 throw new ArgumentException("Cannot create actor before last replay time");
 
-            var actor = new Actor(this.scene, id, startTime);
+            var actor = new Actor(this.scene, id, startTime, context);
             this.scene.AddActor(actor);
 
             if (OnNewActor != null)

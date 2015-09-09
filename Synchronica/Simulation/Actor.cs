@@ -35,8 +35,9 @@ namespace Synchronica.Simulation
         private int startTime;
         private int endTime;
         private List<Variable> variables = new List<Variable>();
+        private object context;
 
-        internal Actor(Scene scene, int id, int startTime)
+        internal Actor(Scene scene, int id, int startTime, object context = null)
         {
             if (startTime < scene.ElapsedTime)
                 throw new ArgumentException("Cannot create actor before lock time of scene");
@@ -45,6 +46,7 @@ namespace Synchronica.Simulation
             this.id = id;
             this.startTime = startTime;
             this.endTime = -1;      // TODO Is it good to use -1 as default value of endTime?
+            this.context = context;
         }
 
         internal void Destroy(int endTime)
@@ -103,6 +105,11 @@ namespace Synchronica.Simulation
         public IEnumerable<Variable> Variables
         {
             get { return this.variables; }
+        }
+
+        public object Context
+        {
+            get { return this.context; }
         }
     }
 }
