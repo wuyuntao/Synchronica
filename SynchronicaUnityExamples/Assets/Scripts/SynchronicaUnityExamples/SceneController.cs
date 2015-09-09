@@ -1,4 +1,5 @@
 ﻿using Synchronica.Examples.Schema;
+using Synchronica.Simulation;
 using Synchronica.Unity.Examples;
 using UnityEngine;
 
@@ -11,12 +12,12 @@ public class SceneController : MonoBehaviour
     private void Start()
     {
         this.client = new SimpleClient("Unity1", "127.0.0.1", 4000);
-        this.client.Replayer.OnNewGameObject += Replayer_OnNewGameObject;
+        this.client.Replayer.OnNewActor += Replayer_OnNewActor;
 
         this.client.Login();
     }
 
-    private void Replayer_OnNewGameObject(Synchronica.Simulation.GameObject gameObject)
+    private void Replayer_OnNewActor(Actor gameObject)
     {
         CubeController.Instantiate(this, gameObject);
     }
