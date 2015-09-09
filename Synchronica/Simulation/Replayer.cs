@@ -29,76 +29,76 @@ using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
-    public delegate void NewGameObjectEventHandler(GameObject gameObject);
+    public delegate void NewActorEventHandler(Actor actor);
 
     public abstract class Replayer<TData>
     {
-        public event NewGameObjectEventHandler OnNewGameObject;
+        public event NewActorEventHandler OnNewActor;
 
         private Scene scene = new Scene();
 
-        #region GameObject
+        #region Actor
 
-        protected GameObject AddObject(int id, int startTime)
+        protected Actor AddActor(int id, int startTime)
         {
             if (startTime < this.scene.ElapsedTime)
-                throw new ArgumentException("Cannot create object before last replay time");
+                throw new ArgumentException("Cannot create actor before last replay time");
 
-            var gameObject = new GameObject(this.scene, id, startTime);
-            this.scene.AddObject(gameObject);
+            var actor = new Actor(this.scene, id, startTime);
+            this.scene.AddActor(actor);
 
-            if (OnNewGameObject != null)
-                OnNewGameObject(gameObject);
+            if (OnNewActor != null)
+                OnNewActor(actor);
 
-            return gameObject;
+            return actor;
         }
 
-        protected void RemoveObject(GameObject gameObject, int endTime)
+        protected void RemoveActor(Actor actor, int endTime)
         {
-            gameObject.Destroy(endTime);
+            actor.Destroy(endTime);
         }
 
-        public GameObject GetObject(int id)
+        public Actor GetActor(int id)
         {
-            return this.scene.GetObject(id);
+            return this.scene.GetActor(id);
         }
 
         #endregion
 
         #region Variable
 
-        protected Variable<bool> AddBoolean(GameObject gameObject, int id)
+        protected Variable<bool> AddBoolean(Actor actor, int id)
         {
-            var variable = new VBoolean(gameObject, id);
-            gameObject.AddVariable(variable);
+            var variable = new VBoolean(actor, id);
+            actor.AddVariable(variable);
             return variable;
         }
 
-        protected Variable<short> AddInt16(GameObject gameObject, int id)
+        protected Variable<short> AddInt16(Actor actor, int id)
         {
-            var variable = new VInt16(gameObject, id);
-            gameObject.AddVariable(variable);
+            var variable = new VInt16(actor, id);
+            actor.AddVariable(variable);
             return variable;
         }
 
-        protected Variable<int> AddInt32(GameObject gameObject, int id)
+        protected Variable<int> AddInt32(Actor actor, int id)
         {
-            var variable = new VInt32(gameObject, id);
-            gameObject.AddVariable(variable);
+            var variable = new VInt32(actor, id);
+            actor.AddVariable(variable);
             return variable;
         }
 
-        protected Variable<long> AddInt64(GameObject gameObject, int id)
+        protected Variable<long> AddInt64(Actor actor, int id)
         {
-            var variable = new VInt64(gameObject, id);
-            gameObject.AddVariable(variable);
+            var variable = new VInt64(actor, id);
+            actor.AddVariable(variable);
             return variable;
         }
 
-        protected Variable<float> AddFloat(GameObject gameObject, int id)
+        protected Variable<float> AddFloat(Actor actor, int id)
         {
-            var variable = new VFloat(gameObject, id);
-            gameObject.AddVariable(variable);
+            var variable = new VFloat(actor, id);
+            actor.AddVariable(variable);
             return variable;
         }
 
@@ -166,9 +166,9 @@ namespace Synchronica.Simulation
             get { return this.scene; }
         }
 
-        public IEnumerable<GameObject> Objects
+        public IEnumerable<Actor> Actors
         {
-            get { return this.scene.Objects; }
+            get { return this.scene.Actors; }
         }
     }
 }

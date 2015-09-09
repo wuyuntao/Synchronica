@@ -40,9 +40,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GeneratedCode\Synchronica\Schema\GameObjectData.cs" />
-    <Compile Include="GeneratedCode\Synchronica\Schema\GameObjectEventData.cs" />
-    <Compile Include="GeneratedCode\Synchronica\Schema\GameObjectEventType.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\ActorData.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\ActorEventData.cs" />
+    <Compile Include="GeneratedCode\Synchronica\Schema\ActorEventType.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\KeyFrameData.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\KeyFrameUnion.cs" />
     <Compile Include="GeneratedCode\Synchronica\Schema\LinearKeyFrameData_Float.cs" />
@@ -67,7 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation\Recorder.cs" />
     <Compile Include="Simulation\Replayer.cs" />
-    <Compile Include="Simulation\GameObject.cs" />
+    <Compile Include="Simulation\Actor.cs" />
     <Compile Include="Simulation\Command\ICommand.cs" />
     <Compile Include="Simulation\Command\CommandProcessor.cs" />
     <Compile Include="Simulation\Command\CommandFrame.cs" />

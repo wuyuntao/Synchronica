@@ -28,7 +28,7 @@ using System.Collections.Generic;
 
 namespace Synchronica.Simulation
 {
-    public sealed class GameObject
+    public sealed class Actor
     {
         private Scene scene;
         private int id;
@@ -36,10 +36,10 @@ namespace Synchronica.Simulation
         private int endTime;
         private List<Variable> variables = new List<Variable>();
 
-        internal GameObject(Scene scene, int id, int startTime)
+        internal Actor(Scene scene, int id, int startTime)
         {
             if (startTime < scene.ElapsedTime)
-                throw new ArgumentException("Cannot create object before lock time of scene");
+                throw new ArgumentException("Cannot create actor before lock time of scene");
 
             this.scene = scene;
             this.id = id;
@@ -56,7 +56,7 @@ namespace Synchronica.Simulation
                 throw new ArgumentException("Cannot destroy before start time");
 
             if (endTime <= scene.ElapsedTime)
-                throw new ArgumentException("Cannot destroy object before lock time of scene");
+                throw new ArgumentException("Cannot destroy actor before lock time of scene");
 
             this.endTime = endTime;
         }

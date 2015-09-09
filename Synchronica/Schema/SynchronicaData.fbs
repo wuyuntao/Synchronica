@@ -109,21 +109,21 @@ table VariableData {
 	keyFrames: [KeyFrameData];
 }
 
-// GameObject
+// Actor
 
-enum GameObjectEventType : byte {
+enum ActorEventType : byte {
 	Start,
 	End,
 }
 
-table GameObjectEventData {
-	type: GameObjectEventType;
+table ActorEventData {
+	type: ActorEventType;
 	time: int;
 }
 
-table GameObjectData {
+table ActorData {
 	id: int;
-	events: [GameObjectEventData];
+	events: [ActorEventData];
 	variables: [VariableData];
 }
 
@@ -132,7 +132,7 @@ table GameObjectData {
 table SynchronizeSceneData {
 	startTime: int;
 	endTime: int;
-	objects: [GameObjectData];
+	actors: [ActorData];
 }
 
 root_type SynchronizeSceneData;

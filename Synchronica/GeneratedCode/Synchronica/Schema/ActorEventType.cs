@@ -3,7 +3,7 @@
 namespace Synchronica.Schema
 {
 
-public enum GameObjectEventType : sbyte
+public enum ActorEventType : sbyte
 {
  Start = 0,
  End = 1,

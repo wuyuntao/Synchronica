@@ -12,16 +12,16 @@ public sealed class SynchronizeSceneData : Table {
 
   public int StartTime { get { int o = __offset(4); return o != 0 ? bb.GetInt(o + bb_pos) : (int)0; } }
   public int EndTime { get { int o = __offset(6); return o != 0 ? bb.GetInt(o + bb_pos) : (int)0; } }
-  public GameObjectData GetObjects(int j) { return GetObjects(new GameObjectData(), j); }
-  public GameObjectData GetObjects(GameObjectData obj, int j) { int o = __offset(8); return o != 0 ? obj.__init(__indirect(__vector(o) + j * 4), bb) : null; }
-  public int ObjectsLength { get { int o = __offset(8); return o != 0 ? __vector_len(o) : 0; } }
+  public ActorData GetActors(int j) { return GetActors(new ActorData(), j); }
+  public ActorData GetActors(ActorData obj, int j) { int o = __offset(8); return o != 0 ? obj.__init(__indirect(__vector(o) + j * 4), bb) : null; }
+  public int ActorsLength { get { int o = __offset(8); return o != 0 ? __vector_len(o) : 0; } }
 
   public static Offset<SynchronizeSceneData> CreateSynchronizeSceneData(FlatBufferBuilder builder,
       int startTime = 0,
       int endTime = 0,
-      VectorOffset objects = default(VectorOffset)) {
+      VectorOffset actors = default(VectorOffset)) {
     builder.StartObject(3);
-    SynchronizeSceneData.AddObjects(builder, objects);
+    SynchronizeSceneData.AddActors(builder, actors);
     SynchronizeSceneData.AddEndTime(builder, endTime);
     SynchronizeSceneData.AddStartTime(builder, startTime);
     return SynchronizeSceneData.EndSynchronizeSceneData(builder);
@@ -30,9 +30,9 @@ public sealed class SynchronizeSceneData : Table {
   public static void StartSynchronizeSceneData(FlatBufferBuilder builder) { builder.StartObject(3); }
   public static void AddStartTime(FlatBufferBuilder builder, int startTime) { builder.AddInt(0, startTime, 0); }
   public static void AddEndTime(FlatBufferBuilder builder, int endTime) { builder.AddInt(1, endTime, 0); }
-  public static void AddObjects(FlatBufferBuilder builder, VectorOffset objectsOffset) { builder.AddOffset(2, objectsOffset.Value, 0); }
-  public static VectorOffset CreateObjectsVector(FlatBufferBuilder builder, Offset<GameObjectData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static void StartObjectsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddActors(FlatBufferBuilder builder, VectorOffset actorsOffset) { builder.AddOffset(2, actorsOffset.Value, 0); }
+  public static VectorOffset CreateActorsVector(FlatBufferBuilder builder, Offset<ActorData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static void StartActorsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<SynchronizeSceneData> EndSynchronizeSceneData(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<SynchronizeSceneData>(o);

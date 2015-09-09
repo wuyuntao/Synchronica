@@ -31,21 +31,21 @@ namespace Synchronica.Tests.Mock
     {
         protected override void DeserializeRecord(RecorderData data)
         {
-            foreach (var gameObjectData in data.GameObjects)
+            foreach (var actorData in data.Actors)
             {
-                var gameObject = GetObject(gameObjectData.Id);
-                if (gameObject == null)
+                var actor = GetActor(actorData.Id);
+                if (actor == null)
                 {
-                    gameObject = CreateGameObject(gameObjectData);
+                    actor = CreateActor(actorData);
                 }
 
-                ReplayGameObject((GameObject)gameObject, gameObjectData, data.StartTime);
+                ReplayActor((Actor)actor, actorData, data.StartTime);
             }
         }
 
-        private GameObject CreateGameObject(GameObjectData data)
+        private Actor CreateActor(ActorData data)
         {
-            var gameObject = AddObject(data.Id, data.StartTime);
+            var actor = AddActor(data.Id, data.StartTime);
 
             if (data.Definitions != null)
             {
@@ -54,23 +54,23 @@ namespace Synchronica.Tests.Mock
                     switch (definition.Type)
                     {
                         case VariableType.VBoolean:
-                            AddBoolean(gameObject, definition.Id);
+                            AddBoolean(actor, definition.Id);
                             break;
 
                         case VariableType.VInt16:
-                            AddInt16(gameObject, definition.Id);
+                            AddInt16(actor, definition.Id);
                             break;
 
                         case VariableType.VInt32:
-                            AddInt32(gameObject, definition.Id);
+                            AddInt32(actor, definition.Id);
                             break;
 
                         case VariableType.VInt64:
-                            AddInt64(gameObject, definition.Id);
+                            AddInt64(actor, definition.Id);
                             break;
 
                         case VariableType.VFloat:
-                            AddFloat(gameObject, definition.Id);
+                            AddFloat(actor, definition.Id);
                             break;
 
                         default:
@@ -79,16 +79,16 @@ namespace Synchronica.Tests.Mock
                 }
             }
 
-            return gameObject;
+            return actor;
         }
 
-        private void ReplayGameObject(GameObject gameObject, GameObjectData data, int startTime)
+        private void ReplayActor(Actor actor, ActorData data, int startTime)
         {
             if (data.Variables != null)
             {
                 foreach (var variableData in data.Variables)
                 {
-                    var variable = gameObject.GetVariable(variableData.Id);
+                    var variable = actor.GetVariable(variableData.Id);
                     if (variable == null)
                     {
                         throw new InvalidOperationException("Missing variable");
@@ -99,7 +99,7 @@ namespace Synchronica.Tests.Mock
             }
 
             if (data.EndTime > 0)
-                RemoveObject(gameObject, data.EndTime);
+                RemoveActor(actor, data.EndTime);
         }
 
         private void ReplayVariable(Variable variable, VariableData data, int startTime)

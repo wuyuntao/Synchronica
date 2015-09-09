@@ -26,7 +26,7 @@ namespace Synchronica.Simulation.Command
 {
     public interface ICommand
     {
-        int ObjectId { get; }
+        int ActorId { get; }
 
         int Milliseconds { get; }
     }

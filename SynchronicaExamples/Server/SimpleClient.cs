@@ -15,7 +15,7 @@ namespace Synchronica.Examples.Server
 
         private string name = "NoName";
 
-        private int objectId;
+        private int actorId;
 
         private TcpClient tcpClient;
 
@@ -70,14 +70,14 @@ namespace Synchronica.Examples.Server
             var req = (LoginRequest)msg.Body;
 
             this.name = req.Name;
-            this.objectId = this.scene.AllocateCube(this.name);
+            this.actorId = this.scene.AllocateCube(this.name);
 
-            if (this.objectId > 0)
+            if (this.actorId > 0)
             {
-                logger.Info("Login succeeded: {0}, ObjectId: {1}", this.name, this.objectId);
+                logger.Info("Login succeeded: {0}, ObjectId: {1}", this.name, this.actorId);
 
                 var fbb = new FlatBufferBuilder(1024);
-                var oRes = LoginResponse.CreateLoginResponse(fbb, this.objectId);
+                var oRes = LoginResponse.CreateLoginResponse(fbb, this.actorId);
                 LoginResponse.FinishLoginResponseBuffer(fbb, oRes);
 
                 WriteBytes(FlatBufferExtensions.ToProtocolMessage(fbb, ServerMessageIds.LoginResponse));
@@ -95,7 +95,7 @@ namespace Synchronica.Examples.Server
         {
             var req = (InputRequest)msg.Body;
 
-            this.scene.AddInput(this.objectId, req.Milliseconds, req.Command);
+            this.scene.AddInput(this.actorId, req.Milliseconds, req.Command);
         }
 
         public void WriteBytes(byte[] bytes)
@@ -105,7 +105,7 @@ namespace Synchronica.Examples.Server
 
         public bool LoginSucceeded
         {
-            get { return this.objectId > 0; }
+            get { return this.actorId > 0; }
         }
     }
 }

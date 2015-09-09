@@ -28,12 +28,12 @@ namespace Synchronica.Simulation.Variables
 {
     sealed class VBoolean : Variable<bool>, IStepKeyFrameVariable<bool>
     {
-        internal VBoolean(GameObject gameObject, int id, bool initialValue)
-            : base(gameObject, id, initialValue)
+        internal VBoolean(Actor actor, int id, bool initialValue)
+            : base(actor, id, initialValue)
         { }
 
-        internal VBoolean(GameObject gameObject, int id)
-            : base(gameObject, id)
+        internal VBoolean(Actor actor, int id)
+            : base(actor, id)
         { }
 
         public void AddStepFrame(int time, bool value)

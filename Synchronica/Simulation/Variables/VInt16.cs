@@ -28,12 +28,12 @@ namespace Synchronica.Simulation.Variables
 {
     sealed class VInt16 : Variable<short>, ILinearKeyFrameVariable<short>, IPulseKeyFrameVariable<short>, IStepKeyFrameVariable<short>
     {
-        internal VInt16(GameObject gameObject, int id, short initialValue)
-            : base(gameObject, id, initialValue)
+        internal VInt16(Actor actor, int id, short initialValue)
+            : base(actor, id, initialValue)
         { }
 
-        internal VInt16(GameObject gameObject, int id)
-            : base(gameObject, id)
+        internal VInt16(Actor actor, int id)
+            : base(actor, id)
         { }
 
         public void AddLinearFrame(int time, short value)

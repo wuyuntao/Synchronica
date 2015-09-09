@@ -37,7 +37,7 @@ namespace Synchronica.Tests.Simulation
 
             #region Time: 0-100ms
             
-            var obj1 = recorder.AddObject(0);
+            var obj1 = recorder.AddActor(0);
             var var1 = recorder.AddInt16(obj1, 1, 10);
             var var2 = recorder.AddInt32(obj1, 2, -10);
             var var3 = recorder.AddFloat(obj1, 3, 5.7f);
@@ -52,19 +52,19 @@ namespace Synchronica.Tests.Simulation
 
             replayer.Replay(data.StartTime, data.EndTime, data);
             
-            var mObj1 = replayer.GetObject(1);
+            var mObj1 = replayer.GetActor(1);
             Assert.AreEqual(obj1.StartTime, mObj1.StartTime);
             Assert.AreEqual(obj1.EndTime, mObj1.EndTime);
 
-            var mVar1 = mObj1.GetVariable<short>(2);
+            var mVar1 = mObj1.GetVariable<short>(1);
             Assert.AreEqual(10, mVar1.GetValue(0));
             Assert.AreEqual(20, mVar1.GetValue(50));
             Assert.AreEqual(30, mVar1.GetValue(100));
 
-            var mVar2 = mObj1.GetVariable<int>(3);
+            var mVar2 = mObj1.GetVariable<int>(2);
             Assert.AreEqual(-10, mVar2.GetValue(50));
 
-            var mVar3 = mObj1.GetVariable<float>(4);
+            var mVar3 = mObj1.GetVariable<float>(3);
             Assert.AreEqual(7.7f, mVar3.GetValue(50));
             Assert.AreEqual(9.3f, mVar3.GetValue(95));
 

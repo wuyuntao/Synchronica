@@ -37,31 +37,31 @@ namespace Synchronica.Tests.Mock
             {
                 StartTime = Scene.ElapsedTime,
                 EndTime = endTime,
-                GameObjects = (from gameObject in Objects
-                               select RecordGameObject(gameObject) into gameObjectData
-                               where gameObjectData != null
-                               select gameObjectData).ToArray(),
+                Actors = (from actor in Actors
+                               select RecordActor(actor) into actorData
+                               where actorData != null
+                               select actorData).ToArray(),
             };
 
-            return data.GameObjects.Length > 0 ? data : null;
+            return data.Actors.Length > 0 ? data : null;
         }
 
-        private GameObjectData RecordGameObject(GameObject gameObject)
+        private ActorData RecordActor(Actor actor)
         {
-            var data = new GameObjectData()
+            var data = new ActorData()
             {
-                Id = gameObject.Id,
-                StartTime = gameObject.StartTime,
-                EndTime = gameObject.EndTime,
-                Variables = (from variable in gameObject.Variables
+                Id = actor.Id,
+                StartTime = actor.StartTime,
+                EndTime = actor.EndTime,
+                Variables = (from variable in actor.Variables
                              select RecordVariable(variable) into variableData
                              where variableData != null
                              select variableData).ToArray(),
             };
 
-            if (gameObject.StartTime >= Scene.ElapsedTime)
+            if (actor.StartTime >= Scene.ElapsedTime)
             {
-                data.Definitions = (from variable in gameObject.Variables
+                data.Definitions = (from variable in actor.Variables
                                     select DefineVariable(variable)).ToArray();
             }
 

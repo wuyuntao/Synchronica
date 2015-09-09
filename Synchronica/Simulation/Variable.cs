@@ -31,16 +31,16 @@ namespace Synchronica.Simulation
 {
     public abstract class Variable
     {
-        private GameObject gameObject;
+        private Actor actor;
         private int id;
         private Type valueType;
 
         private KeyFrame firstFrame;
         private KeyFrame lastFrame;
 
-        protected Variable(GameObject gameObject, int id, Type valueType)
+        protected Variable(Actor actor, int id, Type valueType)
         {
-            this.gameObject = gameObject;
+            this.actor = actor;
             this.id = id;
             this.valueType = valueType;
         }
@@ -198,9 +198,9 @@ namespace Synchronica.Simulation
             }
         }
 
-        public GameObject GameObject
+        public Actor Actor
         {
-            get { return this.gameObject; }
+            get { return this.actor; }
         }
 
         public int Id
@@ -240,20 +240,20 @@ namespace Synchronica.Simulation
 
     public class Variable<TValue> : Variable
     {
-        internal Variable(GameObject gameObject, int id)
-            : base(gameObject, id, typeof(TValue))
+        internal Variable(Actor actor, int id)
+            : base(actor, id, typeof(TValue))
         { }
 
-        protected Variable(GameObject gameObject, int id, TValue initialValue)
-            : base(gameObject, id, typeof(TValue))
+        protected Variable(Actor actor, int id, TValue initialValue)
+            : base(actor, id, typeof(TValue))
         {
-            AddFirstFrame(new StepKeyFrame<TValue>(gameObject.StartTime, initialValue));
+            AddFirstFrame(new StepKeyFrame<TValue>(actor.StartTime, initialValue));
         }
 
         public TValue GetValue(int time)
         {
-            if (time < GameObject.StartTime)
-                throw new ArgumentException("Cannot get value before game object starts");
+            if (time < Actor.StartTime)
+                throw new ArgumentException("Cannot get value before actor starts");
 
             if (FirstFrame == null)
                 throw new ArgumentException("No key frame is added");

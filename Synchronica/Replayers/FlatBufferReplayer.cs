@@ -32,43 +32,43 @@ namespace Synchronica.Replayers
     {
         protected override void DeserializeRecord(SynchronizeSceneData data)
         {
-            for (int i = 0; i < data.ObjectsLength; i++)
+            for (int i = 0; i < data.ActorsLength; i++)
             {
-                DeserializeGameObject(data.GetObjects(i));
+                DeserializeActor(data.GetActors(i));
             }
         }
 
-        private void DeserializeGameObject(GameObjectData data)
+        private void DeserializeActor(ActorData data)
         {
-            var gameObject = GetObject(data.Id);
-            if (gameObject == null)
+            var actor = GetActor(data.Id);
+            if (actor == null)
             {
-                if (data.EventsLength == 0 || data.GetEvents(0).Type != GameObjectEventType.Start)
+                if (data.EventsLength == 0 || data.GetEvents(0).Type != ActorEventType.Start)
                     throw new InvalidOperationException("Start event not found");
 
-                gameObject = AddObject(data.Id, data.GetEvents(0).Time);
+                actor = AddActor(data.Id, data.GetEvents(0).Time);
             }
 
             for (int i = 0; i < data.EventsLength; i++)
             {
-                DeserializeGameObjectEvent(gameObject, data.GetEvents(i));
+                DeserializeActorEvent(actor, data.GetEvents(i));
             }
 
             for (int i = 0; i < data.VariablesLength; i++)
             {
-                DeserializeVariables(gameObject, data.GetVariables(i));
+                DeserializeVariables(actor, data.GetVariables(i));
             }
         }
 
-        private void DeserializeGameObjectEvent(GameObject gameObject, GameObjectEventData data)
+        private void DeserializeActorEvent(Actor actor, ActorEventData data)
         {
             switch (data.Type)
             {
-                case GameObjectEventType.End:
-                    RemoveObject(gameObject, data.Time);
+                case ActorEventType.End:
+                    RemoveActor(actor, data.Time);
                     break;
 
-                case GameObjectEventType.Start:
+                case ActorEventType.Start:
                     break;
 
                 default:
@@ -76,14 +76,14 @@ namespace Synchronica.Replayers
             }
         }
 
-        private void DeserializeVariables(GameObject gameObject, VariableData data)
+        private void DeserializeVariables(Actor actor, VariableData data)
         {
-            Variable variable = gameObject.GetVariable(data.Id);
+            Variable variable = actor.GetVariable(data.Id);
             if (variable == null)
             {
                 if (data.Parameters != null)
                 {
-                    variable = AddVariable(gameObject, data.Id, data.Parameters.Type);
+                    variable = AddVariable(actor, data.Id, data.Parameters.Type);
                 }
                 else
                 {
@@ -99,24 +99,24 @@ namespace Synchronica.Replayers
             }
         }
 
-        private Variable AddVariable(GameObject gameObject, int id, VariableType type)
+        private Variable AddVariable(Actor actor, int id, VariableType type)
         {
             switch (type)
             {
                 case VariableType.Boolean:
-                    return AddBoolean(gameObject, id);
+                    return AddBoolean(actor, id);
 
                 case VariableType.Int16:
-                    return AddInt16(gameObject, id);
+                    return AddInt16(actor, id);
 
                 case VariableType.Int32:
-                    return AddInt32(gameObject, id);
+                    return AddInt32(actor, id);
 
                 case VariableType.Int64:
-                    return AddInt64(gameObject, id);
+                    return AddInt64(actor, id);
 
                 case VariableType.Float:
-                    return AddFloat(gameObject, id);
+                    return AddFloat(actor, id);
 
                 default:
                     throw new NotSupportedException("VariableType");

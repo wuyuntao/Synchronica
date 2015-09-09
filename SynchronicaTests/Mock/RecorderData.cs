@@ -30,10 +30,10 @@ namespace Synchronica.Tests.Mock
 
         public int EndTime;
 
-        public GameObjectData[] GameObjects;
+        public ActorData[] Actors;
     }
 
-    public class GameObjectData
+    public class ActorData
     {
         public int Id;
 

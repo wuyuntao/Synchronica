@@ -30,23 +30,23 @@ namespace Synchronica.Simulation
     public sealed class Scene
     {
         private int elapsedTime;
-        private Dictionary<int, GameObject> objects = new Dictionary<int, GameObject>();
+        private Dictionary<int, Actor> actors = new Dictionary<int, Actor>();
 
-        public GameObject GetObject(int id)
+        public Actor GetActor(int id)
         {
-            GameObject obj;
-            this.objects.TryGetValue(id, out obj);
+            Actor obj;
+            this.actors.TryGetValue(id, out obj);
             return obj;
         }
 
-        internal void AddObject(GameObject gameObject)
+        internal void AddActor(Actor actor)
         {
-            this.objects.Add(gameObject.Id, gameObject);
+            this.actors.Add(actor.Id, actor);
         }
 
-        internal void RemoveObject(GameObject gameObject)
+        internal void RemoveActor(Actor actor)
         {
-            this.objects.Remove(gameObject.Id);
+            this.actors.Remove(actor.Id);
         }
 
         public int ElapsedTime
@@ -61,14 +61,14 @@ namespace Synchronica.Simulation
             }
         }
 
-        public IEnumerable<GameObject> Objects
+        public IEnumerable<Actor> Actors
         {
-            get { return this.objects.Values; }
+            get { return this.actors.Values; }
         }
 
         public int Count
         {
-            get { return this.objects.Count; }
+            get { return this.actors.Count; }
         }
     }
 }

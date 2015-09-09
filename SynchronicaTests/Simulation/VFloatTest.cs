@@ -34,9 +34,9 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestAddFrames()
         {
-            var gameObject = new GameObject(new Scene(), 1, 0);
+            var actor = new Actor(new Scene(), 1, 0);
 
-            var value = new VFloat(gameObject, 1, -10.5f);
+            var value = new VFloat(actor, 1, -10.5f);
             Assert.Throws<ArgumentException>(() => value.GetValue(-1));
             Assert.AreEqual(-10.5f, value.GetValue(0));
             Assert.AreEqual(-10.5f, value.GetValue(1));
@@ -58,9 +58,9 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestRemoveFramesBefore()
         {
-            var gameObject = new GameObject(new Scene(), 1, 0);
+            var actor = new Actor(new Scene(), 1, 0);
 
-            var value = new VFloat(gameObject, 1, 0);
+            var value = new VFloat(actor, 1, 0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesBefore(1));
 
             value.AddStepFrame(10, 5.1f);
@@ -85,9 +85,9 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestRemoveFramesAfter()
         {
-            var gameObject = new GameObject(new Scene(), 1, 0);
+            var actor = new Actor(new Scene(), 1, 0);
 
-            var value = new VFloat(gameObject, 1, 0);
+            var value = new VFloat(actor, 1, 0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesAfter(-1));
 
             value.AddStepFrame(10, 5);

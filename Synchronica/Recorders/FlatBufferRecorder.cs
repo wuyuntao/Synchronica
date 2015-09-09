@@ -44,18 +44,18 @@ namespace Synchronica.Recorders
         {
             var fbb = new FlatBufferBuilder(bufferSize);
 
-            var oObjects = new List<Offset<GameObjectData>>();
-            foreach (var gameObject in Objects)
+            var oActors = new List<Offset<ActorData>>();
+            foreach (var actor in Actors)
             {
-                var oObject = SerializeGameObject(fbb, gameObject);
-                if (oObject != null)
-                    oObjects.Add(oObject.Value);
+                var oActor = SerializeActor(fbb, actor);
+                if (oActor != null)
+                    oActors.Add(oActor.Value);
             }
 
-            if (oObjects.Count > 0)
+            if (oActors.Count > 0)
             {
-                var vObjects = SynchronizeSceneData.CreateObjectsVector(fbb, oObjects.ToArray());
-                var oData = SynchronizeSceneData.CreateSynchronizeSceneData(fbb, Scene.ElapsedTime, endTime, vObjects);
+                var vActors = SynchronizeSceneData.CreateActorsVector(fbb, oActors.ToArray());
+                var oData = SynchronizeSceneData.CreateSynchronizeSceneData(fbb, Scene.ElapsedTime, endTime, vActors);
                 SynchronizeSceneData.FinishSynchronizeSceneDataBuffer(fbb, oData);
 
                 return fbb;
@@ -66,36 +66,36 @@ namespace Synchronica.Recorders
             }
         }
 
-        private Offset<GameObjectData>? SerializeGameObject(FlatBufferBuilder fbb, GameObject gameObject)
+        private Offset<ActorData>? SerializeActor(FlatBufferBuilder fbb, Actor actor)
         {
             var oVariables = new List<Offset<VariableData>>();
-            foreach (var variable in gameObject.Variables)
+            foreach (var variable in actor.Variables)
             {
-                var oVariable = SerializeVariable(fbb, variable, gameObject.StartTime >= Scene.ElapsedTime);
+                var oVariable = SerializeVariable(fbb, variable, actor.StartTime >= Scene.ElapsedTime);
                 if (oVariable != null)
                     oVariables.Add(oVariable.Value);
             }
 
-            var oEvents = new List<Offset<GameObjectEventData>>();
-            if (gameObject.StartTime >= Scene.ElapsedTime)
+            var oEvents = new List<Offset<ActorEventData>>();
+            if (actor.StartTime >= Scene.ElapsedTime)
             {
-                var oEvent = GameObjectEventData.CreateGameObjectEventData(fbb, GameObjectEventType.Start, gameObject.StartTime);
+                var oEvent = ActorEventData.CreateActorEventData(fbb, ActorEventType.Start, actor.StartTime);
                 oEvents.Add(oEvent);
             }
 
-            if (gameObject.EndTime >= Scene.ElapsedTime)
+            if (actor.EndTime >= Scene.ElapsedTime)
             {
-                var oEvent = GameObjectEventData.CreateGameObjectEventData(fbb, GameObjectEventType.End, gameObject.EndTime);
+                var oEvent = ActorEventData.CreateActorEventData(fbb, ActorEventType.End, actor.EndTime);
                 oEvents.Add(oEvent);
             }
 
             if (oVariables.Count > 0 || oEvents.Count > 0)
             {
-                var vVariables = GameObjectData.CreateVariablesVector(fbb, oVariables.ToArray());
-                var vEvents = GameObjectData.CreateEventsVector(fbb, oEvents.ToArray());
-                var oObject = GameObjectData.CreateGameObjectData(fbb, gameObject.Id, vEvents, vVariables);
+                var vVariables = ActorData.CreateVariablesVector(fbb, oVariables.ToArray());
+                var vEvents = ActorData.CreateEventsVector(fbb, oEvents.ToArray());
+                var oActor = ActorData.CreateActorData(fbb, actor.Id, vEvents, vVariables);
 
-                return oObject;
+                return oActor;
             }
             else
             {

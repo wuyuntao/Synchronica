@@ -31,87 +31,87 @@ namespace Synchronica.Simulation
 {
     public abstract class Recorder<TData>
     {
-        private int lastObjectId = 0;
+        private int lastActorId = 0;
         private Scene scene = new Scene();
 
-        private int GetNextObjectId()
+        private int GetNextActorId()
         {
-            return ++this.lastObjectId;
+            return ++this.lastActorId;
         }
 
-        #region GameObject
+        #region Actor
 
-        public GameObject AddObject(int startTime)
+        public Actor AddActor(int startTime)
         {
             if (startTime < this.scene.ElapsedTime)
-                throw new ArgumentException("Cannot create object before lock time");
+                throw new ArgumentException("Cannot create actor before lock time");
 
-            var gameObject = new GameObject(this.scene, GetNextObjectId(), startTime);
-            this.scene.AddObject(gameObject);
-            return gameObject;
+            var actor = new Actor(this.scene, GetNextActorId(), startTime);
+            this.scene.AddActor(actor);
+            return actor;
         }
 
-        public void RemoveObject(GameObject gameObject, int endTime)
+        public void RemoveActor(Actor actor, int endTime)
         {
-            gameObject.Destroy(endTime);
+            actor.Destroy(endTime);
         }
 
-        public GameObject GetObject(int id)
+        public Actor GetActor(int id)
         {
-            return this.scene.GetObject(id);
+            return this.scene.GetActor(id);
         }
 
         #endregion
 
         #region Variable
 
-        public Variable<bool> AddBoolean(GameObject gameObject, int id, bool value)
+        public Variable<bool> AddBoolean(Actor actor, int id, bool value)
         {
-            if (gameObject.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after game object starts");
+            if (actor.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VBoolean(gameObject, id, value);
-            gameObject.AddVariable(variable);
+            var variable = new VBoolean(actor, id, value);
+            actor.AddVariable(variable);
             return variable;
         }
 
-        public Variable<short> AddInt16(GameObject gameObject, int id, short value)
+        public Variable<short> AddInt16(Actor actor, int id, short value)
         {
-            if (gameObject.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after game object starts");
+            if (actor.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VInt16(gameObject, id, value);
-            gameObject.AddVariable(variable);
+            var variable = new VInt16(actor, id, value);
+            actor.AddVariable(variable);
             return variable;
         }
 
-        public Variable<int> AddInt32(GameObject gameObject, int id, int value)
+        public Variable<int> AddInt32(Actor actor, int id, int value)
         {
-            if (gameObject.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after game object starts");
+            if (actor.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VInt32(gameObject, id, value);
-            gameObject.AddVariable(variable);
+            var variable = new VInt32(actor, id, value);
+            actor.AddVariable(variable);
             return variable;
         }
 
-        public Variable<long> AddInt64(GameObject gameObject, int id, long value)
+        public Variable<long> AddInt64(Actor actor, int id, long value)
         {
-            if (gameObject.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after game object starts");
+            if (actor.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VInt64(gameObject, id, value);
-            gameObject.AddVariable(variable);
+            var variable = new VInt64(actor, id, value);
+            actor.AddVariable(variable);
             return variable;
         }
 
-        public Variable<float> AddFloat(GameObject gameObject, int id, float value)
+        public Variable<float> AddFloat(Actor actor, int id, float value)
         {
-            if (gameObject.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after game object starts");
+            if (actor.StartTime < this.scene.ElapsedTime)
+                throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VFloat(gameObject, id, value);
-            gameObject.AddVariable(variable);
+            var variable = new VFloat(actor, id, value);
+            actor.AddVariable(variable);
             return variable;
         }
 
@@ -169,7 +169,7 @@ namespace Synchronica.Simulation
 
             if (data != null)
             {
-                // TODO Remove obsolete objects?
+                // TODO Remove obsolete actors?
                 this.scene.ElapsedTime = time;
             }
 
@@ -185,9 +185,9 @@ namespace Synchronica.Simulation
             get { return this.scene; }
         }
 
-        public IEnumerable<GameObject> Objects
+        public IEnumerable<Actor> Actors
         {
-            get { return this.scene.Objects; }
+            get { return this.scene.Actors; }
         }
     }
 }

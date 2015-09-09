@@ -34,7 +34,7 @@ namespace Synchronica.Examples.Scene
         class Cube
         {
             public SimpleScene scene;
-            public GameObject gameObject;
+            public Actor actor;
             public string clientName;
 
             private Variable<float> posX;
@@ -45,10 +45,10 @@ namespace Synchronica.Examples.Scene
             {
                 this.scene = scene;
 
-                this.gameObject = this.scene.recorder.AddObject(0);
-                this.posX = this.scene.recorder.AddFloat(gameObject, 1, posX);
-                this.posY = this.scene.recorder.AddFloat(gameObject, 2, posY);
-                this.posZ = this.scene.recorder.AddFloat(gameObject, 3, posZ);
+                this.actor = this.scene.recorder.AddActor(0);
+                this.posX = this.scene.recorder.AddFloat(actor, 1, posX);
+                this.posY = this.scene.recorder.AddFloat(actor, 2, posY);
+                this.posZ = this.scene.recorder.AddFloat(actor, 3, posZ);
             }
 
             internal void Forward(int time)
@@ -98,13 +98,13 @@ namespace Synchronica.Examples.Scene
 
         class Input
         {
-            public int objectId;
+            public int actorId;
             public int time;
             public Command command;
 
-            public Input(int objectId, int time, Command command)
+            public Input(int actorId, int time, Command command)
             {
-                this.objectId = objectId;
+                this.actorId = actorId;
                 this.time = time;
                 this.command = command;
             }
@@ -139,11 +139,11 @@ namespace Synchronica.Examples.Scene
                     Cube cube;
                     lock (this.cubesLock)
                     {
-                        cube = this.cubes.Find(c => c.gameObject.Id == input.objectId);
+                        cube = this.cubes.Find(c => c.actor.Id == input.actorId);
                     }
 
                     if (cube == null)
-                        throw new InvalidOperationException("Invalid object id");
+                        throw new InvalidOperationException("Invalid actor id");
 
                     ProcessCommand(cube, input.command, startTime);
                 }
@@ -218,7 +218,7 @@ namespace Synchronica.Examples.Scene
                 if (cube != null)
                 {
                     cube.clientName = clientName;
-                    return cube.gameObject.Id;
+                    return cube.actor.Id;
                 }
                 else
                 {
@@ -227,11 +227,11 @@ namespace Synchronica.Examples.Scene
             }
         }
 
-        public void AddInput(int objectId, int time, Command command)
+        public void AddInput(int actorId, int time, Command command)
         {
             lock (this.inputsLock)
             {
-                this.inputs.Add(new Input(objectId, time, command));
+                this.inputs.Add(new Input(actorId, time, command));
             }
         }
 
