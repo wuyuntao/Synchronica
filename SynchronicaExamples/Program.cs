@@ -52,7 +52,10 @@ namespace Synchronica.Examples
                     case "disconnect":
                     case "c":
                         if (client != null)
+                        {
                             client.Disconnect();
+                            client = null;
+                        }
                         break;
 
                     case "exit":

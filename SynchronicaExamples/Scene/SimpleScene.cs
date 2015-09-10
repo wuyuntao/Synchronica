@@ -57,7 +57,7 @@ namespace Synchronica.Examples.Scene
                 recorder.InterpolateKeyFrame(this.posZ, time);
                 recorder.RemoveKeyFramesAfter(this.posZ, time + 1);
 
-                var value = this.posZ.GetValue(time) + 100;
+                var value = this.posZ.GetValue(time) + 1;
                 recorder.AddLinearFrame(this.posZ, time + 1000, value);
             }
 
@@ -67,7 +67,7 @@ namespace Synchronica.Examples.Scene
                 recorder.InterpolateKeyFrame(this.posZ, time);
                 recorder.RemoveKeyFramesAfter(this.posZ, time + 1);
 
-                var value = this.posZ.GetValue(time) - 100;
+                var value = this.posZ.GetValue(time) - 1;
                 recorder.AddLinearFrame(this.posZ, time + 1000, value);
             }
 
@@ -77,7 +77,7 @@ namespace Synchronica.Examples.Scene
                 recorder.InterpolateKeyFrame(this.posX, time);
                 recorder.RemoveKeyFramesAfter(this.posX, time + 1);
 
-                var value = this.posZ.GetValue(time) - 100;
+                var value = this.posZ.GetValue(time) - 1;
                 recorder.AddLinearFrame(this.posX, time + 1000, value);
             }
 
@@ -87,7 +87,7 @@ namespace Synchronica.Examples.Scene
                 recorder.InterpolateKeyFrame(this.posX, time);
                 recorder.RemoveKeyFramesAfter(this.posX, time + 1);
 
-                var value = this.posZ.GetValue(time) + 100;
+                var value = this.posZ.GetValue(time) + 1;
                 recorder.AddLinearFrame(this.posX, time + 1000, value);
             }
         }

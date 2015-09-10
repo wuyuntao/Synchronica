@@ -98,7 +98,6 @@ namespace Synchronica.Unity.Examples
         {
             var data = (SynchronizeSceneData)msg.Body;
 
-            Debug.Log(string.Format("Received SynchronizeSceneData: {0} -> {1}", data.StartTime, data.EndTime));
             lock (this.sceneDataBufferLock)
             {
                 this.sceneDataBuffer.Add(data);
@@ -147,6 +146,8 @@ namespace Synchronica.Unity.Examples
             {
                 foreach (var data in dataBuffer)
                 {
+                    Debug.Log(string.Format("Replay: {0} -> {1}", data.StartTime, data.EndTime));
+
                     this.replayer.Replay(data.StartTime, data.EndTime, data);
                 }
             }
