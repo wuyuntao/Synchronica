@@ -5,6 +5,7 @@ using Synchronica.Examples.Schema;
 using Synchronica.Replayers;
 using Synchronica.Schema;
 using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -41,6 +42,11 @@ namespace Synchronica.Examples.Client
             return string.Format("{0}-{1}", GetType().Name, this.objectId);
         }
 
+        public void Disconnect()
+        {
+            this.tcpClient.Close();
+        }
+
         private void ReadThread(object state)
         {
             var schema = new MessageSchema();
@@ -55,7 +61,21 @@ namespace Synchronica.Examples.Client
 
             while (this.networkStream.CanRead)
             {
-                var readSize = this.networkStream.Read(buffer, 0, buffer.Length);
+                int readSize;
+                try
+                {
+                    readSize = this.networkStream.Read(buffer, 0, buffer.Length);
+                }
+                catch(IOException)
+                {
+                    readSize = 0;
+                }
+
+                if (readSize == 0)
+                {
+                    logger.Info("Disconnected");
+                    break;
+                }
 
                 var bytes = new byte[readSize];
                 Array.Copy(buffer, bytes, readSize);

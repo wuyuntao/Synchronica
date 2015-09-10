@@ -4,12 +4,13 @@ using NLog;
 using Synchronica.Examples.Scene;
 using Synchronica.Examples.Schema;
 using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 
 namespace Synchronica.Examples.Server
 {
-    class SimpleClient 
+    class SimpleClient
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -53,7 +54,21 @@ namespace Synchronica.Examples.Server
 
             while (this.networkStream.CanRead)
             {
-                var readSize = this.networkStream.Read(buffer, 0, buffer.Length);
+                int readSize;
+                try
+                {
+                    readSize = this.networkStream.Read(buffer, 0, buffer.Length);
+                }
+                catch (IOException)
+                {
+                    readSize = 0;
+                }
+
+                if (readSize == 0)
+                {
+                    logger.Info("Disconnected");
+                    break;
+                }
 
                 var bytes = new byte[readSize];
                 Array.Copy(buffer, bytes, readSize);

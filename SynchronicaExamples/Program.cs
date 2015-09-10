@@ -32,9 +32,9 @@ namespace Synchronica.Examples
 
             Thread.Sleep(1000);
 
-            var client = new Client.SimpleClient("Client1", "127.0.0.1", 4000);
-
+            Client.SimpleClient client = null;
             var exit = false;
+
             while (!exit)
             {
                 var command = Console.ReadLine().Trim();
@@ -42,7 +42,17 @@ namespace Synchronica.Examples
                 {
                     case "login":
                     case "l":
-                        client.Login();
+                        if (client == null)
+                        {
+                            client = new Client.SimpleClient("Client1", "127.0.0.1", 4000);
+                            client.Login();
+                        }
+                        break;
+
+                    case "disconnect":
+                    case "c":
+                        if (client != null)
+                            client.Disconnect();
                         break;
 
                     case "exit":
@@ -52,22 +62,26 @@ namespace Synchronica.Examples
 
                     case "forward":
                     case "w":
-                        client.Input(Command.Up);
+                        if (client != null)
+                            client.Input(Command.Up);
                         break;
 
                     case "back":
                     case "s":
-                        client.Input(Command.Down);
+                        if (client != null)
+                            client.Input(Command.Down);
                         break;
 
                     case "left":
                     case "a":
-                        client.Input(Command.Left);
+                        if (client != null)
+                            client.Input(Command.Left);
                         break;
-                    
+
                     case "right":
                     case "d":
-                        client.Input(Command.Right);
+                        if (client != null)
+                            client.Input(Command.Right);
                         break;
                 }
             }

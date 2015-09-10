@@ -91,6 +91,8 @@ namespace Synchronica.Replayers
                 }
             }
 
+            RemoveFramesAfter(variable, Scene.ElapsedTime);
+
             for (int i = 0; i < data.KeyFramesLength; i++)
             {
                 var frame = data.GetKeyFrames(i);
