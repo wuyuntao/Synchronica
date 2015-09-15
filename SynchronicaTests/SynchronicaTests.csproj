@@ -45,6 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation\RecorderTest.cs" />
     <Compile Include="Simulation\ReplayerTest.cs" />
+    <Compile Include="Simulation\SimulationConsistencyTest.cs" />
     <Compile Include="Simulation\VFloatTest.cs" />
     <Compile Include="Simulation\VInt64Test.cs" />
     <Compile Include="Simulation\VInt16Test.cs" />

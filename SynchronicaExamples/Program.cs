@@ -8,9 +8,9 @@ namespace Synchronica.Examples
     {
         static void Main(string[] args)
         {
-            //RunUnitTest();
+            RunUnitTest();
 
-            StartSimpleServer();
+            //StartSimpleServer();
         }
 
         static void RunUnitTest()
@@ -18,12 +18,15 @@ namespace Synchronica.Examples
             //var t = new Synchronica.Tests.Record.RecorderTest();
             //t.TestRecorder();
 
-            var t = new Synchronica.Tests.Simulation.ReplayerTest();
-            t.TestReplayer();
+            //var t = new Synchronica.Tests.Simulation.ReplayerTest();
+            //t.TestReplayer();
 
             //var t = new Synchronica.Tests.Simulation.VFloatTest();
             //t.TestRemoveFramesBefore();
             //t.TestRemoveFramesAfter();
+
+            var t = new Synchronica.Tests.Simulation.SimulationConsistencyTest();
+            t.TestConsistency();
         }
 
         static void StartSimpleServer()
