@@ -61,36 +61,37 @@ namespace Synchronica.Tests.Simulation
                 var x = actor.GetVariable<float>(1);
                 var y = actor.GetVariable<float>(2);
                 var z = actor.GetVariable<float>(3);
-                var keyFrameTime = random.Next(time, time + 1000);
+                var keyFrameStartTime = random.Next(time, time + RecordInterval);
+                var keyFrameEndTime = keyFrameStartTime + random.Next(1, 1000);
 
                 switch (random.Next(0, 4))
                 {
                     case 1:     // Linear movement
-                        recorder.InterpolateKeyFrame(x, keyFrameTime);
-                        recorder.RemoveKeyFramesAfter(x, keyFrameTime + 1);
-                        recorder.AddLinearFrame(x, keyFrameTime, (float)(random.NextDouble() * 100));
+                        recorder.InterpolateKeyFrame(x, keyFrameStartTime);
+                        recorder.RemoveKeyFramesAfter(x, keyFrameStartTime + 1);
+                        recorder.AddLinearFrame(x, keyFrameEndTime, (float)(random.NextDouble() * 100));
 
-                        recorder.InterpolateKeyFrame(y, keyFrameTime);
-                        recorder.RemoveKeyFramesAfter(y, keyFrameTime + 1);
-                        recorder.AddLinearFrame(y, keyFrameTime, (float)(random.NextDouble() * 100));
+                        recorder.InterpolateKeyFrame(y, keyFrameStartTime);
+                        recorder.RemoveKeyFramesAfter(y, keyFrameStartTime + 1);
+                        recorder.AddLinearFrame(y, keyFrameEndTime, (float)(random.NextDouble() * 100));
 
-                        recorder.InterpolateKeyFrame(z, keyFrameTime);
-                        recorder.RemoveKeyFramesAfter(z, keyFrameTime + 1);
-                        recorder.AddLinearFrame(z, keyFrameTime, (float)(random.NextDouble() * 100));
+                        recorder.InterpolateKeyFrame(z, keyFrameStartTime);
+                        recorder.RemoveKeyFramesAfter(z, keyFrameStartTime + 1);
+                        recorder.AddLinearFrame(z, keyFrameEndTime, (float)(random.NextDouble() * 100));
                         break;
 
                     case 2:     // Step movement
-                        recorder.InterpolateKeyFrame(x, keyFrameTime);
-                        recorder.RemoveKeyFramesAfter(x, keyFrameTime + 1);
-                        recorder.AddStepFrame(x, keyFrameTime, (float)(random.NextDouble() * 100));
+                        recorder.InterpolateKeyFrame(x, keyFrameStartTime);
+                        recorder.RemoveKeyFramesAfter(x, keyFrameStartTime + 1);
+                        recorder.AddStepFrame(x, keyFrameEndTime, (float)(random.NextDouble() * 100));
 
-                        recorder.InterpolateKeyFrame(y, keyFrameTime);
-                        recorder.RemoveKeyFramesAfter(y, keyFrameTime + 1);
-                        recorder.AddStepFrame(y, keyFrameTime, (float)(random.NextDouble() * 100));
+                        recorder.InterpolateKeyFrame(y, keyFrameStartTime);
+                        recorder.RemoveKeyFramesAfter(y, keyFrameStartTime + 1);
+                        recorder.AddStepFrame(y, keyFrameEndTime, (float)(random.NextDouble() * 100));
 
-                        recorder.InterpolateKeyFrame(z, keyFrameTime);
-                        recorder.RemoveKeyFramesAfter(z, keyFrameTime + 1);
-                        recorder.AddStepFrame(z, keyFrameTime, (float)(random.NextDouble() * 100));
+                        recorder.InterpolateKeyFrame(z, keyFrameStartTime);
+                        recorder.RemoveKeyFramesAfter(z, keyFrameStartTime + 1);
+                        recorder.AddStepFrame(z, keyFrameEndTime, (float)(random.NextDouble() * 100));
                         break;
 
                     default:     // No movement;

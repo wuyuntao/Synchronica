@@ -150,14 +150,13 @@ namespace Synchronica.Simulation
             {
                 foreach (var frame in KeyFrames)
                 {
-                    if (time == frame.Time)
-                    {
-                        throw new ArgumentException("Key frame exists");
-                    }
-
                     if (time < frame.Time)
                     {
                         AddFrameBefore(frame, frame.Clone(time));
+                        break;
+                    }
+                    else if (time == frame.Time)
+                    {
                         break;
                     }
                 }

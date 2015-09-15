@@ -98,7 +98,7 @@ namespace Synchronica.Tests.Mock
                 }
             }
 
-            if (data.EndTime > 0)
+            if (data.EndTime > 0 && actor.EndTime < 0)
                 RemoveActor(actor, data.EndTime);
         }
 
