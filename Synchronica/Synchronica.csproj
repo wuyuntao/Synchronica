@@ -70,6 +70,7 @@
     <Compile Include="Recorders\Recorder.cs" />
     <Compile Include="Replayers\Replayer.cs" />
     <Compile Include="Simulation\Actor.cs" />
+    <Compile Include="Simulation\ActorEvent.cs" />
     <Compile Include="Simulation\KeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\PulseKeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\LinearKeyFrame.cs" />
