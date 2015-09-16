@@ -46,11 +46,10 @@ namespace Synchronica.Recorders
             if (startTime < this.scene.ElapsedTime)
                 throw new ArgumentException("Cannot create actor before lock time");
 
-            var actor = new Actor(this.scene, GetNextActorId(), startTime, new RecordState());
+            var actor = new Actor(this.scene, GetNextActorId(), startTime);
 
             this.scene.AddActor(actor);
             ActorFactory.Initiailize(actor, initializer);
-            ((RecordState)actor.State).OnChange(startTime);
 
             return actor;
         }
@@ -58,8 +57,6 @@ namespace Synchronica.Recorders
         public void RemoveActor(Actor actor, int endTime)
         {
             actor.Destroy(endTime);
-
-            ((RecordState)actor.State).OnChange(endTime);
         }
 
         public Actor GetActor(int id)
