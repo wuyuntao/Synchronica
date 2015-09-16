@@ -68,9 +68,6 @@
     <Compile Include="Simulation\Recorder.cs" />
     <Compile Include="Simulation\Replayer.cs" />
     <Compile Include="Simulation\Actor.cs" />
-    <Compile Include="Simulation\Command\ICommand.cs" />
-    <Compile Include="Simulation\Command\CommandProcessor.cs" />
-    <Compile Include="Simulation\Command\CommandFrame.cs" />
     <Compile Include="Simulation\KeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\PulseKeyFrame.cs" />
     <Compile Include="Simulation\KeyFrames\LinearKeyFrame.cs" />
