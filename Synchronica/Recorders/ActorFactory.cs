@@ -22,10 +22,11 @@
  * SOFTWARE.
 */
 
+using Synchronica.Simulation;
 using Synchronica.Simulation.Variables;
 using System;
 
-namespace Synchronica.Simulation
+namespace Synchronica.Recorders
 {
     public class ActorFactory
     {
@@ -58,7 +59,7 @@ namespace Synchronica.Simulation
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VBoolean(this.actor, id);
+            var variable = new VBoolean(this.actor, id, new RecordState());
             variable.AddStepFrame(this.actor.StartTime, value);
 
             this.actor.AddVariable(variable);
@@ -70,7 +71,7 @@ namespace Synchronica.Simulation
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VInt16(this.actor, id);
+            var variable = new VInt16(this.actor, id, new RecordState());
             variable.AddStepFrame(this.actor.StartTime, value);
 
             this.actor.AddVariable(variable);
@@ -82,7 +83,7 @@ namespace Synchronica.Simulation
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VInt32(this.actor, id);
+            var variable = new VInt32(this.actor, id, new RecordState());
             variable.AddStepFrame(this.actor.StartTime, value);
 
             this.actor.AddVariable(variable);
@@ -94,7 +95,7 @@ namespace Synchronica.Simulation
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VInt64(this.actor, id);
+            var variable = new VInt64(this.actor, id, new RecordState());
             variable.AddStepFrame(this.actor.StartTime, value);
 
             this.actor.AddVariable(variable);
@@ -106,7 +107,7 @@ namespace Synchronica.Simulation
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VFloat(this.actor, id);
+            var variable = new VFloat(this.actor, id, new RecordState());
             variable.AddStepFrame(this.actor.StartTime, value);
 
             this.actor.AddVariable(variable);

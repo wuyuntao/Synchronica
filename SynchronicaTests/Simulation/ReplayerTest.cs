@@ -48,9 +48,9 @@ namespace Synchronica.Tests.Simulation
             var var2 = obj1.GetVariable<int>(2);
             var var3 = obj1.GetVariable<float>(3);
 
-            recorder.AddLinearFrame(var1, 100, (short)30);
-            recorder.AddStepFrame(var2, 110, 10);
-            recorder.AddLinearFrame(var3, 90, 9.3f);
+            recorder.AddLine(var1, 0, 100, (short)30);
+            recorder.AddStep(var2, 0, 110, 10);
+            recorder.AddLine(var3, 0, 90, 9.3f);
 
             var data = recorder.Record(100);
             Assert.AreEqual(0, data.StartTime);
@@ -78,9 +78,7 @@ namespace Synchronica.Tests.Simulation
 
             #region Time: 100-200ms
 
-            recorder.InterpolateKeyFrame(var1, 110);
-            recorder.RemoveKeyFramesAfter(var1, 111);
-            recorder.AddLinearFrame(var1, 150, (short)40);
+            recorder.AddLine(var1, 110, 150, (short)40);
 
             #endregion
         }

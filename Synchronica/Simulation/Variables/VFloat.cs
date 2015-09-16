@@ -28,8 +28,8 @@ namespace Synchronica.Simulation.Variables
 {
     sealed class VFloat : Variable<float>, ILinearKeyFrameVariable<float>, IPulseKeyFrameVariable<float>, IStepKeyFrameVariable<float>
     {
-        internal VFloat(Actor actor, int id)
-            : base(actor, id)
+        internal VFloat(Actor actor, int id, object state = null)
+            : base(actor, id, state)
         { }
 
         public void AddLinearFrame(int time, float value)

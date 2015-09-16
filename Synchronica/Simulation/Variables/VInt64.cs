@@ -28,8 +28,8 @@ namespace Synchronica.Simulation.Variables
 {
     sealed class VInt64 : Variable<long>, ILinearKeyFrameVariable<long>, IPulseKeyFrameVariable<long>, IStepKeyFrameVariable<long>
     {
-        internal VInt64(Actor actor, int id)
-            : base(actor, id)
+        internal VInt64(Actor actor, int id, object state = null)
+            : base(actor, id, state)
         { }
 
         public void AddLinearFrame(int time, long value)

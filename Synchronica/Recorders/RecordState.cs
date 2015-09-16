@@ -22,19 +22,35 @@
  * SOFTWARE.
 */
 
-using Synchronica.Simulation.KeyFrames;
+using System;
 
-namespace Synchronica.Simulation.Variables
+namespace Synchronica.Recorders
 {
-    sealed class VBoolean : Variable<bool>, IStepKeyFrameVariable<bool>
+    class RecordState
     {
-        internal VBoolean(Actor actor, int id, object state = null)
-            : base(actor, id, state)
-        { }
+        private bool hasChanges;
+        private int firstChangeTime;
 
-        public void AddStepFrame(int time, bool value)
+        public void OnChange(int time)
         {
-            AddLastFrame(new StepKeyFrame<bool>(time, value));
+            this.hasChanges = true;
+            this.firstChangeTime = Math.Min(firstChangeTime, time);
+        }
+
+        public void OnResetChange(int time)
+        {
+            this.hasChanges = false;
+            this.firstChangeTime = time;
+        }
+
+        public bool HasChanges
+        {
+            get { return this.hasChanges; }
+        }
+
+        public int FirstChangeTime
+        {
+            get { return this.firstChangeTime; }
         }
     }
 }

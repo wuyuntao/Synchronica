@@ -22,6 +22,7 @@
  * SOFTWARE.
 */
 
+using Synchronica.Replayers;
 using Synchronica.Simulation;
 using System;
 

@@ -22,12 +22,12 @@
  * SOFTWARE.
 */
 
+using Synchronica.Simulation;
 using Synchronica.Simulation.KeyFrames;
-using Synchronica.Simulation.Variables;
 using System;
 using System.Collections.Generic;
 
-namespace Synchronica.Simulation
+namespace Synchronica.Recorders
 {
     public abstract class Recorder<TData>
     {
@@ -41,15 +41,16 @@ namespace Synchronica.Simulation
 
         #region Actor
 
-        public Actor AddActor(int startTime, Action<ActorFactory> initializer, object context = null)
+        public Actor AddActor(int startTime, Action<ActorFactory> initializer)
         {
             if (startTime < this.scene.ElapsedTime)
                 throw new ArgumentException("Cannot create actor before lock time");
 
-            var actor = new Actor(this.scene, GetNextActorId(), startTime, context);
-            
+            var actor = new Actor(this.scene, GetNextActorId(), startTime, new RecordState());
+
             this.scene.AddActor(actor);
             ActorFactory.Initiailize(actor, initializer);
+            ((RecordState)actor.State).OnChange(startTime);
 
             return actor;
         }
@@ -57,6 +58,8 @@ namespace Synchronica.Simulation
         public void RemoveActor(Actor actor, int endTime)
         {
             actor.Destroy(endTime);
+
+            ((RecordState)actor.State).OnChange(endTime);
         }
 
         public Actor GetActor(int id)
@@ -66,102 +69,63 @@ namespace Synchronica.Simulation
 
         #endregion
 
-        #region Variable
-
-        public Variable<bool> AddBoolean(Actor actor, int id, bool value)
-        {
-            if (actor.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after actor starts");
-
-            var variable = new VBoolean(actor, id);
-            variable.AddStepFrame(actor.StartTime, value);
-            actor.AddVariable(variable);
-            return variable;
-        }
-
-        public Variable<short> AddInt16(Actor actor, int id, short value)
-        {
-            if (actor.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after actor starts");
-
-            var variable = new VInt16(actor, id);
-            variable.AddStepFrame(actor.StartTime, value);
-            actor.AddVariable(variable);
-            return variable;
-        }
-
-        public Variable<int> AddInt32(Actor actor, int id, int value)
-        {
-            if (actor.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after actor starts");
-
-            var variable = new VInt32(actor, id);
-            variable.AddStepFrame(actor.StartTime, value);
-            actor.AddVariable(variable);
-            return variable;
-        }
-
-        public Variable<long> AddInt64(Actor actor, int id, long value)
-        {
-            if (actor.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after actor starts");
-
-            var variable = new VInt64(actor, id);
-            variable.AddStepFrame(actor.StartTime, value);
-            actor.AddVariable(variable);
-            return variable;
-        }
-
-        public Variable<float> AddFloat(Actor actor, int id, float value)
-        {
-            if (actor.StartTime < this.scene.ElapsedTime)
-                throw new InvalidOperationException("Cannot add variable after actor starts");
-
-            var variable = new VFloat(actor, id);
-            variable.AddStepFrame(actor.StartTime, value);
-            actor.AddVariable(variable);
-            return variable;
-        }
-
-        #endregion
-
         #region KeyFrame
 
-        public void AddLinearFrame<TValue>(Variable<TValue> variable, int time, TValue value)
+        public void AddLine<TValue>(Variable<TValue> variable, int startTime, int endTime, TValue endValue)
         {
             var v = variable as ILinearKeyFrameVariable<TValue>;
             if (v == null)
                 throw new ArgumentException("Cannot add linear key frame");
 
-            v.AddLinearFrame(time, value);
+            variable.Interpolate(startTime);
+            variable.RemoveFramesAfter(startTime + 1);
+
+            v.AddLinearFrame(endTime, endValue);
+
+            ((RecordState)variable.State).OnChange(startTime);
         }
 
-        public void AddPulseFrame<TValue>(Variable<TValue> variable, int time, TValue value)
+        public void AddPulse<TValue>(Variable<TValue> variable, int startTime, int endTime, TValue endValue)
         {
             var v = variable as IPulseKeyFrameVariable<TValue>;
             if (v == null)
                 throw new ArgumentException("Cannot add pulse key frame");
 
-            v.AddPulseFrame(time, value);
+            variable.Interpolate(startTime);
+            variable.RemoveFramesAfter(startTime + 1);
+
+            v.AddPulseFrame(endTime, endValue);
+
+            ((RecordState)variable.State).OnChange(startTime);
         }
 
-        public void AddStepFrame<TValue>(Variable<TValue> variable, int time, TValue value)
+        public void AddStep<TValue>(Variable<TValue> variable, int startTime, int endTime, TValue endValue)
         {
             var v = variable as IStepKeyFrameVariable<TValue>;
             if (v == null)
                 throw new ArgumentException("Cannot add step key frame");
 
-            v.AddStepFrame(time, value);
+            variable.Interpolate(startTime);
+            variable.RemoveFramesAfter(startTime + 1);
+
+            v.AddStepFrame(endTime, endValue);
+
+            ((RecordState)variable.State).OnChange(startTime);
         }
 
-        public void InterpolateKeyFrame<TValue>(Variable<TValue> variable, int time)
+        protected IEnumerable<KeyFrame> GetKeyFrameChanges(Variable variable)
         {
-            variable.Interpolate(time);
-        }
+            var state = (RecordState)variable.State;
 
-        public void RemoveKeyFramesAfter<TValue>(Variable<TValue> variable, int time)
-        {
-            variable.RemoveFramesAfter(time);
+            if (state.HasChanges)
+            {
+                var frames = variable.FindFramesAfter(state.FirstChangeTime);
+
+                foreach (var frame in frames)
+                    yield return frame;
+            }
+
+            state.OnResetChange(variable.LastFrame.Time);
         }
 
         #endregion

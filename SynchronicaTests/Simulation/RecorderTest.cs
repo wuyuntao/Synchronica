@@ -56,9 +56,9 @@ namespace Synchronica.Tests.Simulation
             Assert.Throws<ArgumentException>(() => var4.GetValue(1));
             Assert.AreEqual(10, var4.GetValue(2));
 
-            recorder.AddLinearFrame(var4, 100, (short)30);
-            recorder.AddStepFrame(var5, 110, 10);
-            recorder.AddLinearFrame(var6, 90, 9.3f);
+            recorder.AddLine(var4, 2, 100, (short)30);
+            recorder.AddStep(var5, 2, 110, 10);
+            recorder.AddLine(var6, 2, 90, 9.3f);
 
             var data = recorder.Record(100);
             Assert.AreEqual(0, data.StartTime);

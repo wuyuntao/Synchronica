@@ -106,7 +106,7 @@ namespace Synchronica.Recorders
         private Offset<VariableData>? SerializeVariable(FlatBufferBuilder fbb, Variable variable, bool includingParameters)
         {
             var oFrames = new List<Offset<KeyFrameData>>();
-            foreach (var frame in variable.FindFramesAfter(Scene.ElapsedTime))
+            foreach (var frame in GetKeyFrameChanges(variable))
             {
                 var oFrame = SerializeKeyFrame(fbb, frame);
                 if (oFrame != null)
@@ -115,13 +115,13 @@ namespace Synchronica.Recorders
 
             if (oFrames.Count > 0 || includingParameters)
             {
-                VectorOffset vFrames = default(VectorOffset);
+                var vFrames = default(VectorOffset);
                 if (oFrames.Count > 0)
                 {
                     vFrames = VariableData.CreateKeyFramesVector(fbb, oFrames.ToArray());
                 }
 
-                Offset<VariableParameters> oParameters = default(Offset<VariableParameters>);
+                var oParameters = default(Offset<VariableParameters>);
                 if (includingParameters)
                 {
                     oParameters = VariableParameters.CreateVariableParameters(fbb, GetVariableType(variable));

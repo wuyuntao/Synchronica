@@ -1,4 +1,28 @@
-﻿using NUnit.Framework;
+﻿/*
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2015 Wu Yuntao
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+*/
+
+using NUnit.Framework;
 using Synchronica.Simulation;
 using Synchronica.Tests.Mock;
 using System;
@@ -67,31 +91,15 @@ namespace Synchronica.Tests.Simulation
                 switch (random.Next(0, 4))
                 {
                     case 1:     // Linear movement
-                        recorder.InterpolateKeyFrame(x, keyFrameStartTime);
-                        recorder.RemoveKeyFramesAfter(x, keyFrameStartTime + 1);
-                        recorder.AddLinearFrame(x, keyFrameEndTime, (float)(random.NextDouble() * 100));
-
-                        recorder.InterpolateKeyFrame(y, keyFrameStartTime);
-                        recorder.RemoveKeyFramesAfter(y, keyFrameStartTime + 1);
-                        recorder.AddLinearFrame(y, keyFrameEndTime, (float)(random.NextDouble() * 100));
-
-                        recorder.InterpolateKeyFrame(z, keyFrameStartTime);
-                        recorder.RemoveKeyFramesAfter(z, keyFrameStartTime + 1);
-                        recorder.AddLinearFrame(z, keyFrameEndTime, (float)(random.NextDouble() * 100));
+                        recorder.AddLine(x, keyFrameStartTime, keyFrameEndTime, (float)(random.NextDouble() * 100));
+                        recorder.AddLine(y, keyFrameStartTime, keyFrameEndTime, (float)(random.NextDouble() * 100));
+                        recorder.AddLine(z, keyFrameStartTime, keyFrameEndTime, (float)(random.NextDouble() * 100));
                         break;
 
                     case 2:     // Step movement
-                        recorder.InterpolateKeyFrame(x, keyFrameStartTime);
-                        recorder.RemoveKeyFramesAfter(x, keyFrameStartTime + 1);
-                        recorder.AddStepFrame(x, keyFrameEndTime, (float)(random.NextDouble() * 100));
-
-                        recorder.InterpolateKeyFrame(y, keyFrameStartTime);
-                        recorder.RemoveKeyFramesAfter(y, keyFrameStartTime + 1);
-                        recorder.AddStepFrame(y, keyFrameEndTime, (float)(random.NextDouble() * 100));
-
-                        recorder.InterpolateKeyFrame(z, keyFrameStartTime);
-                        recorder.RemoveKeyFramesAfter(z, keyFrameStartTime + 1);
-                        recorder.AddStepFrame(z, keyFrameEndTime, (float)(random.NextDouble() * 100));
+                        recorder.AddStep(x, keyFrameStartTime, keyFrameEndTime, (float)(random.NextDouble() * 100));
+                        recorder.AddStep(y, keyFrameStartTime, keyFrameEndTime, (float)(random.NextDouble() * 100));
+                        recorder.AddStep(z, keyFrameStartTime, keyFrameEndTime, (float)(random.NextDouble() * 100));
                         break;
 
                     default:     // No movement;

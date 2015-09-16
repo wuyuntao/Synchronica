@@ -22,12 +22,13 @@
  * SOFTWARE.
 */
 
+using Synchronica.Simulation;
 using Synchronica.Simulation.KeyFrames;
 using Synchronica.Simulation.Variables;
 using System;
 using System.Collections.Generic;
 
-namespace Synchronica.Simulation
+namespace Synchronica.Replayers
 {
     public delegate void NewActorEventHandler(Actor actor);
 
@@ -132,7 +133,6 @@ namespace Synchronica.Simulation
 
             v.AddStepFrame(time, value);
         }
-
 
         protected void RemoveFramesAfter(Variable variable, int startTime)
         {

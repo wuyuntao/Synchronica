@@ -1,4 +1,28 @@
-﻿using FlatBuffers.Schema;
+﻿/*
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2015 Wu Yuntao
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+*/
+
+using FlatBuffers.Schema;
 using NLog;
 using Synchronica.Examples.Schema;
 using Synchronica.Recorders;
@@ -53,7 +77,7 @@ namespace Synchronica.Examples.Scene
                     this.posY = f.AddFloat(2, posY);
                     this.posZ = f.AddFloat(3, posZ);
                 });
-                
+
                 logger.Debug("Cube #{0} created: Pos: ({1}, {2}, {3}), Time: {4}",
                         this.actor.Id,
                         this.posX.GetValue(this.actor.StartTime),
@@ -65,11 +89,8 @@ namespace Synchronica.Examples.Scene
             internal void Forward(int time)
             {
                 var recorder = this.scene.recorder;
-                recorder.InterpolateKeyFrame(this.posZ, time);
-                recorder.RemoveKeyFramesAfter(this.posZ, time + 1);
-
                 var value = this.posZ.GetValue(time);
-                recorder.AddLinearFrame(this.posZ, time + 1000, value + 1);
+                recorder.AddLine(this.posZ, time, time + 1000, value + 1);
 
                 logger.Debug("Cube #{0} forward: Z: {1} -> {2}, Time: {3} -> {4}",
                         this.actor.Id, value, value + 1, time, time + 1000);
@@ -78,40 +99,31 @@ namespace Synchronica.Examples.Scene
             internal void Back(int time)
             {
                 var recorder = this.scene.recorder;
-                recorder.InterpolateKeyFrame(this.posZ, time);
-                recorder.RemoveKeyFramesAfter(this.posZ, time + 1);
+                var value = this.posZ.GetValue(time);
+                recorder.AddLine(this.posZ, time, time + 1000, value - 1);
 
-                var value = this.posZ.GetValue(time) - 1;
-                recorder.AddLinearFrame(this.posZ, time + 1000, value);
-
-                logger.Debug("Cube #{0} back: Z: {1}, Time: {2}",
-                        this.actor.Id, value, time + 1000);
+                logger.Debug("Cube #{0} back: Z: {1} -> {2}, Time: {3} -> {4}",
+                        this.actor.Id, value, value - 1, time, time + 1000);
             }
 
             internal void TurnLeft(int time)
             {
                 var recorder = this.scene.recorder;
-                recorder.InterpolateKeyFrame(this.posX, time);
-                recorder.RemoveKeyFramesAfter(this.posX, time + 1);
+                var value = this.posX.GetValue(time);
+                recorder.AddLine(this.posX, time, time + 1000, value + 1);
 
-                var value = this.posX.GetValue(time) - 1;
-                recorder.AddLinearFrame(this.posX, time + 1000, value);
-
-                logger.Debug("Cube #{0} left: X: {1}, Time: {2}",
-                        this.actor.Id, value, time + 1000);
+                logger.Debug("Cube #{0} forward: X: {1} -> {2}, Time: {3} -> {4}",
+                        this.actor.Id, value, value + 1, time, time + 1000);
             }
 
             internal void TurnRight(int time)
             {
                 var recorder = this.scene.recorder;
-                recorder.InterpolateKeyFrame(this.posX, time);
-                recorder.RemoveKeyFramesAfter(this.posX, time + 1);
+                var value = this.posX.GetValue(time);
+                recorder.AddLine(this.posX, time, time + 1000, value - 1);
 
-                var value = this.posX.GetValue(time) + 1;
-                recorder.AddLinearFrame(this.posX, time + 1000, value);
-
-                logger.Debug("Cube #{0} right: X: {1}, Time: {2}",
-                        this.actor.Id, value, time + 1000);
+                logger.Debug("Cube #{0} back: X: {1} -> {2}, Time: {3} -> {4}",
+                        this.actor.Id, value, value - 1, time, time + 1000);
             }
         }
 

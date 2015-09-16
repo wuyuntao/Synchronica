@@ -78,7 +78,7 @@ namespace Synchronica.Replayers
 
         private void DeserializeVariables(Actor actor, VariableData data)
         {
-            Variable variable = actor.GetVariable(data.Id);
+            var variable = actor.GetVariable(data.Id);
             if (variable == null)
             {
                 if (data.Parameters != null)

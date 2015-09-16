@@ -34,15 +34,17 @@ namespace Synchronica.Simulation
         private Actor actor;
         private int id;
         private Type valueType;
+        private object state;
 
         private KeyFrame firstFrame;
         private KeyFrame lastFrame;
 
-        protected Variable(Actor actor, int id, Type valueType)
+        protected Variable(Actor actor, int id, Type valueType, object state = null)
         {
             this.actor = actor;
             this.id = id;
             this.valueType = valueType;
+            this.state = state;
         }
 
         protected KeyFrame FindFrameBefore(int time)
@@ -55,14 +57,14 @@ namespace Synchronica.Simulation
             return FindFramesAfter(time).FirstOrDefault();
         }
 
-        public IEnumerable<KeyFrame> FindFramesBefore(int time)
+        internal IEnumerable<KeyFrame> FindFramesBefore(int time)
         {
             return from frame in KeyFrames
                    where frame.Time <= time
                    select frame;
         }
 
-        public IEnumerable<KeyFrame> FindFramesAfter(int time)
+        internal IEnumerable<KeyFrame> FindFramesAfter(int time)
         {
             return from frame in KeyFrames
                    where frame.Time >= time
@@ -182,22 +184,27 @@ namespace Synchronica.Simulation
             get { return this.valueType; }
         }
 
+        internal object State
+        {
+            get { return this.state; }
+        }
+
         internal bool IsNew
         {
             get { return this.firstFrame == null; }
         }
 
-        protected KeyFrame FirstFrame
+        internal KeyFrame FirstFrame
         {
             get { return this.firstFrame; }
         }
 
-        protected KeyFrame LastFrame
+        internal KeyFrame LastFrame
         {
             get { return this.lastFrame; }
         }
 
-        protected IEnumerable<KeyFrame> KeyFrames
+        internal IEnumerable<KeyFrame> KeyFrames
         {
             get
             {
@@ -209,8 +216,8 @@ namespace Synchronica.Simulation
 
     public class Variable<TValue> : Variable
     {
-        internal Variable(Actor actor, int id)
-            : base(actor, id, typeof(TValue))
+        internal Variable(Actor actor, int id, object state = null)
+            : base(actor, id, typeof(TValue), state)
         { }
 
         internal void Interpolate(int time)

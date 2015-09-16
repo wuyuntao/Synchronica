@@ -22,6 +22,7 @@
  * SOFTWARE.
 */
 
+using Synchronica.Recorders;
 using Synchronica.Simulation;
 using Synchronica.Simulation.KeyFrames;
 using System;
