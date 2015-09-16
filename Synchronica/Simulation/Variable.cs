@@ -133,36 +133,6 @@ namespace Synchronica.Simulation
             newFrame.Previous = frame;
         }
 
-        internal void Interpolate(int time)
-        {
-            if (this.firstFrame == null)
-                throw new ArgumentException("No key frame is added");
-
-            if (time < this.firstFrame.Time)
-            {
-                AddFirstFrame(this.firstFrame.Clone(time));
-            }
-            else if (time > this.lastFrame.Time)
-            {
-                AddLastFrame(this.lastFrame.Clone(time));
-            }
-            else
-            {
-                foreach (var frame in KeyFrames)
-                {
-                    if (time < frame.Time)
-                    {
-                        AddFrameBefore(frame, frame.Clone(time));
-                        break;
-                    }
-                    else if (time == frame.Time)
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-
         internal void RemoveFramesBefore(int time)
         {
             if (LastFrame == null)
@@ -249,6 +219,36 @@ namespace Synchronica.Simulation
             AddFirstFrame(new StepKeyFrame<TValue>(actor.StartTime, initialValue));
         }
 
+        internal void Interpolate(int time)
+        {
+            if (FirstFrame == null)
+                throw new ArgumentException("No key frame is added");
+
+            if (time < FirstFrame.Time)
+            {
+                AddFirstFrame(new StepKeyFrame<TValue>(time, ((KeyFrame<TValue>)FirstFrame).Value));
+            }
+            else if (time > LastFrame.Time)
+            {
+                AddLastFrame(new StepKeyFrame<TValue>(time, ((KeyFrame<TValue>)LastFrame).Value));
+            }
+            else
+            {
+                foreach (var frame in KeyFrames)
+                {
+                    if (time < frame.Time)
+                    {
+                        AddFrameBefore(frame, frame.Clone(time));
+                        break;
+                    }
+                    else if (time == frame.Time)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
         public TValue GetValue(int time)
         {
             if (time < Actor.StartTime)
@@ -270,7 +270,7 @@ namespace Synchronica.Simulation
                     value = LastFrame.Value;
 
                 }
-                else if (frame.Previous == null)
+                else if (frame.Previous == null || frame.Next == null)
                 {
                     value = frame.Value;
                 }

@@ -33,6 +33,8 @@ namespace Synchronica.Examples.Scene
 
         class Cube
         {
+            private static Logger logger = LogManager.GetCurrentClassLogger();
+
             public SimpleScene scene;
             public Actor actor;
             public string clientName;
@@ -49,6 +51,13 @@ namespace Synchronica.Examples.Scene
                 this.posX = this.scene.recorder.AddFloat(actor, 1, posX);
                 this.posY = this.scene.recorder.AddFloat(actor, 2, posY);
                 this.posZ = this.scene.recorder.AddFloat(actor, 3, posZ);
+
+                logger.Debug("Cube #{0} created: Pos: ({1}, {2}, {3}), Time: {4}",
+                        this.actor.Id,
+                        this.posX.GetValue(this.actor.StartTime),
+                        this.posY.GetValue(this.actor.StartTime),
+                        this.posZ.GetValue(this.actor.StartTime),
+                        this.actor.StartTime);
             }
 
             internal void Forward(int time)
@@ -57,8 +66,11 @@ namespace Synchronica.Examples.Scene
                 recorder.InterpolateKeyFrame(this.posZ, time);
                 recorder.RemoveKeyFramesAfter(this.posZ, time + 1);
 
-                var value = this.posZ.GetValue(time) + 1;
-                recorder.AddLinearFrame(this.posZ, time + 1000, value);
+                var value = this.posZ.GetValue(time);
+                recorder.AddLinearFrame(this.posZ, time + 1000, value + 1);
+
+                logger.Debug("Cube #{0} forward: Z: {1} -> {2}, Time: {3} -> {4}",
+                        this.actor.Id, value, value + 1, time, time + 1000);
             }
 
             internal void Back(int time)
@@ -69,6 +81,9 @@ namespace Synchronica.Examples.Scene
 
                 var value = this.posZ.GetValue(time) - 1;
                 recorder.AddLinearFrame(this.posZ, time + 1000, value);
+
+                logger.Debug("Cube #{0} back: Z: {1}, Time: {2}",
+                        this.actor.Id, value, time + 1000);
             }
 
             internal void TurnLeft(int time)
@@ -77,8 +92,11 @@ namespace Synchronica.Examples.Scene
                 recorder.InterpolateKeyFrame(this.posX, time);
                 recorder.RemoveKeyFramesAfter(this.posX, time + 1);
 
-                var value = this.posZ.GetValue(time) - 1;
+                var value = this.posX.GetValue(time) - 1;
                 recorder.AddLinearFrame(this.posX, time + 1000, value);
+
+                logger.Debug("Cube #{0} left: X: {1}, Time: {2}",
+                        this.actor.Id, value, time + 1000);
             }
 
             internal void TurnRight(int time)
@@ -87,8 +105,11 @@ namespace Synchronica.Examples.Scene
                 recorder.InterpolateKeyFrame(this.posX, time);
                 recorder.RemoveKeyFramesAfter(this.posX, time + 1);
 
-                var value = this.posZ.GetValue(time) + 1;
+                var value = this.posX.GetValue(time) + 1;
                 recorder.AddLinearFrame(this.posX, time + 1000, value);
+
+                logger.Debug("Cube #{0} right: X: {1}, Time: {2}",
+                        this.actor.Id, value, time + 1000);
             }
         }
 
@@ -153,7 +174,7 @@ namespace Synchronica.Examples.Scene
                 {
                     var data = fbb.ToProtocolMessage(ServerMessageIds.SynchronizeSceneData);
 
-                    lock(this.sceneDataLock)
+                    lock (this.sceneDataLock)
                     {
                         this.sceneData.Add(data);
                     }
@@ -237,7 +258,7 @@ namespace Synchronica.Examples.Scene
 
         public IEnumerable<byte[]> GetSceneData()
         {
-            lock(this.sceneDataLock)
+            lock (this.sceneDataLock)
             {
                 return this.sceneData.ToArray();
             }

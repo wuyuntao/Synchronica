@@ -26,38 +26,31 @@ public class SceneController : MonoBehaviour
     {
         this.client.Update();
 
-        this.elapsedTime += Time.deltaTime;
-    }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            this.client.Input(Command.Up);
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+            this.client.Input(Command.Down);
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            this.client.Input(Command.Left);
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+            this.client.Input(Command.Right);
 
-    private void OnGUI()
-    {
-        if (Event.current.isKey)
+        var replayerElapsedTime = this.client.Replayer.Scene.ElapsedTime;
+        var timeDelay = replayerElapsedTime - ElapsedTime;
+        if (timeDelay > 1000)
         {
-            Command command = 0;
-            switch (Event.current.keyCode)
-            {
-                case KeyCode.UpArrow:
-                    command = Command.Up;
-                    break;
+            Debug.Log(string.Format("Fix elapsed time: {0} -> {1}", ElapsedTime, replayerElapsedTime));
 
-                case KeyCode.DownArrow:
-                    command = Command.Down;
-                    break;
-
-                case KeyCode.LeftArrow:
-                    command = Command.Left;
-                    break;
-
-                case KeyCode.RightArrow:
-                    command = Command.Right;
-                    break;
-
-                default:
-                    return;
-            }
-
-            this.client.Input(command);
+            this.elapsedTime = ((float)replayerElapsedTime - 100) / 1000;
         }
+        else if (timeDelay > 200)
+        {
+            Debug.Log("Fast forward elapsed time");
+
+            this.elapsedTime += Time.deltaTime * 2;
+        }
+        else
+            this.elapsedTime += Time.deltaTime;
     }
 
     public int ElapsedTime

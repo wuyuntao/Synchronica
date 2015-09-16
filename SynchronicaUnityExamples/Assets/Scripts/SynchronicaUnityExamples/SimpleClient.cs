@@ -146,7 +146,7 @@ namespace Synchronica.Unity.Examples
             {
                 foreach (var data in dataBuffer)
                 {
-                    Debug.Log(string.Format("Replay: {0} -> {1}", data.StartTime, data.EndTime));
+                    //Debug.Log(string.Format("Replay: {0} -> {1}", data.StartTime, data.EndTime));
 
                     this.replayer.Replay(data.StartTime, data.EndTime, data);
                 }

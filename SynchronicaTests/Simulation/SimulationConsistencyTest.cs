@@ -11,9 +11,9 @@ namespace Synchronica.Tests.Simulation
         const int TotalRunTime = 100000;
         const int RecordInterval = 100;
         const int ReplayInterval = 10;
-        const double CreateActorOdds = 0.1;
-        const double ChangeActorOdds = 0.5;
-        const double RemoveActorOdds = 0.1;
+        const double CreateActorOdds = 0.5;
+        const double ChangeActorOdds = 0.8;
+        const double RemoveActorOdds = 0.3;
 
         [Test]
         public void TestConsistency()

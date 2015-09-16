@@ -8,9 +8,9 @@ namespace Synchronica.Examples
     {
         static void Main(string[] args)
         {
-            RunUnitTest();
+            //RunUnitTest();
 
-            //StartSimpleServer();
+            StartSimpleServer();
         }
 
         static void RunUnitTest()

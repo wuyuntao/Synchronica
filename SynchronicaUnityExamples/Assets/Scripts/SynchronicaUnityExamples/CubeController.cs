@@ -37,8 +37,6 @@ public class CubeController : MonoBehaviour
                 this.posY = this.actor.GetVariable<float>(2);
                 this.posZ = this.actor.GetVariable<float>(3);
 
-                Debug.Log(string.Format("x: {0}, y: {1}, z: {2}", this.posX, this.posY, this.posZ));
-
                 UpdatePosition(this.actor.StartTime);
 
                 root.gameObject.SetActive(true);
@@ -58,6 +56,11 @@ public class CubeController : MonoBehaviour
 
         var pos = new Vector3(x, y, z);
 
-        transform.position = pos;
+        if (pos != transform.position)
+        {
+            Debug.Log(string.Format("Cube: {0}, pos: {1}, time: {2}", this.actor.Id, pos, time));
+
+            transform.position = pos;
+        }
     }
 }
