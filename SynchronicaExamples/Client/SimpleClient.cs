@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Synchronica.Examples.Client
 {
-    class SimpleClient 
+    class SimpleClient
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -25,6 +25,10 @@ namespace Synchronica.Examples.Client
 
         private FlatBufferReplayer replayer = new FlatBufferReplayer();
 
+        private object replayerLock = new object();
+
+        private int elapsedTime;
+
         public SimpleClient(string name, string hostname, int port)
         {
             this.name = name;
@@ -35,6 +39,7 @@ namespace Synchronica.Examples.Client
             logger.Info("Connected to {0}:{1}", hostname, port);
 
             ThreadPool.QueueUserWorkItem(ReadThread);
+            //ThreadPool.QueueUserWorkItem(OutputThread);
         }
 
         public override string ToString()
@@ -66,7 +71,7 @@ namespace Synchronica.Examples.Client
                 {
                     readSize = this.networkStream.Read(buffer, 0, buffer.Length);
                 }
-                catch(IOException)
+                catch (IOException)
                 {
                     readSize = 0;
                 }
@@ -87,6 +92,37 @@ namespace Synchronica.Examples.Client
             }
         }
 
+        private void OutputThread(object state)
+        {
+            while (this.networkStream.CanRead)
+            {
+                lock (this.replayerLock)
+                {
+                    for (; this.elapsedTime < this.replayer.Scene.ElapsedTime; this.elapsedTime += 10)
+                    {
+                        foreach (var actor in this.replayer.Scene.Actors)
+                        {
+                            if (actor.Id != 1)
+                                continue;
+
+                            var posX = actor.GetVariable<float>(1);
+                            var posY = actor.GetVariable<float>(2);
+                            var posZ = actor.GetVariable<float>(3);
+
+                            logger.Debug("Actor {0} moves to ({1}, {2}, {3}) at {4}ms",
+                                    actor.Id,
+                                    posX.GetValue(this.elapsedTime),
+                                    posY.GetValue(this.elapsedTime),
+                                    posZ.GetValue(this.elapsedTime),
+                                    this.elapsedTime);
+                        }
+                    }
+                }
+
+                Thread.Sleep(10);
+            }
+        }
+
         private void OnLoginResponse(Message msg)
         {
             var res = (LoginResponse)msg.Body;
@@ -99,9 +135,12 @@ namespace Synchronica.Examples.Client
         private void OnSynchronizeSceneData(Message msg)
         {
             var data = (SynchronizeSceneData)msg.Body;
-
             logger.Info("Received SynchronizeSceneData: {0} -> {1}", data.StartTime, data.EndTime);
-            this.replayer.Replay(data.StartTime, data.EndTime, data);
+
+            lock (this.replayerLock)
+            {
+                this.replayer.Replay(data.StartTime, data.EndTime, data);
+            }
         }
 
         public void Login()

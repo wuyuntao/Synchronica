@@ -270,7 +270,7 @@ namespace Synchronica.Simulation
                     value = LastFrame.Value;
 
                 }
-                else if (frame.Previous == null || frame.Next == null)
+                else if (frame.Previous == null || time >= frame.Time)
                 {
                     value = frame.Value;
                 }
