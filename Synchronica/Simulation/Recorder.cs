@@ -70,7 +70,8 @@ namespace Synchronica.Simulation
             if (actor.StartTime < this.scene.ElapsedTime)
                 throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VBoolean(actor, id, value);
+            var variable = new VBoolean(actor, id);
+            variable.AddStepFrame(actor.StartTime, value);
             actor.AddVariable(variable);
             return variable;
         }
@@ -80,7 +81,8 @@ namespace Synchronica.Simulation
             if (actor.StartTime < this.scene.ElapsedTime)
                 throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VInt16(actor, id, value);
+            var variable = new VInt16(actor, id);
+            variable.AddStepFrame(actor.StartTime, value);
             actor.AddVariable(variable);
             return variable;
         }
@@ -90,7 +92,8 @@ namespace Synchronica.Simulation
             if (actor.StartTime < this.scene.ElapsedTime)
                 throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VInt32(actor, id, value);
+            var variable = new VInt32(actor, id);
+            variable.AddStepFrame(actor.StartTime, value);
             actor.AddVariable(variable);
             return variable;
         }
@@ -100,7 +103,8 @@ namespace Synchronica.Simulation
             if (actor.StartTime < this.scene.ElapsedTime)
                 throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VInt64(actor, id, value);
+            var variable = new VInt64(actor, id);
+            variable.AddStepFrame(actor.StartTime, value);
             actor.AddVariable(variable);
             return variable;
         }
@@ -110,7 +114,8 @@ namespace Synchronica.Simulation
             if (actor.StartTime < this.scene.ElapsedTime)
                 throw new InvalidOperationException("Cannot add variable after actor starts");
 
-            var variable = new VFloat(actor, id, value);
+            var variable = new VFloat(actor, id);
+            variable.AddStepFrame(actor.StartTime, value);
             actor.AddVariable(variable);
             return variable;
         }

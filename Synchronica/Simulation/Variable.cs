@@ -213,12 +213,6 @@ namespace Synchronica.Simulation
             : base(actor, id, typeof(TValue))
         { }
 
-        protected Variable(Actor actor, int id, TValue initialValue)
-            : base(actor, id, typeof(TValue))
-        {
-            AddFirstFrame(new StepKeyFrame<TValue>(actor.StartTime, initialValue));
-        }
-
         internal void Interpolate(int time)
         {
             if (FirstFrame == null)

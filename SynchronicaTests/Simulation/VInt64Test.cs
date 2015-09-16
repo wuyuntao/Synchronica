@@ -36,7 +36,9 @@ namespace Synchronica.Tests.Simulation
         {
             var actor = new Actor(new Scene(), 1, 0);
 
-            var value = new VInt64(actor, 1, -10);
+            var value = new VInt64(actor, 1);
+            value.AddStepFrame(actor.StartTime, -10);
+
             Assert.Throws<ArgumentException>(() => value.GetValue(-1));
             Assert.AreEqual(-10, value.GetValue(0));
             Assert.AreEqual(-10, value.GetValue(1));
@@ -60,7 +62,8 @@ namespace Synchronica.Tests.Simulation
         {
             var actor = new Actor(new Scene(), 1, 0);
 
-            var value = new VInt64(actor, 1, 0);
+            var value = new VInt64(actor, 1);
+            value.AddStepFrame(actor.StartTime, 0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesBefore(1));
 
             value.AddStepFrame(10, 5);
@@ -87,7 +90,8 @@ namespace Synchronica.Tests.Simulation
         {
             var actor = new Actor(new Scene(), 1, 0);
 
-            var value = new VInt64(actor, 1, 0);
+            var value = new VInt64(actor, 1);
+            value.AddStepFrame(actor.StartTime, 0);
             Assert.Throws<ArgumentException>(() => value.RemoveFramesAfter(-1));
 
             value.AddStepFrame(10, 5);

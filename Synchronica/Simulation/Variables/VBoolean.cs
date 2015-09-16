@@ -28,10 +28,6 @@ namespace Synchronica.Simulation.Variables
 {
     sealed class VBoolean : Variable<bool>, IStepKeyFrameVariable<bool>
     {
-        internal VBoolean(Actor actor, int id, bool initialValue)
-            : base(actor, id, initialValue)
-        { }
-
         internal VBoolean(Actor actor, int id)
             : base(actor, id)
         { }

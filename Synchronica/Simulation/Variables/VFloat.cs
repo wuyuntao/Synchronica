@@ -28,10 +28,6 @@ namespace Synchronica.Simulation.Variables
 {
     sealed class VFloat : Variable<float>, ILinearKeyFrameVariable<float>, IPulseKeyFrameVariable<float>, IStepKeyFrameVariable<float>
     {
-        internal VFloat(Actor actor, int id, float initialValue)
-            : base(actor, id, initialValue)
-        { }
-
         internal VFloat(Actor actor, int id)
             : base(actor, id)
         { }
