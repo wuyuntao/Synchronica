@@ -36,11 +36,17 @@ namespace Synchronica.Tests.Simulation
             var replayer = new Replayer();
 
             #region Time: 0-100ms
-            
-            var obj1 = recorder.AddActor(0);
-            var var1 = recorder.AddInt16(obj1, 1, 10);
-            var var2 = recorder.AddInt32(obj1, 2, -10);
-            var var3 = recorder.AddFloat(obj1, 3, 5.7f);
+
+            var obj1 = recorder.AddActor(0, f =>
+            {
+                f.AddInt16(1, 10);
+                f.AddInt32(2, -10);
+                f.AddFloat(3, 5.7f);
+            });
+
+            var var1 = obj1.GetVariable<short>(1);
+            var var2 = obj1.GetVariable<int>(2);
+            var var3 = obj1.GetVariable<float>(3);
 
             recorder.AddLinearFrame(var1, 100, (short)30);
             recorder.AddStepFrame(var2, 110, 10);

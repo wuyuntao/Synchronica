@@ -103,11 +103,12 @@ namespace Synchronica.Tests.Simulation
             if (random.NextDouble() < CreateActorOdds)
             {
                 var startTime = random.Next(time, time + RecordInterval);
-                var actor = recorder.AddActor(startTime);
-
-                recorder.AddFloat(actor, 1, (float)(random.NextDouble() * 10));
-                recorder.AddFloat(actor, 2, (float)(random.NextDouble() * 10));
-                recorder.AddFloat(actor, 3, (float)(random.NextDouble() * 10));
+                var actor = recorder.AddActor(startTime, f =>
+                {
+                    f.AddFloat(1, (float)(random.NextDouble() * 10));
+                    f.AddFloat(2, (float)(random.NextDouble() * 10));
+                    f.AddFloat(3, (float)(random.NextDouble() * 10));
+                });
             }
 
             return recorder.Record(time + RecordInterval);

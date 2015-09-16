@@ -47,11 +47,13 @@ namespace Synchronica.Examples.Scene
             {
                 this.scene = scene;
 
-                this.actor = this.scene.recorder.AddActor(0);
-                this.posX = this.scene.recorder.AddFloat(actor, 1, posX);
-                this.posY = this.scene.recorder.AddFloat(actor, 2, posY);
-                this.posZ = this.scene.recorder.AddFloat(actor, 3, posZ);
-
+                this.actor = this.scene.recorder.AddActor(0, f =>
+                {
+                    this.posX = f.AddFloat(1, posX);
+                    this.posY = f.AddFloat(2, posY);
+                    this.posZ = f.AddFloat(3, posZ);
+                });
+                
                 logger.Debug("Cube #{0} created: Pos: ({1}, {2}, {3}), Time: {4}",
                         this.actor.Id,
                         this.posX.GetValue(this.actor.StartTime),
