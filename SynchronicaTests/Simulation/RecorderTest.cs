@@ -33,7 +33,7 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestRecorder()
         {
-            var recorder = new Recorder();
+            var recorder = new MockRecorder();
             var obj1 = recorder.AddActor(2, f =>
             {
                 f.AddInt16(1, 10);

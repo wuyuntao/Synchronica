@@ -30,7 +30,7 @@ using System.Linq;
 
 namespace Synchronica.Tests.Mock
 {
-    public sealed class Recorder : Recorder<RecorderData>
+    public sealed class MockRecorder : Recorder<RecorderData>
     {
         protected override RecorderData SerializeRecord(int endTime)
         {

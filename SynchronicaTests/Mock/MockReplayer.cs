@@ -28,7 +28,7 @@ using System;
 
 namespace Synchronica.Tests.Mock
 {
-    public sealed class Replayer : Replayer<RecorderData>
+    public sealed class MockReplayer : Replayer<RecorderData>
     {
         protected override void DeserializeRecord(RecorderData data)
         {

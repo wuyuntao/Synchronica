@@ -32,8 +32,8 @@ namespace Synchronica.Tests.Simulation
         [Test]
         public void TestReplayer()
         {
-            var recorder = new Recorder();
-            var replayer = new Replayer();
+            var recorder = new MockRecorder();
+            var replayer = new MockReplayer();
 
             #region Time: 0-100ms
 

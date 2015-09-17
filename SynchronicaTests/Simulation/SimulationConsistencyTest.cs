@@ -48,8 +48,8 @@ namespace Synchronica.Tests.Simulation
         public void TestMockConsistency()
         {
             var random = new Random();
-            var recorder = new Recorder();
-            var replayer = new Replayer();
+            var recorder = new MockRecorder();
+            var replayer = new MockReplayer();
 
             for (var time = 0; time < TotalRunTime; time += RecordInterval)
             {
