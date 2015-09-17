@@ -59,8 +59,10 @@ namespace Synchronica.Recorders
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VBoolean(this.actor, id, new RecordState());
+            var state  = new RecordState();
+            var variable = new VBoolean(this.actor, id, state);
             variable.AddStepFrame(this.actor.StartTime, value);
+            state.OnChange(this.actor.StartTime);
 
             this.actor.AddVariable(variable);
             return variable;
@@ -71,8 +73,10 @@ namespace Synchronica.Recorders
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VInt16(this.actor, id, new RecordState());
+            var state = new RecordState();
+            var variable = new VInt16(this.actor, id, state);
             variable.AddStepFrame(this.actor.StartTime, value);
+            state.OnChange(this.actor.StartTime);
 
             this.actor.AddVariable(variable);
             return variable;
@@ -83,8 +87,10 @@ namespace Synchronica.Recorders
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VInt32(this.actor, id, new RecordState());
+            var state = new RecordState();
+            var variable = new VInt32(this.actor, id, state);
             variable.AddStepFrame(this.actor.StartTime, value);
+            state.OnChange(this.actor.StartTime);
 
             this.actor.AddVariable(variable);
             return variable;
@@ -95,8 +101,10 @@ namespace Synchronica.Recorders
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VInt64(this.actor, id, new RecordState());
+            var state = new RecordState();
+            var variable = new VInt64(this.actor, id, state);
             variable.AddStepFrame(this.actor.StartTime, value);
+            state.OnChange(this.actor.StartTime);
 
             this.actor.AddVariable(variable);
             return variable;
@@ -107,8 +115,10 @@ namespace Synchronica.Recorders
             if (this.actor == null)
                 throw new InvalidOperationException("Cannot add variable after this.actor initialized");
 
-            var variable = new VFloat(this.actor, id, new RecordState());
+            var state = new RecordState();
+            var variable = new VFloat(this.actor, id, state);
             variable.AddStepFrame(this.actor.StartTime, value);
+            state.OnChange(this.actor.StartTime);
 
             this.actor.AddVariable(variable);
             return variable;

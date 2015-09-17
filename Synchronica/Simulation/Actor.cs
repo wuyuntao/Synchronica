@@ -57,7 +57,7 @@ namespace Synchronica.Simulation
             if (endTime <= this.startTime)
                 throw new ArgumentException("Cannot destroy before start time");
 
-            if (endTime <= scene.ElapsedTime)
+            if (endTime < scene.ElapsedTime)
                 throw new ArgumentException("Cannot destroy actor before lock time of scene");
 
             this.endTime = endTime;

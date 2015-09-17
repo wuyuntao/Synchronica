@@ -39,9 +39,9 @@ namespace Synchronica.Tests.Mock
                 StartTime = Scene.ElapsedTime,
                 EndTime = endTime,
                 Actors = (from actor in Actors
-                               select RecordActor(actor) into actorData
-                               where actorData != null
-                               select actorData).ToArray(),
+                          select RecordActor(actor) into actorData
+                          where actorData != null
+                          select actorData).ToArray(),
             };
 
             return data.Actors.Length > 0 ? data : null;
@@ -95,7 +95,7 @@ namespace Synchronica.Tests.Mock
             var data = new VariableData()
             {
                 Id = variable.Id,
-                KeyFrames = (from keyFrame in variable.FindFramesAfter(Scene.ElapsedTime)
+                KeyFrames = (from keyFrame in GetKeyFrameChanges(variable)
                              select RecordKeyFrame(keyFrame)).ToArray(),
             };
 

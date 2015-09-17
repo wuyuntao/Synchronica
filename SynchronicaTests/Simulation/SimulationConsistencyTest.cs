@@ -22,7 +22,11 @@
  * SOFTWARE.
 */
 
+using FlatBuffers.Schema;
 using NUnit.Framework;
+using Synchronica.Recorders;
+using Synchronica.Replayers;
+using Synchronica.Schema;
 using Synchronica.Simulation;
 using Synchronica.Tests.Mock;
 using System;
@@ -38,11 +42,12 @@ namespace Synchronica.Tests.Simulation
         const double CreateActorOdds = 0.5;
         const double ChangeActorOdds = 0.8;
         const double RemoveActorOdds = 0.3;
+        const int Seed = 4;
 
         [Test]
-        public void TestConsistency()
+        public void TestMockConsistency()
         {
-            var random = new Random(1);
+            var random = new Random();
             var recorder = new Recorder();
             var replayer = new Replayer();
 
@@ -62,7 +67,33 @@ namespace Synchronica.Tests.Simulation
             }
         }
 
-        private static RecorderData RandomRecord(Random random, Recorder recorder, int time)
+        [Test]
+        public void TestFlatBufferConsistency()
+        {
+            var random = new Random();
+            var recorder = new FlatBufferRecorder();
+            var replayer = new FlatBufferReplayer();
+
+            var schema = new MessageSchema();
+            schema.Register(1, SynchronizeSceneData.GetRootAsSynchronizeSceneData);
+            
+            var processor = new MessageProcessor(schema);
+            processor.Attach(1, msg => OnProcessMessage(recorder, replayer, msg));
+
+            for (var time = 0; time < TotalRunTime; time += RecordInterval)
+            {
+                var fbb = RandomRecord(random, recorder, time);
+                if (fbb != null)
+                {
+                    var bytes = FlatBufferExtensions.ToProtocolMessage(fbb, 1);
+
+                    processor.Enqueue(bytes);
+                    processor.Process();
+                }
+            }
+        }
+
+        private static TData RandomRecord<TData>(Random random, Recorder<TData> recorder, int time)
         {
             // Destroy an old actor randomly
             if (random.NextDouble() < RemoveActorOdds)
@@ -170,6 +201,20 @@ namespace Synchronica.Tests.Simulation
                 Assert.AreEqual(recorderActor.X, replayerActor.X);
                 Assert.AreEqual(recorderActor.Y, replayerActor.Y);
                 Assert.AreEqual(recorderActor.Z, replayerActor.Z);
+            }
+        }
+
+        private void OnProcessMessage(FlatBufferRecorder recorder, FlatBufferReplayer replayer, Message message)
+        {
+            var data = (SynchronizeSceneData)message.Body;
+            replayer.Replay(data.StartTime, data.EndTime, data);
+
+            for (var frameTime = data.StartTime; frameTime < data.EndTime; frameTime += ReplayInterval)
+            {
+                var recorderFrame = GetFrameData(recorder.Scene, frameTime);
+                var replayerFrame = GetFrameData(replayer.Scene, frameTime);
+
+                CompareFrameData(recorderFrame, replayerFrame);
             }
         }
 

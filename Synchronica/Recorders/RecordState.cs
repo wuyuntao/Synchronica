@@ -29,18 +29,20 @@ namespace Synchronica.Recorders
     class RecordState
     {
         private bool hasChanges;
-        private int firstChangeTime;
+        private int firstChangeTime = -1;
 
         public void OnChange(int time)
         {
             this.hasChanges = true;
-            this.firstChangeTime = Math.Min(firstChangeTime, time);
+
+            if (this.firstChangeTime < 0 || time < this.firstChangeTime)
+                this.firstChangeTime = time;
         }
 
         public void OnResetChange(int time)
         {
             this.hasChanges = false;
-            this.firstChangeTime = time;
+            this.firstChangeTime = time + 1;
         }
 
         public bool HasChanges
